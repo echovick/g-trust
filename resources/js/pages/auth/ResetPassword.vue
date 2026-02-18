@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import AuthLayout from '@/layouts/AuthLayout.vue';
+import BankAuthLayout from '@/layouts/BankAuthLayout.vue';
 import { update } from '@/routes/password';
 
 const props = defineProps<{
@@ -18,9 +18,9 @@ const inputEmail = ref(props.email);
 </script>
 
 <template>
-    <AuthLayout
-        title="Reset password"
-        description="Please enter your new password below"
+    <BankAuthLayout
+        title="Reset Password"
+        description="Enter your new password below"
     >
         <Head title="Reset password" />
 
@@ -30,37 +30,37 @@ const inputEmail = ref(props.email);
             :reset-on-success="['password', 'password_confirmation']"
             v-slot="{ errors, processing }"
         >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="email">Email</Label>
+            <div class="space-y-4">
+                <div>
+                    <Label for="email" class="text-gray-700 font-medium">Email</Label>
                     <Input
                         id="email"
                         type="email"
                         name="email"
                         autocomplete="email"
                         v-model="inputEmail"
-                        class="mt-1 block w-full"
                         readonly
+                        class="mt-2 h-12 border-gray-200 bg-gray-50 text-gray-600"
                     />
-                    <InputError :message="errors.email" class="mt-2" />
+                    <InputError :message="errors.email" class="mt-1" />
                 </div>
 
-                <div class="grid gap-2">
-                    <Label for="password">Password</Label>
+                <div>
+                    <Label for="password" class="text-gray-700 font-medium">New Password</Label>
                     <Input
                         id="password"
                         type="password"
                         name="password"
                         autocomplete="new-password"
-                        class="mt-1 block w-full"
                         autofocus
-                        placeholder="Password"
+                        placeholder="Enter new password"
+                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
                     />
-                    <InputError :message="errors.password" />
+                    <InputError :message="errors.password" class="mt-1" />
                 </div>
 
-                <div class="grid gap-2">
-                    <Label for="password_confirmation">
+                <div>
+                    <Label for="password_confirmation" class="text-gray-700 font-medium">
                         Confirm Password
                     </Label>
                     <Input
@@ -68,22 +68,22 @@ const inputEmail = ref(props.email);
                         type="password"
                         name="password_confirmation"
                         autocomplete="new-password"
-                        class="mt-1 block w-full"
-                        placeholder="Confirm password"
+                        placeholder="Confirm new password"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
-                    <InputError :message="errors.password_confirmation" />
+                    <InputError :message="errors.password_confirmation" class="mt-1" />
                 </div>
-
-                <Button
-                    type="submit"
-                    class="mt-4 w-full"
-                    :disabled="processing"
-                    data-test="reset-password-button"
-                >
-                    <Spinner v-if="processing" />
-                    Reset password
-                </Button>
             </div>
+
+            <Button
+                type="submit"
+                class="mt-6 w-full h-12 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-full transition-colors"
+                :disabled="processing"
+                data-test="reset-password-button"
+            >
+                <Spinner v-if="processing" class="mr-2" />
+                {{ processing ? 'Resetting...' : 'Reset Password' }}
+            </Button>
         </Form>
-    </AuthLayout>
+    </BankAuthLayout>
 </template>

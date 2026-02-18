@@ -5,16 +5,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import AuthLayout from '@/layouts/AuthLayout.vue';
+import BankAuthLayout from '@/layouts/BankAuthLayout.vue';
 import { store } from '@/routes/password/confirm';
+import { Shield } from 'lucide-vue-next';
 </script>
 
 <template>
-    <AuthLayout
-        title="Confirm your password"
-        description="This is a secure area of the application. Please confirm your password before continuing."
+    <BankAuthLayout
+        title="Confirm Password"
+        description="This is a secure area - please confirm your password"
     >
         <Head title="Confirm password" />
+
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield :size="32" class="text-red-500" />
+            </div>
+            <p class="text-gray-600 text-sm">
+                For your security, please confirm your password before continuing.
+            </p>
+        </div>
 
         <Form
             v-bind="store.form()"
@@ -22,32 +32,30 @@ import { store } from '@/routes/password/confirm';
             v-slot="{ errors, processing }"
         >
             <div class="space-y-6">
-                <div class="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
+                <div>
+                    <Label htmlFor="password" class="text-gray-700 font-medium">Password</Label>
                     <Input
                         id="password"
                         type="password"
                         name="password"
-                        class="mt-1 block w-full"
                         required
                         autocomplete="current-password"
                         autofocus
+                        placeholder="Enter your password"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
-
-                    <InputError :message="errors.password" />
+                    <InputError :message="errors.password" class="mt-1" />
                 </div>
 
-                <div class="flex items-center">
-                    <Button
-                        class="w-full"
-                        :disabled="processing"
-                        data-test="confirm-password-button"
-                    >
-                        <Spinner v-if="processing" />
-                        Confirm Password
-                    </Button>
-                </div>
+                <Button
+                    class="w-full h-12 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-full transition-colors"
+                    :disabled="processing"
+                    data-test="confirm-password-button"
+                >
+                    <Spinner v-if="processing" class="mr-2" />
+                    {{ processing ? 'Confirming...' : 'Confirm Password' }}
+                </Button>
             </div>
         </Form>
-    </AuthLayout>
+    </BankAuthLayout>
 </template>

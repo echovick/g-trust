@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import AuthBase from '@/layouts/AuthLayout.vue';
+import BankAuthLayout from '@/layouts/BankAuthLayout.vue';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -20,15 +20,15 @@ defineProps<{
 </script>
 
 <template>
-    <AuthBase
-        title="Log in to your account"
-        description="Enter your email and password below to log in"
+    <BankAuthLayout
+        title="Welcome Back"
+        description="Sign in to access your account"
     >
         <Head title="Log in" />
 
         <div
             v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
+            class="mb-4 text-center text-sm font-medium text-green-600 bg-green-50 py-2 px-4 rounded-lg"
         >
             {{ status }}
         </div>
@@ -37,11 +37,11 @@ defineProps<{
             v-bind="store.form()"
             :reset-on-success="['password']"
             v-slot="{ errors, processing }"
-            class="flex flex-col gap-6"
+            class="space-y-6"
         >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
+            <div class="space-y-4">
+                <div>
+                    <Label for="email" class="text-gray-700 font-medium">Email Address</Label>
                     <Input
                         id="email"
                         type="email"
@@ -50,18 +50,19 @@ defineProps<{
                         autofocus
                         :tabindex="1"
                         autocomplete="email"
-                        placeholder="email@example.com"
+                        placeholder="your@email.com"
+                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
                     />
-                    <InputError :message="errors.email" />
+                    <InputError :message="errors.email" class="mt-1" />
                 </div>
 
-                <div class="grid gap-2">
-                    <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <Label for="password" class="text-gray-700 font-medium">Password</Label>
                         <TextLink
                             v-if="canResetPassword"
                             :href="request()"
-                            class="text-sm"
+                            class="text-sm text-red-500 hover:text-red-600"
                             :tabindex="5"
                         >
                             Forgot password?
@@ -74,37 +75,40 @@ defineProps<{
                         required
                         :tabindex="2"
                         autocomplete="current-password"
-                        placeholder="Password"
+                        placeholder="Enter your password"
+                        class="h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
                     />
-                    <InputError :message="errors.password" />
+                    <InputError :message="errors.password" class="mt-1" />
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" name="remember" :tabindex="3" />
-                        <span>Remember me</span>
+                <div class="flex items-center">
+                    <Label for="remember" class="flex items-center space-x-2 cursor-pointer">
+                        <Checkbox id="remember" name="remember" :tabindex="3" class="border-gray-300 text-red-500" />
+                        <span class="text-sm text-gray-700">Keep me signed in</span>
                     </Label>
                 </div>
-
-                <Button
-                    type="submit"
-                    class="mt-4 w-full"
-                    :tabindex="4"
-                    :disabled="processing"
-                    data-test="login-button"
-                >
-                    <Spinner v-if="processing" />
-                    Log in
-                </Button>
             </div>
 
+            <Button
+                type="submit"
+                class="w-full h-12 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-full transition-colors"
+                :tabindex="4"
+                :disabled="processing"
+                data-test="login-button"
+            >
+                <Spinner v-if="processing" class="mr-2" />
+                {{ processing ? 'Signing in...' : 'Sign In' }}
+            </Button>
+
             <div
-                class="text-center text-sm text-muted-foreground"
+                class="text-center text-sm text-gray-600 pt-4 border-t"
                 v-if="canRegister"
             >
                 Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+                <TextLink :href="register()" class="text-red-500 hover:text-red-600 font-medium" :tabindex="5">
+                    Create account
+                </TextLink>
             </div>
         </Form>
-    </AuthBase>
+    </BankAuthLayout>
 </template>
