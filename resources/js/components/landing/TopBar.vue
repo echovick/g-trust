@@ -2,10 +2,10 @@
 import { Facebook, Twitter, Linkedin, Youtube, Instagram } from 'lucide-vue-next';
 
 const topLinks = [
-    { name: 'About Bank', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Credit Cards', href: '#' },
-    { name: 'Services', href: '#' },
+    { name: 'About Bank', href: '/about' },
+    { name: 'Careers', href: '/about/careers' },
+    { name: 'Credit Cards', href: '/cards' },
+    { name: 'Services', href: '/services' },
 ];
 </script>
 

@@ -37,6 +37,10 @@ Route::prefix('banking/personal')->name('banking.personal.')->group(function () 
     Route::get('/savings', function () {
         return Inertia::render('banking/personal/Savings');
     })->name('savings');
+
+    Route::get('/managers', function () {
+        return Inertia::render('banking/personal/Managers');
+    })->name('managers');
 });
 
 // Business Banking
@@ -44,6 +48,26 @@ Route::prefix('banking/business')->name('banking.business.')->group(function () 
     Route::get('/', function () {
         return Inertia::render('banking/business/Index');
     })->name('index');
+
+    Route::get('/checking', function () {
+        return Inertia::render('banking/business/Checking');
+    })->name('checking');
+
+    Route::get('/savings', function () {
+        return Inertia::render('banking/business/Savings');
+    })->name('savings');
+
+    Route::get('/sba', function () {
+        return Inertia::render('banking/business/Administration');
+    })->name('sba');
+
+    Route::get('/services', function () {
+        return Inertia::render('banking/business/Services');
+    })->name('services');
+
+    Route::get('/e-banking', function () {
+        return Inertia::render('banking/business/EBanking');
+    })->name('ebanking');
 });
 
 // Credit Cards
@@ -51,6 +75,18 @@ Route::prefix('cards')->name('cards.')->group(function () {
     Route::get('/', function () {
         return Inertia::render('cards/Index');
     })->name('index');
+
+    Route::get('/find', function () {
+        return Inertia::render('cards/Find');
+    })->name('find');
+
+    Route::get('/benefits', function () {
+        return Inertia::render('cards/Benefits');
+    })->name('benefits');
+
+    Route::get('/apply', function () {
+        return Inertia::render('cards/Apply');
+    })->name('apply');
 });
 
 // Services
@@ -66,6 +102,10 @@ Route::prefix('services')->name('services.')->group(function () {
     Route::get('/online-business', function () {
         return Inertia::render('services/OnlineBusiness');
     })->name('online-business');
+
+    Route::get('/business-plan', function () {
+        return Inertia::render('services/BusinessPlan');
+    })->name('business-plan');
 });
 
 // News

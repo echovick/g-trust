@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import { Phone, MapPin, User, Search, Landmark } from 'lucide-vue-next';
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+const currentRoute = computed(() => page.url);
 
 const navItems = [
-    { name: 'Home', href: '#', active: true },
-    { name: 'Credit Cards', href: '#', active: false },
-    { name: 'Features', href: '#', active: false },
-    { name: 'Shortcodes', href: '#', active: false },
-    { name: 'Post Types', href: '#', active: false },
-    { name: 'News', href: '#', active: false },
+    { name: 'Home', href: '/', active: false },
+    { name: 'Credit Cards', href: '/cards', active: false },
+    { name: 'Features', href: '/features', active: false },
+    { name: 'Services', href: '/services', active: false },
+    { name: 'About', href: '/about', active: false },
+    { name: 'News', href: '/news', active: false },
 ];
+
+const isActive = (href: string) => {
+    return currentRoute.value === href || currentRoute.value.startsWith(href + '/');
+};
 </script>
 
 <template>
@@ -29,14 +38,14 @@ const navItems = [
                         :href="item.href"
                         :class="[
                             'text-sm font-medium transition-colors relative py-6',
-                            item.active
+                            isActive(item.href)
                                 ? 'text-red-500'
                                 : 'text-gray-700 hover:text-red-500',
                         ]"
                     >
                         {{ item.name }}
                         <span
-                            v-if="item.active"
+                            v-if="isActive(item.href)"
                             class="absolute left-0 right-0 h-0.5 bg-red-500"
                             style="bottom: -0.25rem;"
                         ></span>
@@ -45,28 +54,28 @@ const navItems = [
 
                 <div class="flex items-center gap-6">
                     <a
-                        href="#"
+                        href="/contact"
                         class="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden md:inline-flex items-center gap-1"
                     >
                         <Phone :size="16" />
                         <span>Contact Us</span>
                     </a>
                     <a
-                        href="#"
+                        href="/locations"
                         class="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden md:inline-flex items-center gap-1"
                     >
                         <MapPin :size="16" />
                         <span>Locations</span>
                     </a>
                     <a
-                        href="#"
+                        href="/login"
                         class="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden md:inline-flex items-center gap-1"
                     >
                         <User :size="16" />
                         <span>Sign In</span>
                     </a>
                     <a
-                        href="#"
+                        href="/search"
                         class="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden md:inline-flex items-center gap-1"
                     >
                         <Search :size="16" />
