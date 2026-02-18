@@ -1,0 +1,50 @@
+<script setup lang="ts"></script>
+
+<template>
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-sm font-semibold text-gray-500 mb-2 tracking-wide">G-TRUST BANK MOBILE APP</p>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Stay connected, enjoy peace of mind</h2>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Download the G-Trust Bank App and simplify your banking. Discover tools, simple and convenient
+                        way to take command of your bank account, on your mobile phone
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="inline-block">
+                            <div class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                                <div class="text-xs">Download on the</div>
+                                <div class="text-lg font-semibold">App Store</div>
+                            </div>
+                        </a>
+                        <a href="#" class="inline-block">
+                            <div class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                                <div class="text-xs">GET IT ON</div>
+                                <div class="text-lg font-semibold">Google Play</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <div class="relative">
+                        <div class="w-64 h-[500px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl p-4 flex items-center justify-center">
+                            <div class="bg-white w-full h-full rounded-2xl overflow-hidden">
+                                <div class="bg-red-500 h-16 flex items-center justify-center">
+                                    <span class="text-white font-bold text-lg">G-Trust Bank</span>
+                                </div>
+                                <div class="p-4">
+                                    <div class="bg-blue-100 h-32 rounded-lg mb-4"></div>
+                                    <div class="space-y-2">
+                                        <div class="bg-gray-100 h-4 rounded"></div>
+                                        <div class="bg-gray-100 h-4 rounded w-3/4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
