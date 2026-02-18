@@ -19,11 +19,12 @@
                         pay bills. Use this guide to find out how to know the comfort of your home. However, it doesn't
                         mean you shouldn't take precautions.
                     </p>
-                    <button
-                        class="border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-blue-500 transition-colors"
+                    <a
+                        href="/help"
+                        class="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-blue-500 transition-colors"
                     >
                         Learn more
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

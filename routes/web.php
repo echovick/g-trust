@@ -22,6 +22,18 @@ Route::prefix('about')->name('about.')->group(function () {
     Route::get('/history', function () {
         return Inertia::render('about/History');
     })->name('history');
+
+    Route::get('/insight', function () {
+        return Inertia::render('about/Insight');
+    })->name('insight');
+
+    Route::get('/investors', function () {
+        return Inertia::render('about/Investors');
+    })->name('investors');
+
+    Route::get('/accessibility', function () {
+        return Inertia::render('about/Accessibility');
+    })->name('accessibility');
 });
 
 // Personal Banking
@@ -113,6 +125,18 @@ Route::prefix('news')->name('news.')->group(function () {
     Route::get('/', function () {
         return Inertia::render('news/Index');
     })->name('index');
+
+    Route::get('/media', function () {
+        return Inertia::render('news/Media');
+    })->name('media');
+
+    Route::get('/blog', function () {
+        return Inertia::render('news/Blog');
+    })->name('blog');
+
+    Route::get('/events', function () {
+        return Inertia::render('news/Events');
+    })->name('events');
 });
 
 // Support

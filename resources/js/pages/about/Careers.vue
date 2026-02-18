@@ -59,7 +59,7 @@ import { Heart, TrendingUp, Users, Coffee } from 'lucide-vue-next';
                     <div class="flex gap-4 items-center">
                         <span class="text-sm text-gray-500">📍 Remote</span>
                         <span class="text-sm text-gray-500">⏰ Full-time</span>
-                        <a href="#" class="ml-auto text-red-500 hover:text-red-600 font-medium">Apply Now →</a>
+                        <a href="/contact" class="ml-auto text-red-500 hover:text-red-600 font-medium">Apply Now →</a>
                     </div>
                 </div>
 
@@ -74,7 +74,7 @@ import { Heart, TrendingUp, Users, Coffee } from 'lucide-vue-next';
                     <div class="flex gap-4 items-center">
                         <span class="text-sm text-gray-500">📍 Multiple Locations</span>
                         <span class="text-sm text-gray-500">⏰ Full-time</span>
-                        <a href="#" class="ml-auto text-red-500 hover:text-red-600 font-medium">Apply Now →</a>
+                        <a href="/contact" class="ml-auto text-red-500 hover:text-red-600 font-medium">Apply Now →</a>
                     </div>
                 </div>
 
@@ -89,14 +89,14 @@ import { Heart, TrendingUp, Users, Coffee } from 'lucide-vue-next';
                     <div class="flex gap-4 items-center">
                         <span class="text-sm text-gray-500">📍 Hybrid</span>
                         <span class="text-sm text-gray-500">⏰ Full-time</span>
-                        <a href="#" class="ml-auto text-red-500 hover:text-red-600 font-medium">Apply Now →</a>
+                        <a href="/contact" class="ml-auto text-red-500 hover:text-red-600 font-medium">Apply Now →</a>
                     </div>
                 </div>
             </div>
 
             <div class="text-center mt-12">
                 <a
-                    href="#"
+                    href="/contact"
                     class="inline-block bg-red-500 hover:bg-red-600 text-white px-10 py-4 rounded-full font-medium transition-colors"
                 >
                     View All Open Positions

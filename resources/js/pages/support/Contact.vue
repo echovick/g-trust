@@ -45,7 +45,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
                     </div>
                     <h3 class="font-semibold text-gray-900 mb-2">Live Chat</h3>
                     <p class="text-gray-600 text-sm mb-2">Available now</p>
-                    <a href="#" class="text-red-500 hover:text-red-600 font-medium">Start Chat</a>
+                    <a href="/contact" class="text-red-500 hover:text-red-600 font-medium">Start Chat</a>
                 </div>
 
                 <div class="text-center p-6">
@@ -54,7 +54,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
                     </div>
                     <h3 class="font-semibold text-gray-900 mb-2">Visit Us</h3>
                     <p class="text-gray-600 text-sm mb-2">Find a branch</p>
-                    <a href="#" class="text-red-500 hover:text-red-600 font-medium">Locations</a>
+                    <a href="/locations" class="text-red-500 hover:text-red-600 font-medium">Locations</a>
                 </div>
             </CardGrid>
         </ContentSection>
@@ -112,7 +112,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
                         <p class="text-gray-600 mb-2">123 Financial District</p>
                         <p class="text-gray-600 mb-2">New York, NY 10004</p>
                         <p class="text-gray-600 mb-4">United States</p>
-                        <a href="#" class="text-red-500 hover:text-red-600 font-medium">Get Directions →</a>
+                        <a href="/locations" class="text-red-500 hover:text-red-600 font-medium">Get Directions →</a>
                     </div>
 
                     <div class="bg-gray-300 rounded-lg h-64 flex items-center justify-center">

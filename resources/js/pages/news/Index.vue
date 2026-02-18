@@ -21,7 +21,7 @@ import ContentSection from '@/components/shared/ContentSection.vue';
                         <span class="text-sm text-gray-500">March 15, 2024</span>
                         <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">G-Trust Bank Launches New Mobile App Features</h3>
                         <p class="text-gray-600 mb-4">Discover the latest enhancements to our award-winning mobile banking app...</p>
-                        <a href="#" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
+                        <a href="/news/blog" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
                     </div>
                 </article>
 
@@ -31,7 +31,7 @@ import ContentSection from '@/components/shared/ContentSection.vue';
                         <span class="text-sm text-gray-500">March 10, 2024</span>
                         <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">New Interest Rates Announced</h3>
                         <p class="text-gray-600 mb-4">We're increasing our savings account rates to help your money grow faster...</p>
-                        <a href="#" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
+                        <a href="/news/blog" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
                     </div>
                 </article>
 
@@ -41,7 +41,7 @@ import ContentSection from '@/components/shared/ContentSection.vue';
                         <span class="text-sm text-gray-500">March 5, 2024</span>
                         <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Community Investment Initiative</h3>
                         <p class="text-gray-600 mb-4">G-Trust Bank commits $10M to support local businesses and communities...</p>
-                        <a href="#" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
+                        <a href="/news/blog" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
                     </div>
                 </article>
             </div>

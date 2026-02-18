@@ -58,7 +58,7 @@ const categories = [
                         <li>✓ 0% intro APR for 15 months</li>
                         <li>✓ No foreign transaction fees</li>
                     </ul>
-                    <a href="#" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
+                    <a href="/cards/apply" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
                         Apply Now
                     </a>
                 </div>
@@ -79,7 +79,7 @@ const categories = [
                         <li>✓ Airport lounge access</li>
                         <li>✓ Travel insurance included</li>
                     </ul>
-                    <a href="#" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
+                    <a href="/cards/apply" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
                         Apply Now
                     </a>
                 </div>
@@ -103,7 +103,7 @@ const categories = [
                         <li>✓ Concierge service 24/7</li>
                         <li>✓ Exclusive partner benefits</li>
                     </ul>
-                    <a href="#" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
+                    <a href="/cards/apply" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
                         Apply Now
                     </a>
                 </div>

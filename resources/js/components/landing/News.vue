@@ -3,18 +3,22 @@ const news = [
     {
         title: 'When Next Listing Credit Cards Can Hurt You',
         image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400',
+        href: '/news/blog',
     },
     {
         title: 'Keep Your Children Safe from Financial Fraud',
         image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400',
+        href: '/news/blog',
     },
     {
         title: "You're Making More Money Here's How to Save",
         image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400',
+        href: '/news/blog',
     },
     {
         title: 'Help and guidance: Personal Financial Advice Service',
         image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400',
+        href: '/help',
     },
 ];
 </script>
@@ -24,9 +28,10 @@ const news = [
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Your news and information</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div
+                <a
                     v-for="item in news"
                     :key="item.title"
+                    :href="item.href"
                     class="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
                 >
                     <div class="overflow-hidden">
@@ -41,7 +46,7 @@ const news = [
                             {{ item.title }}
                         </h3>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>

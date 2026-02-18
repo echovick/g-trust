@@ -40,7 +40,7 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
                             <p>Mon-Fri: 9am-5pm<br />Sat: 9am-2pm</p>
                         </div>
                     </div>
-                    <a href="#" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
+                    <a href="/contact" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
                         >Get Directions →</a
                     >
                 </div>
@@ -61,7 +61,7 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
                             <p>Mon-Fri: 9am-6pm<br />Sat: 10am-3pm</p>
                         </div>
                     </div>
-                    <a href="#" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
+                    <a href="/contact" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
                         >Get Directions →</a
                     >
                 </div>
@@ -82,7 +82,7 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
                             <p>Mon-Fri: 8:30am-5:30pm<br />Sat: 9am-1pm</p>
                         </div>
                     </div>
-                    <a href="#" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
+                    <a href="/contact" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
                         >Get Directions →</a
                     >
                 </div>
@@ -103,7 +103,7 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
                             <p>Mon-Fri: 9am-5pm<br />Sat: 10am-2pm</p>
                         </div>
                     </div>
-                    <a href="#" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
+                    <a href="/contact" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
                         >Get Directions →</a
                     >
                 </div>
@@ -124,7 +124,7 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
                             <p>Mon-Fri: 9am-6pm<br />Sat: 10am-3pm</p>
                         </div>
                     </div>
-                    <a href="#" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
+                    <a href="/contact" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
                         >Get Directions →</a
                     >
                 </div>
@@ -145,7 +145,7 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
                             <p>Mon-Fri: 8am-5pm<br />Sat: 9am-1pm</p>
                         </div>
                     </div>
-                    <a href="#" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
+                    <a href="/contact" class="inline-block mt-4 text-red-500 hover:text-red-600 font-medium"
                         >Get Directions →</a
                     >
                 </div>

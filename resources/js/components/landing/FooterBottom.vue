@@ -1,18 +1,43 @@
 <script setup lang="ts">
 import { Landmark } from 'lucide-vue-next';
 
+const brandLinks = [
+    { name: 'About G-Trust Bank', href: '/about' },
+    { name: 'G-Trust Bank Insight', href: '/about/insight' },
+    { name: 'G-Trust Bank History', href: '/about/history' },
+    { name: 'Investors Information', href: '/about/investors' },
+];
+
 const sections = [
     {
         title: 'Banking With Us',
-        links: ['Personal Banking', 'Mobile Banking', 'G-Trust Bank Insight', 'G-Trust Bank History', 'Services'],
+        links: [
+            { name: 'Personal Banking', href: '/banking/personal' },
+            { name: 'Mobile Banking', href: '/services/mobile-banking' },
+            { name: 'G-Trust Bank Insight', href: '/about/insight' },
+            { name: 'G-Trust Bank History', href: '/about/history' },
+            { name: 'Services', href: '/services' },
+        ],
     },
     {
         title: 'Customer Service',
-        links: ['Help', 'About us', 'Locations', 'Privacy policy', 'Accessibility'],
+        links: [
+            { name: 'Help', href: '/help' },
+            { name: 'About us', href: '/about' },
+            { name: 'Locations', href: '/locations' },
+            { name: 'Privacy policy', href: '/privacy' },
+            { name: 'Accessibility', href: '/about/accessibility' },
+        ],
     },
     {
         title: 'Socials',
-        links: ['Facebook', 'Twitter', 'Instagram', 'YouTube', 'Pinterest'],
+        links: [
+            { name: 'Facebook', href: '#' },
+            { name: 'Twitter', href: '#' },
+            { name: 'Instagram', href: '#' },
+            { name: 'YouTube', href: '#' },
+            { name: 'Pinterest', href: '#' },
+        ],
     },
 ];
 </script>
@@ -29,17 +54,16 @@ const sections = [
                         <span class="text-xl font-semibold">G-Trust Bank</span>
                     </div>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">About G-Trust Bank</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">G-Trust Bank Insight</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">G-Trust Bank History</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Investors Information</a></li>
+                        <li v-for="link in brandLinks" :key="link.name">
+                            <a :href="link.href" class="hover:text-white transition-colors">{{ link.name }}</a>
+                        </li>
                     </ul>
                 </div>
                 <div v-for="section in sections" :key="section.title">
                     <h5 class="font-semibold mb-4 text-sm">{{ section.title }}</h5>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li v-for="link in section.links" :key="link">
-                            <a href="#" class="hover:text-white transition-colors">{{ link }}</a>
+                        <li v-for="link in section.links" :key="link.name">
+                            <a :href="link.href" class="hover:text-white transition-colors">{{ link.name }}</a>
                         </li>
                     </ul>
                 </div>

@@ -7,6 +7,7 @@ const services = [
         description: 'Explore competitive pricing with full service online banking. Bank online with over 250 services',
         icon: Briefcase,
         link: 'Apply online',
+        href: '/services/online-business',
         color: 'bg-red-50',
         iconColor: 'text-red-500',
     },
@@ -16,6 +17,7 @@ const services = [
             "Your business deserves banking that puts you first. We offer everything you need, from deposits to bill tools, there's a huge range of investments to choose",
         icon: TrendingUp,
         link: 'Take the first step',
+        href: '/services/business-plan',
         color: 'bg-red-50',
         iconColor: 'text-red-500',
     },
@@ -24,6 +26,7 @@ const services = [
         description: 'Explore competitive pricing with full service internet banking. Bank online with over 250 services',
         icon: Smartphone,
         link: 'Find out more',
+        href: '/services/mobile-banking',
         color: 'bg-red-50',
         iconColor: 'text-red-500',
     },
@@ -32,6 +35,7 @@ const services = [
         description: 'Explore competitive pricing with full service internet banking. Bank online with over 250 services',
         icon: PiggyBank,
         link: 'Learn more',
+        href: '/banking/personal/checking',
         color: 'bg-red-50',
         iconColor: 'text-red-500',
     },
@@ -55,7 +59,7 @@ const services = [
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ service.title }}</h3>
                     <p class="text-sm text-gray-600 mb-4 leading-relaxed">{{ service.description }}</p>
-                    <a href="#" class="text-sm text-red-500 hover:text-red-600 font-medium">
+                    <a :href="service.href" class="text-sm text-red-500 hover:text-red-600 font-medium">
                         {{ service.link }} →
                     </a>
                 </div>
