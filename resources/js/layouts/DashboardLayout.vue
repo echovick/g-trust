@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
-const user = computed(() => page.props.auth?.user);
+const user = computed(() => page.props.auth?.user || { name: 'User' });
 
 const showMobileMenu = ref(false);
 
@@ -94,7 +94,7 @@ const isActive = (itemCurrent: string) => {
                         <!-- User Menu -->
                         <div class="flex items-center gap-3 pl-3 border-l">
                             <div class="hidden sm:block text-right">
-                                <p class="text-sm font-medium text-gray-900">{{ user?.name || 'User' }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
                                 <p class="text-xs text-gray-500">Premium Member</p>
                             </div>
                             <Link

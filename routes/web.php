@@ -165,9 +165,7 @@ Route::get('/search', function () {
     return Inertia::render('Search');
 })->name('search');
 
-// Dashboard (protected)
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard Routes
+require __DIR__.'/dashboard.php';
 
 require __DIR__.'/settings.php';

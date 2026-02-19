@@ -45,14 +45,17 @@ export function useCurrency() {
     const setCurrency = (currency: Currency) => {
         currentCurrency.value = currency;
 
-        // Save to backend
-        router.post('/dashboard/currency',
-            { currency },
-            {
-                preserveState: true,
-                preserveScroll: true,
-            }
-        );
+        // Save to backend (only if we're in the dashboard)
+        if (window.location.pathname.startsWith('/dashboard')) {
+            router.post('/dashboard/currency',
+                { currency },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    preserveUrl: true,
+                }
+            );
+        }
     };
 
     const currencyConfig = computed(() => currencies[currentCurrency.value]);
