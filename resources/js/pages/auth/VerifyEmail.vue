@@ -18,7 +18,9 @@ defineProps<{
         title="Verify Your Email"
         description="We sent a verification link to your email"
     >
-        <Head title="Email verification" />
+        <Head title="Verify Email">
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
 
         <div class="text-center mb-6">
             <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">

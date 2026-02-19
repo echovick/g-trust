@@ -48,7 +48,9 @@ const code = ref<string>('');
         :title="authConfigContent.title"
         :description="authConfigContent.description"
     >
-        <Head title="Two-Factor Authentication" />
+        <Head title="Two-Factor Authentication">
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
 
         <div class="text-center mb-6">
             <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">

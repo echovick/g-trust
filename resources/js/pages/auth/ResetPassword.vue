@@ -22,7 +22,9 @@ const inputEmail = ref(props.email);
         title="Reset Password"
         description="Enter your new password below"
     >
-        <Head title="Reset password" />
+        <Head title="Reset Password">
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
 
         <Form
             v-bind="update.form()"
@@ -54,7 +56,7 @@ const inputEmail = ref(props.email);
                         autocomplete="new-password"
                         autofocus
                         placeholder="Enter new password"
-                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
                     <InputError :message="errors.password" class="mt-1" />
                 </div>

@@ -15,7 +15,9 @@ import { Shield } from 'lucide-vue-next';
         title="Confirm Password"
         description="This is a secure area - please confirm your password"
     >
-        <Head title="Confirm password" />
+        <Head title="Confirm Password">
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
 
         <div class="text-center mb-6">
             <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">

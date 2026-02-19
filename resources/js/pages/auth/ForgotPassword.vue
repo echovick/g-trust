@@ -20,7 +20,9 @@ defineProps<{
         title="Forgot Password?"
         description="Enter your email to receive a password reset link"
     >
-        <Head title="Forgot password" />
+        <Head title="Forgot Password">
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
 
         <div
             v-if="status"
@@ -41,7 +43,7 @@ defineProps<{
                             autocomplete="off"
                             autofocus
                             placeholder="your@email.com"
-                            class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
+                            class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                         />
                         <InputError :message="errors.email" class="mt-1" />
                     </div>

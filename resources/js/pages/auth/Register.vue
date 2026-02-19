@@ -16,7 +16,9 @@ import { store } from '@/routes/register';
         title="Create Account"
         description="Join G-Trust Bank today"
     >
-        <Head title="Register" />
+        <Head title="Register">
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
 
         <Form
             v-bind="store.form()"
@@ -36,7 +38,7 @@ import { store } from '@/routes/register';
                         autocomplete="name"
                         name="name"
                         placeholder="John Doe"
-                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
                     <InputError :message="errors.name" class="mt-1" />
                 </div>
@@ -51,7 +53,7 @@ import { store } from '@/routes/register';
                         autocomplete="email"
                         name="email"
                         placeholder="your@email.com"
-                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
                     <InputError :message="errors.email" class="mt-1" />
                 </div>
@@ -66,7 +68,7 @@ import { store } from '@/routes/register';
                         autocomplete="new-password"
                         name="password"
                         placeholder="Create a strong password"
-                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
                     <InputError :message="errors.password" class="mt-1" />
                 </div>
@@ -81,7 +83,7 @@ import { store } from '@/routes/register';
                         autocomplete="new-password"
                         name="password_confirmation"
                         placeholder="Confirm your password"
-                        class="mt-2 h-12 bg-white border-gray-300 focus:border-red-500 focus:ring-red-500 text-gray-900 placeholder:text-gray-400"
+                        class="mt-2 h-12 border-gray-300 focus:border-red-500 focus:ring-red-500"
                     />
                     <InputError :message="errors.password_confirmation" class="mt-1" />
                 </div>
