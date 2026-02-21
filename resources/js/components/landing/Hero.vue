@@ -18,11 +18,12 @@ const activeSlide = ref(0);
                     Connecting all your<br />banking needs
                 </h1>
                 <p class="text-xl md:text-2xl text-white mb-10 font-light drop-shadow-lg">Making It Easy for You.</p>
-                <button
-                    class="bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-base"
+                <a
+                    href="/about"
+                    class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-base"
                 >
                     Find out more
-                </button>
+                </a>
             </div>
         </div>
 

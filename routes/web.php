@@ -169,3 +169,5 @@ Route::get('/search', function () {
 require __DIR__.'/dashboard.php';
 
 require __DIR__.'/settings.php';
+
+require __DIR__.'/admin.php';

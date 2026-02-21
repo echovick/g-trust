@@ -98,7 +98,7 @@ const isActive = (itemCurrent: string) => {
                                 <p class="text-xs text-gray-500">Premium Member</p>
                             </div>
                             <Link
-                                href="/dashboard/settings"
+                                href="/settings"
                                 class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
                             >
                                 <User :size="20" class="text-gray-700" />
@@ -128,7 +128,7 @@ const isActive = (itemCurrent: string) => {
 
                     <!-- Settings and Logout for Mobile -->
                     <Link
-                        href="/dashboard/settings"
+                        href="/settings"
                         class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
                     >
                         <Settings :size="20" />

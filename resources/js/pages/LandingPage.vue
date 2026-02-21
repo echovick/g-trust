@@ -4,7 +4,6 @@ import { ref } from 'vue';
 import TopBar from '@/components/landing/TopBar.vue';
 import Header from '@/components/landing/Header.vue';
 import Hero from '@/components/landing/Hero.vue';
-import Partners from '@/components/landing/Partners.vue';
 import Services from '@/components/landing/Services.vue';
 import BusinessBanking from '@/components/landing/BusinessBanking.vue';
 import MobileApp from '@/components/landing/MobileApp.vue';
@@ -24,7 +23,6 @@ const showCookieBanner = ref(true);
         <TopBar />
         <Header />
         <Hero />
-        <Partners />
         <Services />
         <BusinessBanking />
         <MobileApp />
