@@ -18,6 +18,7 @@ import {
     X,
     Landmark,
     LogOut,
+    UserPlus,
 } from 'lucide-vue-next';
 import CurrencySelector from '@/components/dashboard/CurrencySelector.vue';
 
@@ -40,6 +41,7 @@ const navItems = [
     { name: 'Accounts', icon: Wallet, href: '/dashboard/accounts', current: 'accounts' },
     { name: 'Transactions', icon: Receipt, href: '/dashboard/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/dashboard/transfers', current: 'transfers' },
+    { name: 'Beneficiaries', icon: UserPlus, href: '/dashboard/beneficiaries', current: 'beneficiaries' },
     { name: 'Payments', icon: DollarSign, href: '/dashboard/payments', current: 'payments' },
     { name: 'Cards', icon: CreditCard, href: '/dashboard/cards', current: 'cards' },
     { name: 'Deposits', icon: ArrowDownToLine, href: '/dashboard/deposits', current: 'deposits' },
@@ -69,8 +71,7 @@ const isActive = (itemCurrent: string) => {
                             @click="showMobileMenu = !showMobileMenu"
                             class="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 mr-2"
                         >
-                            <Menu v-if="!showMobileMenu" :size="24" />
-                            <X v-else :size="24" />
+                            <Menu :size="24" />
                         </button>
                         <Link href="/" class="flex items-center gap-2">
                             <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
@@ -108,44 +109,102 @@ const isActive = (itemCurrent: string) => {
                 </div>
             </div>
 
-            <!-- Mobile Navigation Menu -->
-            <div v-if="showMobileMenu" class="lg:hidden border-t border-gray-200 bg-white">
-                <div class="px-4 py-3 space-y-1">
-                    <Link
-                        v-for="item in navItems"
-                        :key="item.name"
-                        :href="item.href"
-                        :class="[
-                            'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
-                            isActive(item.current)
-                                ? 'bg-red-50 text-red-600'
-                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                        ]"
-                    >
-                        <component :is="item.icon" :size="20" />
-                        {{ item.name }}
-                    </Link>
+        </nav>
 
-                    <!-- Settings and Logout for Mobile -->
-                    <Link
-                        href="/settings"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
-                    >
-                        <Settings :size="20" />
-                        Settings
-                    </Link>
-                    <Link
-                        href="/logout"
-                        method="post"
-                        as="button"
-                        class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
-                    >
-                        <LogOut :size="20" />
-                        Logout
-                    </Link>
+        <!-- Mobile Navigation Drawer -->
+        <Transition
+            enter-active-class="transition-opacity duration-300"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition-opacity duration-300"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <div v-if="showMobileMenu" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 lg:hidden" @click="showMobileMenu = false"></div>
+        </Transition>
+
+        <Transition
+            enter-active-class="transition-transform duration-300"
+            enter-from-class="-translate-x-full"
+            enter-to-class="translate-x-0"
+            leave-active-class="transition-transform duration-300"
+            leave-from-class="translate-x-0"
+            leave-to-class="-translate-x-full"
+        >
+            <div v-if="showMobileMenu" class="fixed top-0 left-0 bottom-0 w-80 bg-white z-50 lg:hidden shadow-xl overflow-y-auto">
+                <div class="p-4">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <Link href="/" class="flex items-center gap-2">
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                                <Landmark :size="24" class="text-white" />
+                            </div>
+                            <span class="text-xl font-bold text-gray-900">G-Trust Bank</span>
+                        </Link>
+                        <button
+                            @click="showMobileMenu = false"
+                            class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                        >
+                            <X :size="24" />
+                        </button>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                                <User :size="24" class="text-white" />
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
+                                <p class="text-xs text-gray-500">Premium Member</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav class="space-y-1">
+                        <Link
+                            v-for="item in navItems"
+                            :key="item.name"
+                            :href="item.href"
+                            @click="showMobileMenu = false"
+                            :class="[
+                                'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                                isActive(item.current)
+                                    ? 'bg-red-50 text-red-600'
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                            ]"
+                        >
+                            <component :is="item.icon" :size="20" />
+                            {{ item.name }}
+                        </Link>
+
+                        <!-- Divider -->
+                        <div class="border-t border-gray-200 my-4"></div>
+
+                        <!-- Settings and Logout -->
+                        <Link
+                            href="/settings"
+                            @click="showMobileMenu = false"
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+                        >
+                            <Settings :size="20" />
+                            Settings
+                        </Link>
+                        <Link
+                            href="/logout"
+                            method="post"
+                            as="button"
+                            class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+                        >
+                            <LogOut :size="20" />
+                            Logout
+                        </Link>
+                    </nav>
                 </div>
             </div>
-        </nav>
+        </Transition>
 
         <!-- Main Layout with Sidebar -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
