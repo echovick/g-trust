@@ -1,35 +1,62 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
+import { User, Shield, Eye, Settings as SettingsIcon, Palette } from 'lucide-vue-next';
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
-import Heading from '@/components/Heading.vue';
-import AppLayout from '@/layouts/AppLayout.vue';
-import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { type BreadcrumbItem } from '@/types';
-import { edit } from '@/routes/appearance';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
-const breadcrumbItems: BreadcrumbItem[] = [
-    {
-        title: 'Appearance settings',
-        href: edit().url,
-    },
+const settingsNav = [
+    { name: 'Profile', href: '/settings/profile', icon: User },
+    { name: 'Password', href: '/settings/password', icon: Shield },
+    { name: 'Two-Factor Auth', href: '/settings/two-factor', icon: Eye },
+    { name: 'Appearance', href: '/settings/appearance', icon: SettingsIcon, current: true },
 ];
 </script>
 
 <template>
-    <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Appearance settings" />
+    <DashboardLayout title="Appearance Settings">
+        <div class="mb-8">
+            <p class="text-gray-600">Manage your profile and account settings</p>
+        </div>
 
-        <h1 class="sr-only">Appearance Settings</h1>
-
-        <SettingsLayout>
-            <div class="space-y-6">
-                <Heading
-                    variant="small"
-                    title="Appearance settings"
-                    description="Update your account's appearance settings"
-                />
-                <AppearanceTabs />
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Settings Navigation -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                    <nav class="space-y-1">
+                        <Link
+                            v-for="item in settingsNav"
+                            :key="item.name"
+                            :href="item.href"
+                            :class="[
+                                'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                                item.current
+                                    ? 'bg-red-50 text-red-600'
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                            ]"
+                        >
+                            <component :is="item.icon" :size="20" />
+                            {{ item.name }}
+                        </Link>
+                    </nav>
+                </div>
             </div>
-        </SettingsLayout>
-    </AppLayout>
+
+            <!-- Settings Content -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
+                            <Palette :size="24" class="text-red-500" />
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Appearance Settings</h3>
+                            <p class="text-sm text-gray-600">Customize the look and feel of your dashboard</p>
+                        </div>
+                    </div>
+
+                    <AppearanceTabs />
+                </div>
+            </div>
+        </div>
+    </DashboardLayout>
 </template>
