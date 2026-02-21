@@ -240,7 +240,7 @@ const formatCurrency = (amount: number) => {
                 <!-- Next Payment Card -->
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
                     <div class="flex items-center gap-2 mb-4">
-                        <Calendar :size="20} class="text-blue-600" />
+                        <Calendar :size="20" class="text-blue-600" />
                         <h3 class="text-lg font-bold text-blue-900">Next Payment Due</h3>
                     </div>
 
