@@ -166,7 +166,7 @@ const getTypeColor = (type: string) => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600">Total Transfers</p>
-                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.total_transfers.toLocaleString() }}</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ (stats?.total_transfers || 0).toLocaleString() }}</p>
                         </div>
                         <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                             <Send :size="24" class="text-blue-600" />
@@ -178,7 +178,7 @@ const getTypeColor = (type: string) => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600">Pending</p>
-                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.pending_transfers }}</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats?.pending_transfers || 0 }}</p>
                         </div>
                         <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                             <Clock :size="24" class="text-yellow-600" />
@@ -191,7 +191,7 @@ const getTypeColor = (type: string) => {
                         <div>
                             <p class="text-sm text-gray-600">Total Volume</p>
                             <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                                ${{ stats.total_volume.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                                ${{ (stats?.total_volume || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -205,7 +205,7 @@ const getTypeColor = (type: string) => {
                         <div>
                             <p class="text-sm text-gray-600">Today's Volume</p>
                             <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                                ${{ stats.today_volume.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                                ${{ (stats?.today_volume || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">

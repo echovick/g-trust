@@ -81,11 +81,11 @@ const bulkRejectForm = useForm({
 const selectAll = computed({
     get: () => {
         return props.transactions?.data?.length > 0 &&
-               selectedTransactions.value.length === props.transactions.data.length;
+               selectedTransactions.value.length === props.transactions?.data?.length;
     },
     set: (value: boolean) => {
         if (value) {
-            selectedTransactions.value = props.transactions.data.map(t => t.id);
+            selectedTransactions.value = props.transactions?.data?.map(t => t.id) || [];
         } else {
             selectedTransactions.value = [];
         }
@@ -93,7 +93,7 @@ const selectAll = computed({
 });
 
 const pendingSelected = computed(() => {
-    return props.transactions.data
+    return (props.transactions?.data || [])
         .filter(t => selectedTransactions.value.includes(t.id) && t.status === 'pending')
         .length;
 });
@@ -272,7 +272,7 @@ const getStatusIcon = (status: string) => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600">Total Transactions</p>
-                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.total_transactions.toLocaleString() }}</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ (stats?.total_transactions || 0).toLocaleString() }}</p>
                         </div>
                         <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                             <Receipt :size="24" class="text-blue-600" />
@@ -284,7 +284,7 @@ const getStatusIcon = (status: string) => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600">Pending</p>
-                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.pending_transactions }}</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats?.pending_transactions || 0 }}</p>
                         </div>
                         <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                             <Clock :size="24" class="text-yellow-600" />
@@ -297,7 +297,7 @@ const getStatusIcon = (status: string) => {
                         <div>
                             <p class="text-sm text-gray-600">Total Volume</p>
                             <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                                ${{ stats.total_volume.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                                ${{ (stats?.total_volume || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -311,7 +311,7 @@ const getStatusIcon = (status: string) => {
                         <div>
                             <p class="text-sm text-gray-600">Today's Volume</p>
                             <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                                ${{ stats.today_volume.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                                ${{ (stats?.today_volume || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
                             </p>
                         </div>
                         <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
@@ -431,7 +431,7 @@ const getStatusIcon = (status: string) => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="transaction in transactions.data" :key="transaction.id"
+                            <tr v-for="transaction in (transactions?.data || [])" :key="transaction.id"
                                 class="hover:bg-gray-50"
                                 :class="selectedTransactions.includes(transaction.id) ? 'bg-blue-50' : ''"
                             >
@@ -504,16 +504,16 @@ const getStatusIcon = (status: string) => {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="transactions.meta.last_page > 1" class="px-6 py-4 border-t border-gray-200">
+                <div v-if="transactions?.meta?.last_page > 1" class="px-6 py-4 border-t border-gray-200">
                     <div class="flex items-center justify-between">
                         <div class="text-sm text-gray-600">
-                            Showing {{ ((transactions.meta.current_page - 1) * transactions.meta.per_page) + 1 }}
-                            to {{ Math.min(transactions.meta.current_page * transactions.meta.per_page, transactions.meta.total) }}
-                            of {{ transactions.meta.total }} transactions
+                            Showing {{ ((transactions?.meta?.current_page - 1) * transactions?.meta?.per_page) + 1 }}
+                            to {{ Math.min(transactions?.meta?.current_page * transactions?.meta?.per_page, transactions?.meta?.total) }}
+                            of {{ transactions?.meta?.total }} transactions
                         </div>
                         <div class="flex gap-2">
                             <Link
-                                v-for="link in transactions.links"
+                                v-for="link in (transactions?.links || [])"
                                 :key="link.label"
                                 :href="link.url || '#'"
                                 :class="[
