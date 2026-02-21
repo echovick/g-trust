@@ -322,7 +322,7 @@ const formatCurrency = (amount: number, currency: string) => {
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="loan in loans.data" :key="loan.id" class="hover:bg-gray-50">
+                        <tr v-for="loan in (loans?.data || [])" :key="loan.id" class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <Banknote class="h-5 w-5 text-gray-400 mr-3" />
@@ -365,7 +365,7 @@ const formatCurrency = (amount: number, currency: string) => {
                                 </Link>
                             </td>
                         </tr>
-                        <tr v-if="loans.data.length === 0">
+                        <tr v-if="!loans || loans.data.length === 0">
                             <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
                                 No loans found
                             </td>
@@ -374,7 +374,7 @@ const formatCurrency = (amount: number, currency: string) => {
                 </table>
 
                 <!-- Pagination -->
-                <div v-if="loans.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div v-if="loans && loans.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                     <div class="flex-1 flex justify-between sm:hidden">
                         <button
                             :disabled="loans.current_page === 1"

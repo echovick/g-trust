@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { ArrowLeft, CreditCard, Freeze, Unlock, Lock, AlertTriangle, Settings, Activity, Globe, Smartphone, CheckCircle, XCircle } from 'lucide-vue-next';
+import { ArrowLeft, CreditCard, Snowflake, Unlock, Lock, AlertTriangle, Settings, Activity, Globe, Smartphone, CheckCircle, XCircle } from 'lucide-vue-next';
 
 interface Card {
     id: number;
@@ -204,7 +204,7 @@ const maskCardNumber = (cardNumber: string) => {
                                 @click="showFreezeModal = true"
                                 class="inline-flex items-center justify-center px-4 py-2 border border-blue-300 rounded-md shadow-sm text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                <Freeze class="h-4 w-4 mr-2" />
+                                <Snowflake class="h-4 w-4 mr-2" />
                                 Freeze Card
                             </button>
 
@@ -406,7 +406,7 @@ const maskCardNumber = (cardNumber: string) => {
                 <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
                     <div>
                         <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-                            <Freeze class="h-6 w-6 text-blue-600" />
+                            <Snowflake class="h-6 w-6 text-blue-600" />
                         </div>
                         <div class="mt-3 text-center sm:mt-5">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">Freeze Card</h3>

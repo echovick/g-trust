@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import {
     Search, Filter, Download, ArrowUpRight, ArrowDownLeft,
-    Receipt, TrendingUp, Clock, CheckCircle, XCircle
+    Receipt, TrendingUp, Clock, CheckCircle, XCircle, CheckSquare, Trash2
 } from 'lucide-vue-next';
 
 interface Account {
@@ -67,7 +67,45 @@ const searchForm = useForm({
     date_to: props.filters.date_to || '',
 });
 
+const selectedTransactions = ref<number[]>([]);
 const showFilters = ref(false);
+const showBulkApproveModal = ref(false);
+const showBulkRejectModal = ref(false);
+const showBulkDeleteModal = ref(false);
+
+const bulkRejectForm = useForm({
+    transaction_ids: [] as number[],
+    reason: '',
+});
+
+const selectAll = computed({
+    get: () => {
+        return props.transactions?.data?.length > 0 &&
+               selectedTransactions.value.length === props.transactions.data.length;
+    },
+    set: (value: boolean) => {
+        if (value) {
+            selectedTransactions.value = props.transactions.data.map(t => t.id);
+        } else {
+            selectedTransactions.value = [];
+        }
+    }
+});
+
+const pendingSelected = computed(() => {
+    return props.transactions.data
+        .filter(t => selectedTransactions.value.includes(t.id) && t.status === 'pending')
+        .length;
+});
+
+const toggleTransactionSelection = (transactionId: number) => {
+    const index = selectedTransactions.value.indexOf(transactionId);
+    if (index > -1) {
+        selectedTransactions.value.splice(index, 1);
+    } else {
+        selectedTransactions.value.push(transactionId);
+    }
+};
 
 const searchTransactions = () => {
     router.get('/admin/transactions', searchForm.data(), {
@@ -79,6 +117,49 @@ const searchTransactions = () => {
 const clearFilters = () => {
     searchForm.reset();
     searchTransactions();
+};
+
+const bulkApprove = () => {
+    router.post('/admin/transactions/bulk/approve', {
+        transaction_ids: selectedTransactions.value,
+    }, {
+        onSuccess: () => {
+            selectedTransactions.value = [];
+            showBulkApproveModal.value = false;
+        },
+    });
+};
+
+const bulkReject = () => {
+    bulkRejectForm.transaction_ids = selectedTransactions.value;
+    bulkRejectForm.post('/admin/transactions/bulk/reject', {
+        onSuccess: () => {
+            selectedTransactions.value = [];
+            showBulkRejectModal.value = false;
+            bulkRejectForm.reset();
+        },
+    });
+};
+
+const bulkDelete = () => {
+    if (confirm(`Are you sure you want to delete ${selectedTransactions.value.length} transaction(s)? This cannot be undone.`)) {
+        router.post('/admin/transactions/bulk/destroy', {
+            transaction_ids: selectedTransactions.value,
+        }, {
+            onSuccess: () => {
+                selectedTransactions.value = [];
+                showBulkDeleteModal.value = false;
+            },
+        });
+    }
+};
+
+const bulkExport = () => {
+    const params = new URLSearchParams(searchForm.data() as any);
+    if (selectedTransactions.value.length > 0) {
+        selectedTransactions.value.forEach(id => params.append('transaction_ids[]', id.toString()));
+    }
+    window.location.href = `/admin/transactions/bulk/export?${params.toString()}`;
 };
 
 const formatCurrency = (amount: number, currency: string) => {
@@ -130,6 +211,59 @@ const getStatusIcon = (status: string) => {
                     <span class="hidden sm:inline">Create Transaction</span>
                     <span class="sm:hidden">Create</span>
                 </Link>
+            </div>
+
+            <!-- Bulk Actions Bar -->
+            <div v-if="selectedTransactions.length > 0" class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <CheckSquare :size="20" class="text-blue-600" />
+                        <span class="text-sm font-medium text-blue-900">
+                            {{ selectedTransactions.length }} transaction(s) selected
+                            <span v-if="pendingSelected > 0" class="text-yellow-700">
+                                ({{ pendingSelected }} pending)
+                            </span>
+                        </span>
+                        <button
+                            @click="selectedTransactions = []"
+                            class="text-sm text-blue-600 hover:text-blue-800 underline"
+                        >
+                            Clear selection
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            v-if="pendingSelected > 0"
+                            @click="showBulkApproveModal = true"
+                            class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                            <CheckCircle :size="16" />
+                            Approve ({{ pendingSelected }})
+                        </button>
+                        <button
+                            v-if="pendingSelected > 0"
+                            @click="showBulkRejectModal = true"
+                            class="inline-flex items-center gap-2 px-3 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors"
+                        >
+                            <XCircle :size="16" />
+                            Reject ({{ pendingSelected }})
+                        </button>
+                        <button
+                            @click="bulkExport"
+                            class="inline-flex items-center gap-2 px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors"
+                        >
+                            <Download :size="16" />
+                            Export
+                        </button>
+                        <button
+                            @click="showBulkDeleteModal = true"
+                            class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                            <Trash2 :size="16" />
+                            Delete
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats Grid -->
@@ -269,6 +403,13 @@ const getStatusIcon = (status: string) => {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
+                                <th class="px-6 py-3 text-left">
+                                    <input
+                                        type="checkbox"
+                                        v-model="selectAll"
+                                        class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                                    />
+                                </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Transaction
                                 </th>
@@ -290,7 +431,18 @@ const getStatusIcon = (status: string) => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="transaction in transactions.data" :key="transaction.id" class="hover:bg-gray-50">
+                            <tr v-for="transaction in transactions.data" :key="transaction.id"
+                                class="hover:bg-gray-50"
+                                :class="selectedTransactions.includes(transaction.id) ? 'bg-blue-50' : ''"
+                            >
+                                <td class="px-6 py-4">
+                                    <input
+                                        type="checkbox"
+                                        :checked="selectedTransactions.includes(transaction.id)"
+                                        @change="toggleTransactionSelection(transaction.id)"
+                                        class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                                    />
+                                </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-start gap-3">
                                         <div
@@ -376,6 +528,114 @@ const getStatusIcon = (status: string) => {
                             />
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Approve Modal -->
+        <div
+            v-if="showBulkApproveModal"
+            class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center p-4"
+            @click="showBulkApproveModal = false"
+        >
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6" @click.stop>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Approve Transactions</h2>
+                <p class="text-sm text-gray-600 mb-4">
+                    Are you sure you want to approve {{ pendingSelected }} pending transaction(s)?
+                </p>
+                <p class="text-sm text-green-800 bg-green-50 border border-green-200 rounded p-3 mb-4">
+                    <strong>Note:</strong> Account balances will be updated immediately. Transactions with insufficient funds will be skipped.
+                </p>
+                <div class="flex justify-end gap-3">
+                    <button
+                        @click="showBulkApproveModal = false"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        @click="bulkApprove"
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    >
+                        Approve Transactions
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Reject Modal -->
+        <div
+            v-if="showBulkRejectModal"
+            class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center p-4"
+            @click="showBulkRejectModal = false"
+        >
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6" @click.stop>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Reject Transactions</h2>
+                <p class="text-sm text-gray-600 mb-4">
+                    Reject {{ pendingSelected }} pending transaction(s)
+                </p>
+                <form @submit.prevent="bulkReject" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Rejection *</label>
+                        <textarea
+                            v-model="bulkRejectForm.reason"
+                            required
+                            rows="4"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                            placeholder="e.g., Suspicious activity detected"
+                        ></textarea>
+                        <p v-if="bulkRejectForm.errors.reason" class="mt-1 text-sm text-red-600">
+                            {{ bulkRejectForm.errors.reason }}
+                        </p>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4 border-t">
+                        <button
+                            type="button"
+                            @click="showBulkRejectModal = false"
+                            class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="bulkRejectForm.processing"
+                            class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50"
+                        >
+                            {{ bulkRejectForm.processing ? 'Rejecting...' : 'Reject Transactions' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bulk Delete Modal -->
+        <div
+            v-if="showBulkDeleteModal"
+            class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center p-4"
+            @click="showBulkDeleteModal = false"
+        >
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6" @click.stop>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Delete Transactions</h2>
+                <p class="text-sm text-gray-600 mb-4">
+                    Are you sure you want to delete {{ selectedTransactions.length }} transaction(s)?
+                </p>
+                <div class="text-sm text-red-800 bg-red-50 border border-red-200 rounded p-3 mb-4 space-y-2">
+                    <p><strong>Warning:</strong> This action cannot be undone.</p>
+                    <p>Only pending or cancelled transactions can be deleted. Completed transactions will be skipped.</p>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button
+                        @click="showBulkDeleteModal = false"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        @click="bulkDelete"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                        Delete Transactions
+                    </button>
                 </div>
             </div>
         </div>

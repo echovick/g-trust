@@ -127,7 +127,7 @@ const formatCurrency = (amount: number, currency: string) => {
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Total Payments</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">{{ stats.total_bill_payments }}</dd>
+                                    <dd class="text-lg font-semibold text-gray-900">{{ stats?.total_bill_payments || 0 }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ const formatCurrency = (amount: number, currency: string) => {
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Pending</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">{{ stats.pending_payments }}</dd>
+                                    <dd class="text-lg font-semibold text-gray-900">{{ stats?.pending_payments || 0 }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -161,7 +161,7 @@ const formatCurrency = (amount: number, currency: string) => {
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Auto-Pay Enabled</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">{{ stats.auto_pay_enabled }}</dd>
+                                    <dd class="text-lg font-semibold text-gray-900">{{ stats?.auto_pay_enabled || 0 }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -177,7 +177,7 @@ const formatCurrency = (amount: number, currency: string) => {
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt class="text-sm font-medium text-gray-500 truncate">Scheduled Amount</dt>
-                                    <dd class="text-sm font-semibold text-gray-900">{{ formatCurrency(stats.total_scheduled_amount, 'USD') }}</dd>
+                                    <dd class="text-sm font-semibold text-gray-900">{{ formatCurrency(stats?.total_scheduled_amount || 0, 'USD') }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -310,7 +310,7 @@ const formatCurrency = (amount: number, currency: string) => {
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="payment in bill_payments.data" :key="payment.id" class="hover:bg-gray-50">
+                        <tr v-for="payment in (bill_payments?.data || [])" :key="payment.id" class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <Receipt class="h-5 w-5 text-gray-400 mr-3" />
@@ -357,7 +357,7 @@ const formatCurrency = (amount: number, currency: string) => {
                                 </Link>
                             </td>
                         </tr>
-                        <tr v-if="bill_payments.data.length === 0">
+                        <tr v-if="!bill_payments || bill_payments.data.length === 0">
                             <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
                                 No bill payments found
                             </td>
@@ -366,7 +366,7 @@ const formatCurrency = (amount: number, currency: string) => {
                 </table>
 
                 <!-- Pagination -->
-                <div v-if="bill_payments.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div v-if="bill_payments && bill_payments.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                     <div class="flex-1 flex justify-between sm:hidden">
                         <button
                             :disabled="bill_payments.current_page === 1"

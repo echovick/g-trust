@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { CreditCard, Search, Filter, X, Freeze, Lock, Eye } from 'lucide-vue-next';
+import { CreditCard, Search, Filter, X, Snowflake, Lock, Eye } from 'lucide-vue-next';
 
 interface Card {
     id: number;
@@ -153,7 +153,7 @@ const hasActiveFilters = computed(() => {
                     <div class="p-5">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <Freeze class="h-6 w-6 text-blue-400" />
+                                <Snowflake class="h-6 w-6 text-blue-400" />
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
@@ -287,7 +287,7 @@ const hasActiveFilters = computed(() => {
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="card in cards.data" :key="card.id" class="hover:bg-gray-50">
+                        <tr v-for="card in (cards?.data || [])" :key="card.id" class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <CreditCard class="h-5 w-5 text-gray-400 mr-3" />
@@ -327,7 +327,7 @@ const hasActiveFilters = computed(() => {
                                 </Link>
                             </td>
                         </tr>
-                        <tr v-if="cards.data.length === 0">
+                        <tr v-if="!cards || cards.data.length === 0">
                             <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
                                 No cards found
                             </td>
@@ -336,7 +336,7 @@ const hasActiveFilters = computed(() => {
                 </table>
 
                 <!-- Pagination -->
-                <div v-if="cards.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div v-if="cards && cards.last_page > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                     <div class="flex-1 flex justify-between sm:hidden">
                         <button
                             :disabled="cards.current_page === 1"

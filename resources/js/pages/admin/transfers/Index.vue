@@ -295,7 +295,7 @@ const getTypeColor = (type: string) => {
             <!-- Transfers List -->
             <div class="space-y-4">
                 <div
-                    v-for="transfer in transfers.data"
+                    v-for="transfer in (transfers?.data || [])"
                     :key="transfer.id"
                     class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
                 >
@@ -381,19 +381,28 @@ const getTypeColor = (type: string) => {
                         </div>
                     </div>
                 </div>
+
+                <!-- Empty State -->
+                <div v-if="!transfers || !transfers.data || transfers.data.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                    <div class="text-gray-400 mb-4">
+                        <Send :size="48" class="mx-auto" />
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No transfers found</h3>
+                    <p class="text-sm text-gray-500">There are no transfers matching your criteria.</p>
+                </div>
             </div>
 
             <!-- Pagination -->
-            <div v-if="transfers.meta.last_page > 1" class="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
+            <div v-if="transfers?.meta?.last_page > 1" class="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-600">
-                        Showing {{ ((transfers.meta.current_page - 1) * transfers.meta.per_page) + 1 }}
-                        to {{ Math.min(transfers.meta.current_page * transfers.meta.per_page, transfers.meta.total) }}
-                        of {{ transfers.meta.total }} transfers
+                        Showing {{ ((transfers?.meta?.current_page - 1) * transfers?.meta?.per_page) + 1 }}
+                        to {{ Math.min(transfers?.meta?.current_page * transfers?.meta?.per_page, transfers?.meta?.total) }}
+                        of {{ transfers?.meta?.total }} transfers
                     </div>
                     <div class="flex gap-2">
                         <Link
-                            v-for="link in transfers.links"
+                            v-for="link in (transfers?.links || [])"
                             :key="link.label"
                             :href="link.url || '#'"
                             :class="[
