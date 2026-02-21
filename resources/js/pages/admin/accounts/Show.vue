@@ -107,6 +107,13 @@ const formatDate = (date: string) => {
                     </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
+                    <a
+                        :href="`/admin/accounts/${account.id}/edit`"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                        Edit Account
+                    </a>
                     <button
                         @click="showFundModal = true"
                         class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"

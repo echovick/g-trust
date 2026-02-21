@@ -245,6 +245,15 @@ const getStatusColor = (status: string) => {
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Admin Actions</h3>
                         <div class="space-y-3">
+                            <Link
+                                v-if="transaction.status === 'pending'"
+                                :href="`/admin/transactions/${transaction.id}/edit`"
+                                class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                Edit Transaction
+                            </Link>
+
                             <button
                                 v-if="transaction.status === 'pending'"
                                 @click="approveTransaction"

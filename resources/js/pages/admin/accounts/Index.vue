@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { Search, Wallet, ArrowRightLeft, DollarSign } from 'lucide-vue-next';
+import { Search, Wallet, ArrowRightLeft, DollarSign, MoreVertical, Download, Trash2, Power, PowerOff } from 'lucide-vue-next';
 
 interface User {
     id: number;
@@ -73,14 +73,24 @@ const formatCurrency = (amount: number, currency: string) => {
                     <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Accounts</h1>
                     <p class="text-gray-600 mt-1">Manage all bank accounts</p>
                 </div>
-                <button
-                    @click="showTransferModal = true"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
-                    <ArrowRightLeft :size="20" />
-                    <span class="hidden sm:inline">Intra-Account Transfer</span>
-                    <span class="sm:hidden">Transfer</span>
-                </button>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <Link
+                        href="/admin/accounts/create"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                        <Wallet :size="20" />
+                        <span class="hidden sm:inline">Create Account</span>
+                        <span class="sm:hidden">Create</span>
+                    </Link>
+                    <button
+                        @click="showTransferModal = true"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                        <ArrowRightLeft :size="20" />
+                        <span class="hidden sm:inline">Intra-Account Transfer</span>
+                        <span class="sm:hidden">Transfer</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Transfer Modal -->

@@ -117,9 +117,19 @@ const getStatusIcon = (status: string) => {
 <template>
     <AdminLayout title="Transaction Management">
         <div class="space-y-4 sm:space-y-6">
-            <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Transactions</h1>
-                <p class="text-gray-600 mt-1">Monitor and manage all system transactions</p>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Transactions</h1>
+                    <p class="text-gray-600 mt-1">Monitor and manage all system transactions</p>
+                </div>
+                <Link
+                    href="/admin/transactions/create"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                    <Receipt :size="20" />
+                    <span class="hidden sm:inline">Create Transaction</span>
+                    <span class="sm:hidden">Create</span>
+                </Link>
             </div>
 
             <!-- Stats Grid -->

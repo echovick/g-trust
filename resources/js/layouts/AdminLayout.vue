@@ -13,6 +13,8 @@ import {
     Landmark,
     LogOut,
     Shield,
+    Receipt,
+    Send,
 } from 'lucide-vue-next';
 
 interface Props {
@@ -32,6 +34,8 @@ const navItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/admin', current: 'dashboard' },
     { name: 'Users', icon: Users, href: '/admin/users', current: 'users' },
     { name: 'Accounts', icon: Wallet, href: '/admin/accounts', current: 'accounts' },
+    { name: 'Transactions', icon: Receipt, href: '/admin/transactions', current: 'transactions' },
+    { name: 'Transfers', icon: Send, href: '/admin/transfers', current: 'transfers' },
 ];
 
 const isActive = (itemCurrent: string) => {
