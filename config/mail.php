@@ -37,6 +37,10 @@ return [
 
     'mailers' => [
 
+        'mailtrap' => [
+            'transport' => 'mailtrap',
+        ],
+
         'mailgun' => [
             'transport' => 'mailgun',
             // 'client' => [

@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'mailtrap' => [
+        'api_key' => env('MAILTRAP_API_KEY'),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
