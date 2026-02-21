@@ -15,6 +15,9 @@ import {
     Shield,
     Receipt,
     Send,
+    CreditCard,
+    Banknote,
+    FileText,
 } from 'lucide-vue-next';
 
 interface Props {
@@ -36,6 +39,9 @@ const navItems = [
     { name: 'Accounts', icon: Wallet, href: '/admin/accounts', current: 'accounts' },
     { name: 'Transactions', icon: Receipt, href: '/admin/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/admin/transfers', current: 'transfers' },
+    { name: 'Cards', icon: CreditCard, href: '/admin/cards', current: 'cards' },
+    { name: 'Loans', icon: Banknote, href: '/admin/loans', current: 'loans' },
+    { name: 'Bill Payments', icon: FileText, href: '/admin/bill-payments', current: 'bill-payments' },
 ];
 
 const isActive = (itemCurrent: string) => {
