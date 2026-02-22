@@ -18,6 +18,7 @@ import {
     CreditCard,
     Banknote,
     FileText,
+    ClipboardList,
 } from 'lucide-vue-next';
 
 interface Props {
@@ -37,6 +38,7 @@ const navItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/admin', current: 'dashboard' },
     { name: 'Users', icon: Users, href: '/admin/users', current: 'users' },
     { name: 'Accounts', icon: Wallet, href: '/admin/accounts', current: 'accounts' },
+    { name: 'Account Requests', icon: ClipboardList, href: '/admin/account-requests', current: 'account-requests' },
     { name: 'Transactions', icon: Receipt, href: '/admin/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/admin/transfers', current: 'transfers' },
     { name: 'Cards', icon: CreditCard, href: '/admin/cards', current: 'cards' },

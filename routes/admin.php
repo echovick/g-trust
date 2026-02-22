@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\AccountRequestController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\CardController;
@@ -38,6 +39,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/accounts/bulk/destroy', [AccountController::class, 'bulkDestroy'])->name('accounts.bulk-destroy');
     Route::post('/accounts/bulk/fund', [AccountController::class, 'bulkFund'])->name('accounts.bulk-fund');
     Route::post('/accounts/bulk/export', [AccountController::class, 'bulkExport'])->name('accounts.bulk-export');
+
+    // Account Request Management
+    Route::get('/account-requests', [AccountRequestController::class, 'index'])->name('account-requests.index');
+    Route::get('/account-requests/{accountRequest}', [AccountRequestController::class, 'show'])->name('account-requests.show');
+    Route::post('/account-requests/{accountRequest}/approve', [AccountRequestController::class, 'approve'])->name('account-requests.approve');
+    Route::post('/account-requests/{accountRequest}/reject', [AccountRequestController::class, 'reject'])->name('account-requests.reject');
 
     // Transaction Management
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');

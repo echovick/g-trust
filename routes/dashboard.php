@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\AccountController;
+use App\Http\Controllers\Dashboard\AccountRequestController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\TransferController;
@@ -20,6 +21,12 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.index');
     Route::get('/accounts/{account}', [AccountController::class, 'show'])->name('accounts.show');
     Route::post('/accounts/{account}/export', [AccountController::class, 'exportStatement'])->name('accounts.export');
+
+    // Account Requests
+    Route::get('/account-requests', [AccountRequestController::class, 'index'])->name('account-requests.index');
+    Route::get('/account-requests/create', [AccountRequestController::class, 'create'])->name('account-requests.create');
+    Route::post('/account-requests', [AccountRequestController::class, 'store'])->name('account-requests.store');
+    Route::get('/account-requests/{accountRequest}', [AccountRequestController::class, 'show'])->name('account-requests.show');
 
     // Transactions
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');

@@ -19,6 +19,7 @@ import {
     Landmark,
     LogOut,
     UserPlus,
+    ClipboardList,
 } from 'lucide-vue-next';
 import CurrencySelector from '@/components/dashboard/CurrencySelector.vue';
 
@@ -40,6 +41,7 @@ const showMobileMenu = ref(false);
 const navItems = [
     { name: 'Dashboard', icon: Home, href: '/dashboard', current: 'dashboard' },
     { name: 'Accounts', icon: Wallet, href: '/dashboard/accounts', current: 'accounts' },
+    { name: 'Account Requests', icon: ClipboardList, href: '/dashboard/account-requests', current: 'account-requests' },
     { name: 'Transactions', icon: Receipt, href: '/dashboard/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/dashboard/transfers', current: 'transfers' },
     { name: 'Beneficiaries', icon: UserPlus, href: '/dashboard/beneficiaries', current: 'beneficiaries' },
@@ -52,6 +54,10 @@ const navItems = [
 
 const isActive = (itemCurrent: string) => {
     const currentRoute = page.url.split('/')[2] || 'dashboard';
+    // Handle multi-segment routes like 'account-requests'
+    if (itemCurrent.includes('-')) {
+        return page.url.includes(`/dashboard/${itemCurrent}`);
+    }
     return currentRoute === itemCurrent;
 };
 </script>
