@@ -350,7 +350,7 @@
     <div class="footer">
         <p>This is a computer-generated statement and does not require a signature.</p>
         <p>For inquiries, please contact customer support.</p>
-        <p>&copy; {{ now()->year }} G-Trust Bank. All rights reserved.</p>
+        <p>&copy; {{ now()->year }} G-Trust. All rights reserved.</p>
     </div>
 </body>
 </html>
