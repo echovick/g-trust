@@ -16,7 +16,7 @@ const cookieBannerVisible = ref(props.showCookieBanner ?? false);
 </script>
 
 <template>
-    <Head :title="title || 'G-Trust Bank'" />
+    <Head :title="title || 'G-Trust'" />
 
     <div class="min-h-screen bg-white flex flex-col">
         <TopBar />

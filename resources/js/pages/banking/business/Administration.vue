@@ -9,7 +9,7 @@ import { FileText, DollarSign, Users, TrendingUp } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Small Business Administration - G-Trust Bank">
+    <MainLayout title="Small Business Administration - G-Trust">
         <PageHero
             title="Small Business Administration (SBA) Loans"
             subtitle="Access government-backed financing for your small business"
@@ -19,7 +19,7 @@ import { FileText, DollarSign, Users, TrendingUp } from 'lucide-vue-next';
 
         <ContentSection title="SBA Loan Programs" :centered="true">
             <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12 text-center">
-                G-Trust Bank is a preferred SBA lender, helping small businesses access affordable financing with
+                G-Trust is a preferred SBA lender, helping small businesses access affordable financing with
                 favorable terms and lower down payments.
             </p>
 

@@ -9,17 +9,17 @@ import { User, Calendar, Phone, TrendingUp } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Personal Managers - G-Trust Bank">
+    <MainLayout title="Personal Managers - G-Trust">
         <PageHero
             title="Personal Managers"
-            subtitle="Get dedicated support from your own personal banking manager"
+            subtitle="Get dedicated support from your own personal finance manager"
             :image="'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Personalized Banking Experience" :centered="true">
+        <ContentSection title="Personalized Finance Experience" :centered="true">
             <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12 text-center">
-                Your personal banking manager is your dedicated partner in achieving your financial goals. Get expert
+                Your personal finance manager is your dedicated partner in achieving your financial goals. Get expert
                 guidance, priority service, and tailored solutions designed specifically for you.
             </p>
 
@@ -99,8 +99,8 @@ import { User, Calendar, Phone, TrendingUp } from 'lucide-vue-next';
         </ContentSection>
 
         <CallToAction
-            title="Ready for personalized banking?"
-            description="Connect with a personal banking manager and experience the difference"
+            title="Ready for personalized finance?"
+            description="Connect with a personal finance manager and experience the difference"
             buttonText="Request a Manager"
             background="blue"
         />

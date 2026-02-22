@@ -17,7 +17,7 @@ const showCookieBanner = ref(true);
 </script>
 
 <template>
-    <Head title="G-Trust Bank - Connecting all your banking needs" />
+    <Head title="G-Trust - Connecting all your financial needs" />
 
     <div class="min-h-screen bg-white">
         <TopBar />

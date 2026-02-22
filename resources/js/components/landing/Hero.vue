@@ -15,7 +15,7 @@ const activeSlide = ref(0);
         <div class="container mx-auto px-6 lg:px-12 relative z-10">
             <div class="max-w-2xl py-20">
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-serif text-white leading-tight mb-6 drop-shadow-lg" style="font-family: Georgia, 'Times New Roman', serif;">
-                    Connecting all your<br />banking needs
+                    Connecting all your<br />financial needs
                 </h1>
                 <p class="text-xl md:text-2xl text-white mb-10 font-light drop-shadow-lg">Making It Easy for You.</p>
                 <a

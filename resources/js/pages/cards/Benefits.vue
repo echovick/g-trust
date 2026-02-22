@@ -8,7 +8,7 @@ import { Shield, Plane, Gift, Headphones } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Credit Card Benefits - G-Trust Bank">
+    <MainLayout title="Credit Card Benefits - G-Trust">
         <PageHero
             title="Credit Card Benefits"
             subtitle="More than just a card - enjoy exclusive perks and protection"

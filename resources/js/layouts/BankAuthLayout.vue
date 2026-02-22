@@ -25,21 +25,21 @@ defineProps<{
                     <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
                         <Landmark :size="28" class="text-red-500" />
                     </div>
-                    <span class="text-2xl font-bold">G-Trust Bank</span>
+                    <span class="text-2xl font-bold">G-Trust</span>
                 </Link>
             </div>
 
             <div class="relative z-10">
                 <h2 class="text-4xl font-bold text-white mb-4 leading-tight">
-                    Secure Banking<br />at Your Fingertips
+                    Secure Finance<br />at Your Fingertips
                 </h2>
                 <p class="text-red-100 text-lg">
-                    Experience modern banking with industry-leading security and 24/7 access to your accounts.
+                    Experience modern financial services with industry-leading security and 24/7 access to your accounts.
                 </p>
             </div>
 
             <div class="relative z-10 text-red-100 text-sm">
-                <p>© 2026 G-Trust Bank. All rights reserved.</p>
+                <p>© 2026 G-Trust. All rights reserved.</p>
             </div>
         </div>
 
@@ -52,7 +52,7 @@ defineProps<{
                         <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
                             <Landmark :size="28" class="text-white" />
                         </div>
-                        <span class="text-2xl font-bold text-gray-900">G-Trust Bank</span>
+                        <span class="text-2xl font-bold text-gray-900">G-Trust</span>
                     </Link>
                 </div>
 

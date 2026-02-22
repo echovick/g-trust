@@ -5,7 +5,7 @@ import ContentSection from '@/components/shared/ContentSection.vue';
 </script>
 
 <template>
-    <MainLayout title="Search - G-Trust Bank">
+    <MainLayout title="Search - G-Trust">
         <PageHero title="Search" subtitle="Find what you're looking for" :dark="false" />
 
         <ContentSection>

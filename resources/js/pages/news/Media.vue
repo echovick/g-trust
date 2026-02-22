@@ -7,26 +7,26 @@ import { Calendar, Download, Image } from 'lucide-vue-next';
 const mediaReleases = [
     {
         date: 'February 15, 2026',
-        title: 'G-Trust Bank Announces Q4 2025 Financial Results',
+        title: 'G-Trust Announces Q4 2025 Financial Results',
         excerpt: 'Record-breaking quarter demonstrates strong growth across all business segments.',
         category: 'Press Release',
     },
     {
         date: 'January 28, 2026',
-        title: 'New Mobile Banking Features Launch',
+        title: 'New Mobile Finance Features Launch',
         excerpt: 'Enhanced security features and AI-powered financial insights now available to all customers.',
         category: 'Product News',
     },
     {
         date: 'January 10, 2026',
-        title: 'G-Trust Bank Expands Community Investment Program',
+        title: 'G-Trust Expands Community Investment Program',
         excerpt: '$50 million commitment to support local businesses and affordable housing initiatives.',
         category: 'Community',
     },
     {
         date: 'December 18, 2025',
-        title: 'Award Recognition for Digital Banking Excellence',
-        excerpt: 'G-Trust Bank receives industry recognition for innovative online banking platform.',
+        title: 'Award Recognition for Digital Finance Excellence',
+        excerpt: 'G-Trust receives industry recognition for innovative online finance platform.',
         category: 'Awards',
     },
 ];

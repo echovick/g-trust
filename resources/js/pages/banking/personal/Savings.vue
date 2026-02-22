@@ -9,7 +9,7 @@ import { TrendingUp, Shield, Zap, Target } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Savings Accounts - G-Trust Bank">
+    <MainLayout title="Savings Accounts - G-Trust">
         <PageHero
             title="Savings Accounts"
             subtitle="Grow your money with competitive rates and flexible access"

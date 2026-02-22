@@ -77,7 +77,7 @@ const isActive = (itemCurrent: string) => {
                             <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                                 <Landmark :size="24" class="text-white" />
                             </div>
-                            <span class="text-xl font-bold text-gray-900 hidden sm:block">G-Trust Bank</span>
+                            <span class="text-xl font-bold text-gray-900 hidden sm:block">G-Trust</span>
                         </Link>
                     </div>
 
@@ -139,7 +139,7 @@ const isActive = (itemCurrent: string) => {
                             <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                                 <Landmark :size="24" class="text-white" />
                             </div>
-                            <span class="text-xl font-bold text-gray-900">G-Trust Bank</span>
+                            <span class="text-xl font-bold text-gray-900">G-Trust</span>
                         </Link>
                         <button
                             @click="showMobileMenu = false"

@@ -5,7 +5,7 @@ import ContentSection from '@/components/shared/ContentSection.vue';
 </script>
 
 <template>
-    <MainLayout title="Apply for a Credit Card - G-Trust Bank">
+    <MainLayout title="Apply for a Credit Card - G-Trust">
         <PageHero
             title="Credit Card Application"
             subtitle="Apply online in minutes and get a decision instantly"

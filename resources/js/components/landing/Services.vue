@@ -4,7 +4,7 @@ import { Briefcase, TrendingUp, Smartphone, PiggyBank } from 'lucide-vue-next';
 const services = [
     {
         title: 'Online Business',
-        description: 'Explore competitive pricing with full service online banking. Bank online with over 250 services',
+        description: 'Explore competitive pricing with full service online finance. Manage online with over 250 services',
         icon: Briefcase,
         link: 'Apply online',
         href: '/services/online-business',
@@ -14,7 +14,7 @@ const services = [
     {
         title: 'Business Plan',
         description:
-            "Your business deserves banking that puts you first. We offer everything you need, from deposits to bill tools, there's a huge range of investments to choose",
+            "Your business deserves financial services that put you first. We offer everything you need, from deposits to bill tools, there's a huge range of investments to choose",
         icon: TrendingUp,
         link: 'Take the first step',
         href: '/services/business-plan',
@@ -22,8 +22,8 @@ const services = [
         iconColor: 'text-red-500',
     },
     {
-        title: 'Mobile Bank',
-        description: 'Explore competitive pricing with full service internet banking. Bank online with over 250 services',
+        title: 'Mobile Finance',
+        description: 'Explore competitive pricing with full service internet finance. Manage online with over 250 services',
         icon: Smartphone,
         link: 'Find out more',
         href: '/services/mobile-banking',
@@ -32,7 +32,7 @@ const services = [
     },
     {
         title: 'Online Deposit',
-        description: 'Explore competitive pricing with full service internet banking. Bank online with over 250 services',
+        description: 'Explore competitive pricing with full service internet finance. Manage online with over 250 services',
         icon: PiggyBank,
         link: 'Learn more',
         href: '/banking/personal/checking',

@@ -9,25 +9,25 @@ import { Laptop, Smartphone, Lock, Zap } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="E-Banking for Business - G-Trust Bank">
+    <MainLayout title="E-Finance for Business - G-Trust">
         <PageHero
-            title="E-Banking for Business"
-            subtitle="Powerful online and mobile banking for modern businesses"
+            title="E-Finance for Business"
+            subtitle="Powerful online and mobile finance for modern businesses"
             :image="'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Complete Digital Banking Platform" :centered="true">
+        <ContentSection title="Complete Digital Finance Platform" :centered="true">
             <CardGrid :columns="4">
                 <FeatureCard
                     :icon="Laptop"
-                    title="Online Banking"
+                    title="Online Finance"
                     description="Full-featured web platform accessible from any device, anywhere."
                 />
                 <FeatureCard
                     :icon="Smartphone"
                     title="Mobile App"
-                    description="Bank on the go with our business mobile banking app for iOS and Android."
+                    description="Manage on the go with our business mobile finance app for iOS and Android."
                 />
                 <FeatureCard
                     :icon="Lock"
@@ -45,7 +45,7 @@ import { Laptop, Smartphone, Lock, Zap } from 'lucide-vue-next';
         <ContentSection background="gray">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Online Banking Features</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Online Finance Features</h2>
                     <ul class="space-y-3">
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
@@ -74,7 +74,7 @@ import { Laptop, Smartphone, Lock, Zap } from 'lucide-vue-next';
                     </ul>
                 </div>
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Mobile Banking Features</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Mobile Finance Features</h2>
                     <ul class="space-y-3">
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
@@ -106,8 +106,8 @@ import { Laptop, Smartphone, Lock, Zap } from 'lucide-vue-next';
         </ContentSection>
 
         <CallToAction
-            title="Experience digital banking done right"
-            description="Manage your business finances anytime, anywhere with our e-banking solutions"
+            title="Experience digital finance done right"
+            description="Manage your business finances anytime, anywhere with our e-finance solutions"
             buttonText="Enroll Now"
             background="blue"
         />

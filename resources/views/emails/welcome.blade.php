@@ -1,7 +1,7 @@
 <x-mail::message>
-# Welcome to G-Trust Bank, {{ $userName }}!
+# Welcome to G-Trust, {{ $userName }}!
 
-We're thrilled to have you join the G-Trust Bank family. Your account has been successfully created and is ready to use!
+We're thrilled to have you join the G-Trust family. Your account has been successfully created and is ready to use!
 
 ## Your Account Details
 
@@ -34,7 +34,7 @@ Once your email is verified, you can:
 
 If you have any questions or need assistance, our support team is here to help. Feel free to reach out to us at any time.
 
-Thank you for choosing G-Trust Bank. We look forward to serving your banking needs!
+Thank you for choosing G-Trust. We look forward to serving your financial needs!
 
 Best regards,<br>
 The {{ config('app.name') }} Team

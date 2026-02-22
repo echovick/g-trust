@@ -9,15 +9,15 @@ import { Smartphone, QrCode, Bell, Shield } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Mobile Banking - G-Trust Bank">
+    <MainLayout title="Mobile Finance - G-Trust">
         <PageHero
-            title="Mobile Banking"
-            subtitle="Bank anywhere, anytime with our award-winning mobile app"
+            title="Mobile Finance"
+            subtitle="Manage your finances anywhere, anytime with our award-winning mobile app"
             :image="'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Mobile Banking Features" :centered="true">
+        <ContentSection title="Mobile Finance Features" :centered="true">
             <CardGrid :columns="4">
                 <FeatureCard
                     :icon="Smartphone"
@@ -43,8 +43,8 @@ import { Smartphone, QrCode, Bell, Shield } from 'lucide-vue-next';
         </ContentSection>
 
         <CallToAction
-            title="Download the G-Trust Bank app today"
-            description="Experience the future of banking in the palm of your hand"
+            title="Download the G-Trust app today"
+            description="Experience the future of finance in the palm of your hand"
             buttonText="Get the App"
             background="blue"
         />

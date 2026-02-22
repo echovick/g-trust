@@ -31,7 +31,7 @@ class WelcomeEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to G-Trust Bank - Your Account is Ready!',
+            subject: 'Welcome to G-Trust - Your Account is Ready!',
         );
     }
 

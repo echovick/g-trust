@@ -43,7 +43,7 @@ const tabContent = {
     wallet: {
         title: 'Go digital with secure mobile wallet solutions',
         description:
-            'Experience the convenience of digital wallets with G-Trust Bank. Make instant payments, track expenses in real-time, and manage multiple cards from one secure app. Compatible with Apple Pay, Google Pay, and Samsung Pay.',
+            'Experience the convenience of digital wallets with G-Trust. Make instant payments, track expenses in real-time, and manage multiple cards from one secure app. Compatible with Apple Pay, Google Pay, and Samsung Pay.',
         image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800',
         alt: 'Digital Wallet',
     },
@@ -53,7 +53,7 @@ const tabContent = {
 <template>
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Business Banking</h2>
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Business Finance</h2>
 
             <div class="flex justify-center gap-8 mb-12 border-b border-gray-200 overflow-x-auto">
                 <button

@@ -6,9 +6,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
 </script>
 
 <template>
-    <MainLayout title="Online Business Banking - G-Trust Bank">
+    <MainLayout title="Online Business Finance - G-Trust">
         <PageHero
-            title="Online Business Banking"
+            title="Online Business Finance"
             subtitle="Powerful online tools to manage your business finances"
             :image="'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600'"
             :dark="true"
@@ -17,9 +17,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
         <ContentSection>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Streamline Your Business Banking</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Streamline Your Business Finance</h2>
                     <p class="text-gray-600 mb-6 leading-relaxed">
-                        Our online business banking platform gives you complete control over your business finances with
+                        Our online business finance platform gives you complete control over your business finances with
                         powerful tools and features designed for modern businesses.
                     </p>
                     <ul class="space-y-3">
@@ -48,8 +48,8 @@ import CallToAction from '@/components/shared/CallToAction.vue';
         </ContentSection>
 
         <CallToAction
-            title="Start banking online today"
-            description="Get instant access to powerful business banking tools"
+            title="Start managing online today"
+            description="Get instant access to powerful business finance tools"
             buttonText="Get Started"
             background="blue"
         />

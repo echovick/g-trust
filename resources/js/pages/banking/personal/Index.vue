@@ -9,17 +9,17 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Personal Banking - G-Trust Bank">
+    <MainLayout title="Personal Finance - G-Trust">
         <PageHero
-            title="Personal Banking"
-            subtitle="Banking that grows with you and adapts to your life"
+            title="Personal Finance"
+            subtitle="Financial services that grow with you and adapt to your life"
             :image="'https://images.unsplash.com/photo-1554224311-beee415c201f?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Personal Banking Services" :centered="true">
+        <ContentSection title="Personal Finance Services" :centered="true">
             <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12 text-center">
-                From everyday checking to long-term savings, we offer a complete range of personal banking solutions
+                From everyday checking to long-term savings, we offer a complete range of personal finance solutions
                 designed to help you manage your money with confidence.
             </p>
 
@@ -65,9 +65,9 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
                     />
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Banking Made Simple</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Finance Made Simple</h3>
                     <p class="text-gray-600 mb-6 leading-relaxed">
-                        Manage your accounts anytime, anywhere with our award-winning mobile app and online banking
+                        Manage your accounts anytime, anywhere with our award-winning mobile app and online finance
                         platform. Pay bills, transfer money, deposit checks, and more - all from the palm of your hand.
                     </p>
                     <ul class="space-y-3 mb-6">
@@ -97,7 +97,7 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
 
         <CallToAction
             title="Ready to get started?"
-            description="Open your personal banking account today and experience banking that works for you"
+            description="Open your personal account today and experience financial services that work for you"
             buttonText="Open an Account"
             background="blue"
         />

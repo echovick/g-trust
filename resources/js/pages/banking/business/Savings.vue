@@ -6,7 +6,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
 </script>
 
 <template>
-    <MainLayout title="Business Savings - G-Trust Bank">
+    <MainLayout title="Business Savings - G-Trust">
         <PageHero
             title="Business Savings"
             subtitle="Earn more on your business funds with competitive rates"

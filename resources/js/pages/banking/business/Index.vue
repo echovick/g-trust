@@ -9,15 +9,15 @@ import { Briefcase, TrendingUp, Shield, Users } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Business Banking - G-Trust Bank">
+    <MainLayout title="Business Finance - G-Trust">
         <PageHero
-            title="Business Banking"
-            subtitle="Banking solutions designed to help your business thrive"
+            title="Business Finance"
+            subtitle="Financial solutions designed to help your business thrive"
             :image="'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Business Banking Solutions" :centered="true">
+        <ContentSection title="Business Finance Solutions" :centered="true">
             <CardGrid :columns="4">
                 <FeatureCard
                     :icon="Briefcase"
@@ -48,7 +48,7 @@ import { Briefcase, TrendingUp, Shield, Users } from 'lucide-vue-next';
 
         <CallToAction
             title="Ready to grow your business?"
-            description="Partner with G-Trust Bank for business banking solutions that scale with you"
+            description="Partner with G-Trust for business finance solutions that scale with you"
             buttonText="Get Started"
             background="blue"
         />

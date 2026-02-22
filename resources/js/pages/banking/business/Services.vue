@@ -8,9 +8,9 @@ import { CreditCard, Globe, Users, Shield, Wallet, FileText } from 'lucide-vue-n
 </script>
 
 <template>
-    <MainLayout title="Banking Additional Services - G-Trust Bank">
+    <MainLayout title="Additional Services - G-Trust">
         <PageHero
-            title="Additional Banking Services"
+            title="Additional Finance Services"
             subtitle="Comprehensive solutions to support your business operations"
             :image="'https://images.unsplash.com/photo-1556742111-a301076d9d18?w=1600'"
             :dark="true"

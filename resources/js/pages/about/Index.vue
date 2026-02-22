@@ -9,10 +9,10 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="About G-Trust Bank">
+    <MainLayout title="About G-Trust">
         <PageHero
-            title="About G-Trust Bank"
-            subtitle="Building trust through innovation and excellence in banking since our foundation"
+            title="About G-Trust"
+            subtitle="Building trust through innovation and excellence in finance since our foundation"
             :image="'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600'"
             :dark="true"
         />
@@ -20,9 +20,9 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
         <ContentSection title="Our Story" :centered="true">
             <div class="max-w-4xl mx-auto">
                 <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                    G-Trust Bank has been at the forefront of banking innovation for decades, serving millions of
+                    G-Trust has been at the forefront of financial innovation for decades, serving millions of
                     customers worldwide with dedication, integrity, and excellence. Our commitment to providing
-                    exceptional financial services has made us one of the most trusted names in banking.
+                    exceptional financial services has made us one of the most trusted names in finance.
                 </p>
                 <p class="text-lg text-gray-600 leading-relaxed">
                     From humble beginnings to becoming a global financial institution, we've never lost sight of our
@@ -60,11 +60,11 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
         <ContentSection>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Why Choose G-Trust Bank?</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Why Choose G-Trust?</h3>
                     <ul class="space-y-4">
                         <li class="flex items-start gap-3">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span class="text-gray-600">Over 50 years of banking excellence and expertise</span>
+                            <span class="text-gray-600">Over 50 years of financial excellence and expertise</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="text-red-500 font-bold">✓</span>
@@ -72,7 +72,7 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span class="text-gray-600">Cutting-edge digital banking platforms</span>
+                            <span class="text-gray-600">Cutting-edge digital finance platforms</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="text-red-500 font-bold">✓</span>
@@ -87,7 +87,7 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
                 <div class="bg-gray-100 rounded-lg overflow-hidden">
                     <img
                         src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800"
-                        alt="G-Trust Bank Team"
+                        alt="G-Trust Team"
                         class="w-full h-[400px] object-cover"
                     />
                 </div>
@@ -95,7 +95,7 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
         </ContentSection>
 
         <CallToAction
-            title="Ready to experience banking done right?"
+            title="Ready to experience financial services done right?"
             description="Join millions of satisfied customers who trust us with their financial future"
             buttonText="Open an Account"
             background="blue"

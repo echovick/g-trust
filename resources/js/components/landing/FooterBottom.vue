@@ -2,20 +2,20 @@
 import { Landmark } from 'lucide-vue-next';
 
 const brandLinks = [
-    { name: 'About G-Trust Bank', href: '/about' },
-    { name: 'G-Trust Bank Insight', href: '/about/insight' },
-    { name: 'G-Trust Bank History', href: '/about/history' },
+    { name: 'About G-Trust', href: '/about' },
+    { name: 'G-Trust Insight', href: '/about/insight' },
+    { name: 'G-Trust History', href: '/about/history' },
     { name: 'Investors Information', href: '/about/investors' },
 ];
 
 const sections = [
     {
-        title: 'Banking With Us',
+        title: 'Finance With Us',
         links: [
-            { name: 'Personal Banking', href: '/banking/personal' },
-            { name: 'Mobile Banking', href: '/services/mobile-banking' },
-            { name: 'G-Trust Bank Insight', href: '/about/insight' },
-            { name: 'G-Trust Bank History', href: '/about/history' },
+            { name: 'Personal Finance', href: '/banking/personal' },
+            { name: 'Mobile Finance', href: '/services/mobile-banking' },
+            { name: 'G-Trust Insight', href: '/about/insight' },
+            { name: 'G-Trust History', href: '/about/history' },
             { name: 'Services', href: '/services' },
         ],
     },
@@ -51,7 +51,7 @@ const sections = [
                         <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                             <Landmark :size="24" class="text-white" />
                         </div>
-                        <span class="text-xl font-semibold">G-Trust Bank</span>
+                        <span class="text-xl font-semibold">G-Trust</span>
                     </div>
                     <ul class="space-y-2 text-sm text-gray-400">
                         <li v-for="link in brandLinks" :key="link.name">

@@ -15,8 +15,8 @@
                     <p class="text-sm font-semibold mb-2 tracking-wide opacity-90">LEARNING CENTER</p>
                     <h2 class="text-4xl font-bold mb-4">Making internet a brand new experience</h2>
                     <p class="mb-8 leading-relaxed opacity-90">
-                        Online banking can open you a lot of time and money: from the comfort of your own home, you can
-                        pay bills. Use this guide to find out how to know the comfort of your home. However, it doesn't
+                        Online finance can save you a lot of time and money: from the comfort of your own home, you can
+                        pay bills. Use this guide to find out how to enjoy the comfort of your home. However, it doesn't
                         mean you shouldn't take precautions.
                     </p>
                     <a

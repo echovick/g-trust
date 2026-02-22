@@ -2,7 +2,7 @@
 import { Facebook, Twitter, Linkedin, Youtube, Instagram } from 'lucide-vue-next';
 
 const topLinks = [
-    { name: 'About Bank', href: '/about' },
+    { name: 'About Us', href: '/about' },
     { name: 'Careers', href: '/about/careers' },
     { name: 'Credit Cards', href: '/cards' },
     { name: 'Services', href: '/services' },

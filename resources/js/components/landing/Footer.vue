@@ -1,42 +1,42 @@
 <script setup lang="ts">
 const footerSections = [
     {
-        title: 'Personal Banking',
+        title: 'Personal Finance',
         links: [
             { name: 'Personal Checking', href: '/banking/personal/checking' },
             { name: 'Saving Accounts', href: '/banking/personal/savings' },
             { name: 'Personal Managers', href: '/banking/personal/managers' },
             { name: 'Credit Cards', href: '/cards' },
-            { name: 'Personal Banking', href: '/banking/personal' },
+            { name: 'Personal Finance', href: '/banking/personal' },
         ],
     },
     {
-        title: 'Business Banking',
+        title: 'Business Finance',
         links: [
             { name: 'Business Checking', href: '/banking/business/checking' },
             { name: 'Business Savings', href: '/banking/business/savings' },
             { name: 'Small Business Administration', href: '/banking/business/sba' },
-            { name: 'Banking Additional Services', href: '/banking/business/services' },
-            { name: 'E-Banking', href: '/banking/business/e-banking' },
+            { name: 'Additional Services', href: '/banking/business/services' },
+            { name: 'E-Finance', href: '/banking/business/e-banking' },
         ],
     },
     {
         title: 'Quick Links',
         links: [
-            { name: 'About G-Trust Bank', href: '/about' },
-            { name: 'G-Trust Bank News', href: '/news' },
+            { name: 'About G-Trust', href: '/about' },
+            { name: 'G-Trust News', href: '/news' },
             { name: 'Credit Cards', href: '/cards' },
-            { name: 'G-Trust Bank Careers', href: '/about/careers' },
+            { name: 'G-Trust Careers', href: '/about/careers' },
         ],
     },
     {
         title: 'News & Blog',
         links: [
-            { name: 'G-Trust Bank Recent News', href: '/news' },
+            { name: 'G-Trust Recent News', href: '/news' },
             { name: 'Media Centre', href: '/news/media' },
-            { name: 'G-Trust Bank Blog', href: '/news/blog' },
-            { name: 'G-Trust Bank Events', href: '/news/events' },
-            { name: 'G-Trust Bank FAQs', href: '/help' },
+            { name: 'G-Trust Blog', href: '/news/blog' },
+            { name: 'G-Trust Events', href: '/news/events' },
+            { name: 'G-Trust FAQs', href: '/help' },
         ],
     },
 ];

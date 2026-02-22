@@ -14,7 +14,7 @@ import { store } from '@/routes/register';
 <template>
     <BankAuthLayout
         title="Create Account"
-        description="Join G-Trust Bank today"
+        description="Join G-Trust today"
     >
         <Head title="Register">
             <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

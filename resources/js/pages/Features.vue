@@ -8,10 +8,10 @@ import { Smartphone, Lock, Zap, Users, Globe, TrendingUp } from 'lucide-vue-next
 </script>
 
 <template>
-    <MainLayout title="Features - G-Trust Bank">
+    <MainLayout title="Features - G-Trust">
         <PageHero
-            title="Banking Features"
-            subtitle="Discover the powerful features that make banking easier"
+            title="Finance Features"
+            subtitle="Discover the powerful features that make managing finances easier"
             :image="'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1600'"
             :dark="true"
         />
@@ -20,7 +20,7 @@ import { Smartphone, Lock, Zap, Users, Globe, TrendingUp } from 'lucide-vue-next
             <CardGrid :columns="3">
                 <FeatureCard
                     :icon="Smartphone"
-                    title="Mobile Banking"
+                    title="Mobile Finance"
                     description="Full-featured mobile app with biometric login, mobile check deposit, and instant notifications."
                 />
                 <FeatureCard

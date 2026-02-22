@@ -8,25 +8,25 @@ import { Smartphone, Globe, CreditCard, Lock } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Services - G-Trust Bank">
+    <MainLayout title="Services - G-Trust">
         <PageHero
             title="Our Services"
-            subtitle="Comprehensive banking services for all your financial needs"
+            subtitle="Comprehensive financial services for all your needs"
             :image="'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Digital Banking Services" :centered="true">
+        <ContentSection title="Digital Finance Services" :centered="true">
             <CardGrid :columns="4">
                 <FeatureCard
                     :icon="Smartphone"
-                    title="Mobile Banking"
-                    description="Bank on the go with our full-featured mobile app for iOS and Android."
+                    title="Mobile Finance"
+                    description="Manage on the go with our full-featured mobile app for iOS and Android."
                     link="#"
                 />
                 <FeatureCard
                     :icon="Globe"
-                    title="Online Banking"
+                    title="Online Finance"
                     description="Manage your accounts 24/7 from any device with our secure online platform."
                     link="#"
                 />

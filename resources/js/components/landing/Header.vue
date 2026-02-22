@@ -37,7 +37,7 @@ const closeMobileMenu = () => {
                     <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
                         <Landmark :size="24" class="text-white" />
                     </div>
-                    <span class="text-xl font-semibold text-gray-900">G-Trust Bank</span>
+                    <span class="text-xl font-semibold text-gray-900">G-Trust</span>
                 </div>
 
                 <nav class="hidden lg:flex items-center gap-8">
