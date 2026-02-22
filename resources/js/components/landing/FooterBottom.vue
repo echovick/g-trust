@@ -30,13 +30,12 @@ const sections = [
         ],
     },
     {
-        title: 'Socials',
+        title: 'Contact Us',
         links: [
-            { name: 'Facebook', href: '#' },
-            { name: 'Twitter', href: '#' },
-            { name: 'Instagram', href: '#' },
-            { name: 'YouTube', href: '#' },
-            { name: 'Pinterest', href: '#' },
+            { name: 'UK: +44 7474798274', href: 'tel:+447474798274' },
+            { name: 'USA: +1 6282657540', href: 'tel:+16282657540' },
+            { name: '128 City Rd, London EC1V 2NX, UK', href: '#' },
+            { name: '333 Market St, San Francisco, CA 94105', href: '#' },
         ],
     },
 ];

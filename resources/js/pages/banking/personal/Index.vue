@@ -28,28 +28,28 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
                     :icon="CreditCard"
                     title="Personal Checking"
                     description="Convenient checking accounts with no monthly fees and unlimited transactions."
-                    link="#"
+                    link="/banking/personal/checking"
                     linkText="Learn more"
                 />
                 <FeatureCard
                     :icon="PiggyBank"
                     title="Savings Accounts"
                     description="Grow your money with competitive interest rates and flexible access to your funds."
-                    link="#"
+                    link="/banking/personal/savings"
                     linkText="Learn more"
                 />
                 <FeatureCard
                     :icon="TrendingUp"
                     title="Investment Options"
                     description="Build wealth for the future with our range of investment and retirement accounts."
-                    link="#"
+                    link="/banking/personal"
                     linkText="Learn more"
                 />
                 <FeatureCard
                     :icon="Shield"
                     title="Account Protection"
                     description="Advanced security features and fraud protection to keep your money safe."
-                    link="#"
+                    link="/help"
                     linkText="Learn more"
                 />
             </CardGrid>
@@ -99,6 +99,7 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
             title="Ready to get started?"
             description="Open your personal account today and experience financial services that work for you"
             buttonText="Open an Account"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

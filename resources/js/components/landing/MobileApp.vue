@@ -11,19 +11,9 @@
                         Download the G-Trust App and simplify your finances. Discover tools, simple and convenient
                         way to take command of your account, on your mobile phone
                     </p>
-                    <div class="flex gap-4">
-                        <a href="#" class="inline-block">
-                            <div class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
-                                <div class="text-xs">Download on the</div>
-                                <div class="text-lg font-semibold">App Store</div>
-                            </div>
-                        </a>
-                        <a href="#" class="inline-block">
-                            <div class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
-                                <div class="text-xs">GET IT ON</div>
-                                <div class="text-lg font-semibold">Google Play</div>
-                            </div>
-                        </a>
+                    <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-8 py-4 rounded-lg inline-block">
+                        <div class="text-2xl font-bold">Coming Soon</div>
+                        <div class="text-sm opacity-90 mt-1">Available on iOS and Android</div>
                     </div>
                 </div>
                 <div class="flex justify-center">

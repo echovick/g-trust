@@ -102,6 +102,7 @@ import { FileText, DollarSign, Users, TrendingUp } from 'lucide-vue-next';
             title="Ready to grow with SBA financing?"
             description="Speak with our SBA lending specialists to find the right loan for your business"
             buttonText="Apply Now"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

@@ -17,13 +17,7 @@ Here are your default account details:
 
 ## What's Next?
 
-Before you can start using your account, please verify your email address by clicking the button below:
-
-<x-mail::button :url="url('/email/verify')">
-Verify Email Address
-</x-mail::button>
-
-Once your email is verified, you can:
+You can now start using your account! Here's what you can do:
 - View your account dashboard
 - Make transfers and payments
 - Add beneficiaries

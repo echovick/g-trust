@@ -109,6 +109,7 @@ import { Laptop, Smartphone, Lock, Zap } from 'lucide-vue-next';
             title="Experience digital finance done right"
             description="Manage your business finances anytime, anywhere with our e-finance solutions"
             buttonText="Enroll Now"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

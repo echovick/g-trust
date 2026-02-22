@@ -98,6 +98,7 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
             title="Ready to experience financial services done right?"
             description="Join millions of satisfied customers who trust us with their financial future"
             buttonText="Open an Account"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

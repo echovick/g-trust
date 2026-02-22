@@ -103,6 +103,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
             title="Open your checking account in minutes"
             description="Get started with no minimum deposit and enjoy financial services without the fees"
             buttonText="Get Started"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

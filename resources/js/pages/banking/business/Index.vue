@@ -50,6 +50,7 @@ import { Briefcase, TrendingUp, Shield, Users } from 'lucide-vue-next';
             title="Ready to grow your business?"
             description="Partner with G-Trust for business finance solutions that scale with you"
             buttonText="Get Started"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

@@ -50,6 +50,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
             title="Start planning for success"
             description="Schedule a consultation with our business planning experts"
             buttonText="Schedule Consultation"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

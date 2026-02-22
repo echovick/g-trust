@@ -64,6 +64,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
             title="Find your perfect card"
             description="Compare our credit cards and choose the one that fits your lifestyle"
             buttonText="Compare Cards"
+            buttonLink="/register"
             background="red"
         />
     </MainLayout>

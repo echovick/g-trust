@@ -168,6 +168,7 @@ const upcomingEvents = [
             title="Questions about our investor relations?"
             description="Our investor relations team is here to help"
             buttonText="Contact IR Team"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

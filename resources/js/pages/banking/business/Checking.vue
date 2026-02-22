@@ -103,6 +103,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
             title="Open your business checking account today"
             description="Get started with the right account for your business needs"
             buttonText="Get Started"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

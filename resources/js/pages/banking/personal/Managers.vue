@@ -102,6 +102,7 @@ import { User, Calendar, Phone, TrendingUp } from 'lucide-vue-next';
             title="Ready for personalized finance?"
             description="Connect with a personal finance manager and experience the difference"
             buttonText="Request a Manager"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

@@ -46,6 +46,7 @@ import { Smartphone, QrCode, Bell, Shield } from 'lucide-vue-next';
             title="Download the G-Trust app today"
             description="Experience the future of finance in the palm of your hand"
             buttonText="Get the App"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

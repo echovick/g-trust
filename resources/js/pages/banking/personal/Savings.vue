@@ -104,6 +104,7 @@ import { TrendingUp, Shield, Zap, Target } from 'lucide-vue-next';
             title="Start saving smarter today"
             description="Open a savings account and watch your money grow with competitive interest rates"
             buttonText="Open Savings Account"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

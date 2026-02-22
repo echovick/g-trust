@@ -51,6 +51,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
             title="Start managing online today"
             description="Get instant access to powerful business finance tools"
             buttonText="Get Started"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>

@@ -86,11 +86,12 @@ const tabContent = {
                     <p class="text-gray-600 mb-6 leading-relaxed">
                         {{ tabContent[activeTab].description }}
                     </p>
-                    <button
-                        class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors"
+                    <a
+                        href="/banking/business"
+                        class="inline-block bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors"
                     >
                         Learn more
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

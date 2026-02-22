@@ -76,6 +76,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
             title="Grow your business reserves"
             description="Put your business savings to work with competitive interest rates"
             buttonText="Open Savings Account"
+            buttonLink="/register"
             background="blue"
         />
     </MainLayout>
