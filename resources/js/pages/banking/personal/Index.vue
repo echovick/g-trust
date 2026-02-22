@@ -88,9 +88,9 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
                             <span class="text-gray-600">Budgeting and spending insights</span>
                         </li>
                     </ul>
-                    <button class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors">
+                    <a href="/services/mobile-banking" class="block bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors text-center">
                         Download App
-                    </button>
+                    </a>
                 </div>
             </div>
         </ContentSection>

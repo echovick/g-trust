@@ -18,12 +18,20 @@ const activeSlide = ref(0);
                     Connecting all your<br />financial needs
                 </h1>
                 <p class="text-xl md:text-2xl text-white mb-10 font-light drop-shadow-lg">Making It Easy for You.</p>
-                <a
-                    href="/about"
-                    class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-base"
-                >
-                    Find out more
-                </a>
+                <div class="flex flex-wrap gap-4">
+                    <a
+                        href="/about"
+                        class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-base"
+                    >
+                        Find out more
+                    </a>
+                    <a
+                        href="/register"
+                        class="inline-block bg-white hover:bg-gray-100 text-gray-900 px-10 py-4 rounded-full font-medium transition-all shadow-lg hover:shadow-xl text-base"
+                    >
+                        Open Account
+                    </a>
+                </div>
             </div>
         </div>
 
