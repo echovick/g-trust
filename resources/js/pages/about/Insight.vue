@@ -16,13 +16,13 @@ const insights = [
         icon: Users,
         title: 'Customer Base',
         stat: '2.3M+',
-        description: 'Active customers across personal and business banking segments.',
+        description: 'Active customers across personal and business finance segments.',
     },
     {
         icon: Award,
         title: 'Industry Recognition',
         stat: '50+',
-        description: 'Awards and accolades received for excellence in banking services.',
+        description: 'Awards and accolades received for excellence in financial services.',
     },
     {
         icon: Globe,
@@ -52,9 +52,9 @@ const reports = [
 </script>
 
 <template>
-    <MainLayout title="G-Trust Bank Insight - G-Trust Bank">
+    <MainLayout title="G-Trust Insight - G-Trust">
         <PageHero
-            title="G-Trust Bank Insight"
+            title="G-Trust Insight"
             subtitle="Data, insights, and transparency into our operations"
             :image="'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600'"
             :dark="true"
@@ -64,7 +64,7 @@ const reports = [
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Transparency Through Data</h2>
                 <p class="text-lg text-gray-600">
-                    At G-Trust Bank, we believe in open communication with our stakeholders. Explore our key metrics,
+                    At G-Trust, we believe in open communication with our stakeholders. Explore our key metrics,
                     performance indicators, and strategic insights that drive our business forward.
                 </p>
             </div>

@@ -15,7 +15,7 @@ const openIndex = ref<number | null>(null);
 </script>
 
 <template>
-    <MainLayout title="Help & FAQ - G-Trust Bank">
+    <MainLayout title="Help & FAQ - G-Trust">
         <PageHero
             title="How Can We Help?"
             subtitle="Find answers to your questions or get in touch with our support team"

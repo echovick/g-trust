@@ -6,10 +6,10 @@ import { MapPin, Clock, Phone } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Branch Locations - G-Trust Bank">
+    <MainLayout title="Branch Locations - G-Trust">
         <PageHero
             title="Branch Locations"
-            subtitle="Find a G-Trust Bank branch near you"
+            subtitle="Find a G-Trust branch near you"
             :image="'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600'"
             :dark="true"
         />

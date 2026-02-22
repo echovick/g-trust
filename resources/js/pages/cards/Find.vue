@@ -16,7 +16,7 @@ const categories = [
 </script>
 
 <template>
-    <MainLayout title="Find a Credit Card - G-Trust Bank">
+    <MainLayout title="Find a Credit Card - G-Trust">
         <PageHero
             title="Find Your Perfect Credit Card"
             subtitle="Compare cards and find the one that matches your spending style"
@@ -46,7 +46,7 @@ const categories = [
                 <div class="bg-white border-2 border-gray-200 rounded-xl p-8 hover:border-red-500 transition-all hover:shadow-lg">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-6 text-white mb-6 h-40 flex flex-col justify-between">
                         <div>
-                            <p class="text-sm opacity-80">G-Trust Bank</p>
+                            <p class="text-sm opacity-80">G-Trust</p>
                             <p class="text-xl font-bold">Cashback Rewards</p>
                         </div>
                         <div class="text-2xl font-bold">2% Back</div>
@@ -67,7 +67,7 @@ const categories = [
                 <div class="bg-white border-2 border-gray-200 rounded-xl p-8 hover:border-red-500 transition-all hover:shadow-lg">
                     <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-lg p-6 text-white mb-6 h-40 flex flex-col justify-between">
                         <div>
-                            <p class="text-sm opacity-80">G-Trust Bank</p>
+                            <p class="text-sm opacity-80">G-Trust</p>
                             <p class="text-xl font-bold">Travel Elite</p>
                         </div>
                         <div class="text-2xl font-bold">3X Points</div>
@@ -91,7 +91,7 @@ const categories = [
                     </div>
                     <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg p-6 text-white mb-6 h-40 flex flex-col justify-between">
                         <div>
-                            <p class="text-sm opacity-80">G-Trust Bank</p>
+                            <p class="text-sm opacity-80">G-Trust</p>
                             <p class="text-xl font-bold">Platinum Elite</p>
                         </div>
                         <div class="text-2xl font-bold">5X Points</div>
