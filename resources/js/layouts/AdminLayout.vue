@@ -83,9 +83,9 @@ const isActive = (itemCurrent: string) => {
                     <!-- Right Side - User -->
                     <div class="flex items-center gap-3">
                         <!-- Notifications -->
-                        <button class="p-2 rounded-full hover:bg-red-800 relative">
+                        <Link href="/admin/notifications" class="p-2 rounded-full hover:bg-red-800 relative">
                             <Bell :size="20" class="text-white" />
-                        </button>
+                        </Link>
 
                         <!-- User Menu -->
                         <div class="flex items-center gap-3 pl-3 border-l border-red-500">
