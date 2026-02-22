@@ -37,9 +37,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                             <span class="text-sm text-gray-600">Bill pay</span>
                         </li>
                     </ul>
-                    <button class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors">
+                    <a href="/register" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
                         Open Account
-                    </button>
+                    </a>
                 </div>
 
                 <div class="bg-white border-2 border-red-500 rounded-lg p-8 relative">
@@ -66,9 +66,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                             <span class="text-sm text-gray-600">Interest on balances</span>
                         </li>
                     </ul>
-                    <button class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors">
+                    <a href="/register" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
                         Open Account
-                    </button>
+                    </a>
                 </div>
 
                 <div class="bg-white border-2 border-gray-200 rounded-lg p-8 hover:border-red-500 transition-colors">
@@ -92,9 +92,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                             <span class="text-sm text-gray-600">Free checks & wire transfers</span>
                         </li>
                     </ul>
-                    <button class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors">
+                    <a href="/register" class="block w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-full font-medium transition-colors text-center">
                         Open Account
-                    </button>
+                    </a>
                 </div>
             </div>
         </ContentSection>

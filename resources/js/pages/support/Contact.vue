@@ -45,7 +45,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
                     </div>
                     <h3 class="font-semibold text-gray-900 mb-2">Live Chat</h3>
                     <p class="text-gray-600 text-sm mb-2">Available now</p>
-                    <a href="/contact" class="text-red-500 hover:text-red-600 font-medium">Start Chat</a>
+                    <a href="/help" class="text-red-500 hover:text-red-600 font-medium">Start Chat</a>
                 </div>
 
                 <div class="text-center p-6">

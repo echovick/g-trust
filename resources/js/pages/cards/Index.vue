@@ -25,9 +25,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                         <li>✓ 0% intro APR for 12 months</li>
                         <li>✓ No foreign transaction fees</li>
                     </ul>
-                    <button class="w-full bg-white text-blue-600 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                    <a href="/cards/apply" class="block w-full bg-white text-blue-600 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors text-center">
                         Apply Now
-                    </button>
+                    </a>
                 </div>
 
                 <div class="bg-gradient-to-br from-red-600 to-red-700 rounded-xl p-8 text-white">
@@ -39,9 +39,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                         <li>✓ Airport lounge access</li>
                         <li>✓ Travel insurance included</li>
                     </ul>
-                    <button class="w-full bg-white text-red-600 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                    <a href="/cards/apply" class="block w-full bg-white text-red-600 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors text-center">
                         Apply Now
-                    </button>
+                    </a>
                 </div>
 
                 <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-8 text-white">
@@ -53,9 +53,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                         <li>✓ Concierge service</li>
                         <li>✓ Exclusive benefits</li>
                     </ul>
-                    <button class="w-full bg-white text-gray-900 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                    <a href="/cards/apply" class="block w-full bg-white text-gray-900 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors text-center">
                         Apply Now
-                    </button>
+                    </a>
                 </div>
             </div>
         </ContentSection>

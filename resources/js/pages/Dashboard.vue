@@ -308,7 +308,7 @@ const savingsPercentage = computed(() =>
                     </div>
                     <div class="text-4xl font-bold mb-2">782</div>
                     <p class="text-blue-100 text-sm mb-4">Excellent • Updated today</p>
-                    <a href="#" class="inline-flex items-center text-sm text-white font-medium hover:underline">
+                    <a href="/dashboard" class="inline-flex items-center text-sm text-white font-medium hover:underline">
                         View Details →
                     </a>
                 </div>

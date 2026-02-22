@@ -38,9 +38,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                             <span class="text-gray-600">No monthly fees</span>
                         </li>
                     </ul>
-                    <button class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors w-full">
+                    <a href="/register" class="block bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors w-full text-center">
                         Open Account
-                    </button>
+                    </a>
                 </div>
 
                 <div class="bg-white rounded-lg p-8 border-2 border-gray-200">
@@ -65,9 +65,9 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                             <span class="text-gray-600">FDIC insured</span>
                         </li>
                     </ul>
-                    <button class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors w-full">
+                    <a href="/register" class="block bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors w-full text-center">
                         Open Account
-                    </button>
+                    </a>
                 </div>
             </div>
         </ContentSection>
