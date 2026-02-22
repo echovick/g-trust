@@ -32,7 +32,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
-const user = computed(() => page.props.auth?.user || { name: 'User' });
+const user = computed(() => page.props.auth?.user || { name: 'User', membership_tier: 'Standard' });
+const unreadNotifications = computed(() => page.props.auth?.unreadNotifications || 0);
 
 const showMobileMenu = ref(false);
 
@@ -87,19 +88,19 @@ const isActive = (itemCurrent: string) => {
                         <CurrencySelector />
 
                         <!-- Notifications -->
-                        <button class="p-2 rounded-full hover:bg-gray-100 relative">
+                        <Link href="/dashboard/notifications" class="p-2 rounded-full hover:bg-gray-100 relative">
                             <Bell :size="20" class="text-gray-600" />
-                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
+                            <span v-if="unreadNotifications > 0" class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </Link>
 
                         <!-- User Menu -->
                         <div class="flex items-center gap-3 pl-3 border-l">
                             <div class="hidden sm:block text-right">
                                 <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
-                                <p class="text-xs text-gray-500">Premium Member</p>
+                                <p class="text-xs text-gray-500">{{ user.membership_tier }} Member</p>
                             </div>
                             <Link
-                                href="/settings"
+                                href="/dashboard/settings"
                                 class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
                             >
                                 <User :size="20" class="text-gray-700" />
@@ -157,7 +158,7 @@ const isActive = (itemCurrent: string) => {
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
-                                <p class="text-xs text-gray-500">Premium Member</p>
+                                <p class="text-xs text-gray-500">{{ user.membership_tier }} Member</p>
                             </div>
                         </div>
                     </div>
@@ -185,7 +186,7 @@ const isActive = (itemCurrent: string) => {
 
                         <!-- Settings and Logout -->
                         <Link
-                            href="/settings"
+                            href="/dashboard/settings"
                             @click="showMobileMenu = false"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
                         >

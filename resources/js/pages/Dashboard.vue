@@ -43,11 +43,27 @@ interface Transaction {
     account?: Account;
 }
 
+interface SavingsGoal {
+    name: string;
+    current: number;
+    target: number;
+}
+
+interface CreditScore {
+    score: number;
+    status: string;
+    lastUpdated: string;
+}
+
 interface Props {
     accounts?: Account[];
     recentTransactions?: Transaction[];
     totalBalance?: number;
     monthlySpending?: number;
+    monthlyBudget?: number;
+    balanceTrend?: { value: number; label: string };
+    savingsGoal?: SavingsGoal;
+    creditScore?: CreditScore;
     preferredCurrency?: 'USD' | 'EUR' | 'GBP';
 }
 
@@ -56,6 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
     recentTransactions: () => [],
     totalBalance: 0,
     monthlySpending: 0,
+    monthlyBudget: 5000,
     preferredCurrency: 'USD',
 });
 
@@ -118,21 +135,15 @@ const quickActions = [
 ];
 
 // Calculate spending progress
-const monthlyBudget = 4500;
 const spendingPercentage = computed(() =>
-    Math.min(Math.round((props.monthlySpending / monthlyBudget) * 100), 100)
+    Math.min(Math.round((props.monthlySpending / props.monthlyBudget) * 100), 100)
 );
 
-// Savings goal (mock data for now)
-const savingsGoal = {
-    name: 'Vacation Fund',
-    current: 7500,
-    target: 10000,
-};
-
-const savingsPercentage = computed(() =>
-    Math.round((savingsGoal.current / savingsGoal.target) * 100)
-);
+// Savings goal percentage
+const savingsPercentage = computed(() => {
+    if (!props.savingsGoal) return 0;
+    return Math.round((props.savingsGoal.current / props.savingsGoal.target) * 100);
+});
 </script>
 
 <template>
@@ -151,7 +162,7 @@ const savingsPercentage = computed(() =>
                 :icon="Wallet"
                 icon-color="text-red-500"
                 icon-background="bg-red-50"
-                :trend="{ value: 2.5, label: 'from last month' }"
+                :trend="balanceTrend"
             />
             <StatWidget
                 title="Monthly Spending"
@@ -195,9 +206,9 @@ const savingsPercentage = computed(() =>
             <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
                 <Wallet :size="48" class="text-gray-300 mx-auto mb-4" />
                 <p class="text-gray-600 mb-4">You don't have any accounts yet</p>
-                <button class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-medium transition-colors">
+                <Link href="/register" class="inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-medium transition-colors">
                     Open an Account
-                </button>
+                </Link>
             </div>
         </div>
 
@@ -276,7 +287,7 @@ const savingsPercentage = computed(() =>
                 </div>
 
                 <!-- Savings Goal Widget -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div v-if="savingsGoal" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center gap-2 mb-4">
                         <Target :size="20" class="text-green-500" />
                         <h3 class="text-lg font-bold text-gray-900">Savings Goal</h3>
@@ -301,16 +312,16 @@ const savingsPercentage = computed(() =>
                 </div>
 
                 <!-- Credit Score Widget -->
-                <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg p-6 text-white">
+                <div v-if="creditScore" class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg p-6 text-white">
                     <div class="flex items-center gap-2 mb-3">
                         <TrendingUp :size="20" />
                         <h3 class="text-lg font-bold">Credit Score</h3>
                     </div>
-                    <div class="text-4xl font-bold mb-2">782</div>
-                    <p class="text-blue-100 text-sm mb-4">Excellent • Updated today</p>
-                    <a href="/dashboard" class="inline-flex items-center text-sm text-white font-medium hover:underline">
+                    <div class="text-4xl font-bold mb-2">{{ creditScore.score }}</div>
+                    <p class="text-blue-100 text-sm mb-4">{{ creditScore.status }} • {{ creditScore.lastUpdated }}</p>
+                    <Link href="/dashboard/credit-score" class="inline-flex items-center text-sm text-white font-medium hover:underline">
                         View Details →
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
