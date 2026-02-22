@@ -7,7 +7,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Contact Us - G-Trust Bank">
+    <MainLayout title="Contact Us - G-Trust">
         <PageHero
             title="Contact Us"
             subtitle="We're here to help. Get in touch with us anytime"
@@ -108,7 +108,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-6">Headquarters</h2>
                     <div class="bg-white p-6 rounded-lg mb-6">
-                        <h3 class="font-semibold text-gray-900 mb-4">G-Trust Bank Headquarters</h3>
+                        <h3 class="font-semibold text-gray-900 mb-4">G-Trust Headquarters</h3>
                         <p class="text-gray-600 mb-2">123 Financial District</p>
                         <p class="text-gray-600 mb-2">New York, NY 10004</p>
                         <p class="text-gray-600 mb-4">United States</p>

@@ -33,7 +33,7 @@ const mediaReleases = [
 </script>
 
 <template>
-    <MainLayout title="Media Centre - G-Trust Bank">
+    <MainLayout title="Media Centre - G-Trust">
         <PageHero
             title="Media Centre"
             subtitle="Latest news, press releases, and media resources"

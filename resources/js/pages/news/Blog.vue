@@ -23,8 +23,8 @@ const blogPosts = [
         image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
     },
     {
-        title: 'Digital Banking Security: Protecting Your Accounts',
-        excerpt: 'Essential tips to keep your online banking safe and secure.',
+        title: 'Digital Finance Security: Protecting Your Accounts',
+        excerpt: 'Essential tips to keep your online finance safe and secure.',
         author: 'Jennifer Martinez',
         date: 'February 5, 2026',
         category: 'Security',
@@ -58,9 +58,9 @@ const blogPosts = [
 </script>
 
 <template>
-    <MainLayout title="Blog - G-Trust Bank">
+    <MainLayout title="Blog - G-Trust">
         <PageHero
-            title="G-Trust Bank Blog"
+            title="G-Trust Blog"
             subtitle="Financial insights, tips, and news to help you succeed"
             :image="'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1600'"
             :dark="true"

@@ -33,7 +33,7 @@ const upcomingEvents = [
         type: 'Virtual',
     },
     {
-        title: 'Community Banking Day',
+        title: 'Community Finance Day',
         date: 'March 25, 2026',
         time: '9:00 AM - 3:00 PM',
         location: 'All Branches',
@@ -45,7 +45,7 @@ const upcomingEvents = [
 
 const pastEvents = [
     {
-        title: 'Digital Banking Security Workshop',
+        title: 'Digital Finance Security Workshop',
         date: 'February 10, 2026',
         location: 'Downtown Branch',
     },
@@ -63,7 +63,7 @@ const pastEvents = [
 </script>
 
 <template>
-    <MainLayout title="Events - G-Trust Bank">
+    <MainLayout title="Events - G-Trust">
         <PageHero
             title="Events & Workshops"
             subtitle="Join us for educational events and community gatherings"

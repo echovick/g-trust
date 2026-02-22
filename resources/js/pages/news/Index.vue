@@ -5,10 +5,10 @@ import ContentSection from '@/components/shared/ContentSection.vue';
 </script>
 
 <template>
-    <MainLayout title="News - G-Trust Bank">
+    <MainLayout title="News - G-Trust">
         <PageHero
             title="News & Updates"
-            subtitle="Stay informed with the latest news from G-Trust Bank"
+            subtitle="Stay informed with the latest news from G-Trust"
             :image="'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600'"
             :dark="true"
         />
@@ -19,8 +19,8 @@ import ContentSection from '@/components/shared/ContentSection.vue';
                     <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400" alt="News" class="w-full h-48 object-cover" />
                     <div class="p-6">
                         <span class="text-sm text-gray-500">March 15, 2024</span>
-                        <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">G-Trust Bank Launches New Mobile App Features</h3>
-                        <p class="text-gray-600 mb-4">Discover the latest enhancements to our award-winning mobile banking app...</p>
+                        <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">G-Trust Launches New Mobile App Features</h3>
+                        <p class="text-gray-600 mb-4">Discover the latest enhancements to our award-winning mobile finance app...</p>
                         <a href="/news/blog" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
                     </div>
                 </article>
@@ -40,7 +40,7 @@ import ContentSection from '@/components/shared/ContentSection.vue';
                     <div class="p-6">
                         <span class="text-sm text-gray-500">March 5, 2024</span>
                         <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">Community Investment Initiative</h3>
-                        <p class="text-gray-600 mb-4">G-Trust Bank commits $10M to support local businesses and communities...</p>
+                        <p class="text-gray-600 mb-4">G-Trust commits $10M to support local businesses and communities...</p>
                         <a href="/news/blog" class="text-red-500 hover:text-red-600 font-medium">Read More →</a>
                     </div>
                 </article>
