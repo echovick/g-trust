@@ -15,7 +15,7 @@ const tabContent = {
     investing: {
         title: 'Nothing is impossible. We can help you achieve your goals!',
         description:
-            "The UK's largest banking groups are required to comply with strict lending requirements from 1 January 2014. Find out more about our approach and what it means for you.",
+            "The UK's largest financial groups are required to comply with strict lending requirements from 1 January 2014. Find out more about our approach and what it means for you.",
         image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800',
         alt: 'Business Meeting',
     },

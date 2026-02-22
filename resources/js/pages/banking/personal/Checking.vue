@@ -30,7 +30,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500">✓</span>
-                            <span class="text-sm text-gray-600">Online & mobile banking</span>
+                            <span class="text-sm text-gray-600">Online & mobile finance</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500">✓</span>
@@ -101,7 +101,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
 
         <CallToAction
             title="Open your checking account in minutes"
-            description="Get started with no minimum deposit and enjoy banking without the fees"
+            description="Get started with no minimum deposit and enjoy financial services without the fees"
             buttonText="Get Started"
             background="blue"
         />

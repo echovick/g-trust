@@ -50,7 +50,7 @@ const upcomingEvents = [
 </script>
 
 <template>
-    <MainLayout title="Investor Relations - G-Trust Bank">
+    <MainLayout title="Investor Relations - G-Trust">
         <PageHero
             title="Investor Relations"
             subtitle="Financial information and resources for our shareholders"

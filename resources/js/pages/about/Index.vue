@@ -37,7 +37,7 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
                 <FeatureCard
                     :icon="Target"
                     title="Mission Driven"
-                    description="We're committed to making banking accessible, simple, and beneficial for everyone."
+                    description="We're committed to making finance accessible, simple, and beneficial for everyone."
                 />
                 <FeatureCard
                     :icon="Users"
@@ -52,7 +52,7 @@ import { Target, Users, Award, TrendingUp } from 'lucide-vue-next';
                 <FeatureCard
                     :icon="TrendingUp"
                     title="Innovation"
-                    description="We continuously evolve to meet changing needs with cutting-edge banking solutions."
+                    description="We continuously evolve to meet changing needs with cutting-edge financial solutions."
                 />
             </CardGrid>
         </ContentSection>

@@ -26,7 +26,7 @@ import CallToAction from '@/components/shared/CallToAction.vue';
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500">✓</span>
-                            <span class="text-sm text-gray-600">Online & mobile banking</span>
+                            <span class="text-sm text-gray-600">Online & mobile finance</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500">✓</span>

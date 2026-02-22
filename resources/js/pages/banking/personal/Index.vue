@@ -60,7 +60,7 @@ import { CreditCard, PiggyBank, TrendingUp, Shield } from 'lucide-vue-next';
                 <div class="bg-gray-200 rounded-lg overflow-hidden">
                     <img
                         src="https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?w=800"
-                        alt="Mobile Banking"
+                        alt="Mobile Finance"
                         class="w-full h-[400px] object-cover"
                     />
                 </div>

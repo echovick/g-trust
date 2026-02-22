@@ -32,7 +32,7 @@ import { TrendingUp, Shield, Zap, Target } from 'lucide-vue-next';
                 <FeatureCard
                     :icon="Zap"
                     title="Easy Access"
-                    description="Access your money anytime through our mobile app, online banking, or ATMs."
+                    description="Access your money anytime through our mobile app, online platform, or ATMs."
                 />
                 <FeatureCard
                     :icon="Target"

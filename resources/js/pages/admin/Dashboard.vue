@@ -107,7 +107,7 @@ const formatDate = (date: string) => {
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
-                    <p class="text-gray-600 mt-1">Overview of your banking system</p>
+                    <p class="text-gray-600 mt-1">Overview of your financial system</p>
                 </div>
                 <div v-if="totalPendingApprovals > 0" class="flex items-center gap-2 px-4 py-2 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <AlertCircle :size="20" class="text-yellow-600" />

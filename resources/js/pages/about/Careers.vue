@@ -8,17 +8,17 @@ import { Heart, TrendingUp, Users, Coffee } from 'lucide-vue-next';
 </script>
 
 <template>
-    <MainLayout title="Careers at G-Trust Bank">
+    <MainLayout title="Careers at G-Trust">
         <PageHero
             title="Build Your Career With Us"
-            subtitle="Join our team and be part of shaping the future of banking"
+            subtitle="Join our team and be part of shaping the future of finance"
             :image="'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600'"
             :dark="true"
         />
 
-        <ContentSection title="Why Work at G-Trust Bank?" :centered="true">
+        <ContentSection title="Why Work at G-Trust?" :centered="true">
             <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12 text-center">
-                At G-Trust Bank, we believe our people are our greatest asset. We foster a culture of innovation,
+                At G-Trust, we believe our people are our greatest asset. We foster a culture of innovation,
                 collaboration, and continuous learning where every team member can thrive and make a meaningful impact.
             </p>
 
@@ -54,7 +54,7 @@ import { Heart, TrendingUp, Users, Coffee } from 'lucide-vue-next';
                         <span class="text-sm text-gray-500">Technology</span>
                     </div>
                     <p class="text-gray-600 mb-4">
-                        Join our engineering team to build next-generation banking platforms.
+                        Join our engineering team to build next-generation finance platforms.
                     </p>
                     <div class="flex gap-4 items-center">
                         <span class="text-sm text-gray-500">📍 Remote</span>
@@ -84,7 +84,7 @@ import { Heart, TrendingUp, Users, Coffee } from 'lucide-vue-next';
                         <span class="text-sm text-gray-500">Product</span>
                     </div>
                     <p class="text-gray-600 mb-4">
-                        Lead product strategy and development for our digital banking solutions.
+                        Lead product strategy and development for our digital finance solutions.
                     </p>
                     <div class="flex gap-4 items-center">
                         <span class="text-sm text-gray-500">📍 Hybrid</span>

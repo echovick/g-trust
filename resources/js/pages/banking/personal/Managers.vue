@@ -74,7 +74,7 @@ import { User, Calendar, Phone, TrendingUp } from 'lucide-vue-next';
                             <span class="text-red-500 font-bold text-xl">•</span>
                             <div>
                                 <strong class="text-gray-900">Issue Resolution</strong>
-                                <p class="text-gray-600 text-sm">Quickly resolve any banking issues or concerns</p>
+                                <p class="text-gray-600 text-sm">Quickly resolve any account issues or concerns</p>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
@@ -82,7 +82,7 @@ import { User, Calendar, Phone, TrendingUp } from 'lucide-vue-next';
                             <div>
                                 <strong class="text-gray-900">Regular Check-ins</strong>
                                 <p class="text-gray-600 text-sm">
-                                    Proactive reviews to ensure your banking stays on track
+                                    Proactive reviews to ensure your finances stay on track
                                 </p>
                             </div>
                         </li>
@@ -91,7 +91,7 @@ import { User, Calendar, Phone, TrendingUp } from 'lucide-vue-next';
                 <div class="bg-gray-100 rounded-lg overflow-hidden">
                     <img
                         src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800"
-                        alt="Personal Banking Manager"
+                        alt="Personal Finance Manager"
                         class="w-full h-[400px] object-cover"
                     />
                 </div>

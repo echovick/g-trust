@@ -29,10 +29,10 @@ const features = [
 </script>
 
 <template>
-    <MainLayout title="Accessibility - G-Trust Bank">
+    <MainLayout title="Accessibility - G-Trust">
         <PageHero
             title="Accessibility Commitment"
-            subtitle="Banking services accessible to everyone"
+            subtitle="Financial services accessible to everyone"
             :image="'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1600'"
             :dark="true"
         />
@@ -41,7 +41,7 @@ const features = [
             <div class="max-w-3xl mx-auto mb-16">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Commitment to Accessibility</h2>
                 <p class="text-lg text-gray-600 mb-4">
-                    At G-Trust Bank, we are committed to ensuring that our banking services, both digital and physical,
+                    At G-Trust, we are committed to ensuring that our financial services, both digital and physical,
                     are accessible to all customers, including those with disabilities. We continuously work to enhance
                     the accessibility of our platforms and services.
                 </p>
@@ -71,7 +71,7 @@ const features = [
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Branch Accessibility</h2>
                 <div class="bg-white border border-gray-200 rounded-lg p-8 mb-8">
                     <p class="text-gray-600 mb-6">
-                        All G-Trust Bank branches are designed with accessibility in mind:
+                        All G-Trust branches are designed with accessibility in mind:
                     </p>
                     <ul class="space-y-3 text-gray-600">
                         <li class="flex items-start gap-2">
@@ -101,31 +101,31 @@ const features = [
                     </ul>
                 </div>
 
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Alternative Banking Options</h2>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">Alternative Service Options</h2>
                 <div class="bg-white border border-gray-200 rounded-lg p-8">
                     <p class="text-gray-600 mb-6">
-                        We offer multiple ways to bank that accommodate different accessibility needs:
+                        We offer multiple ways to manage your finances that accommodate different accessibility needs:
                     </p>
                     <ul class="space-y-3 text-gray-600">
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span>24/7 telephone banking with TTY/TDD service available</span>
+                            <span>24/7 telephone service with TTY/TDD available</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span>Video banking with ASL interpretation services</span>
+                            <span>Video service with ASL interpretation</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span>Mobile banking app with VoiceOver and TalkBack support</span>
+                            <span>Mobile finance app with VoiceOver and TalkBack support</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span>Online banking with full keyboard navigation</span>
+                            <span>Online finance with full keyboard navigation</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-red-500 font-bold">✓</span>
-                            <span>Mail-in banking services for those unable to visit branches</span>
+                            <span>Mail-in services for those unable to visit branches</span>
                         </li>
                     </ul>
                 </div>

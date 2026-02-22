@@ -18,7 +18,7 @@ const upcomingEvents = [
         title: 'Small Business Financial Planning Seminar',
         date: 'March 12, 2026',
         time: '2:00 PM - 4:00 PM',
-        location: 'Business Banking Center',
+        location: 'Business Finance Center',
         description: 'Expert guidance on cash flow management, business credit, and growth strategies.',
         spots: '8 spots remaining',
         type: 'Seminar',
