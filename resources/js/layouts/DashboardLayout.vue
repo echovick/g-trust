@@ -22,6 +22,7 @@ import {
     ClipboardList,
 } from 'lucide-vue-next';
 import CurrencySelector from '@/components/dashboard/CurrencySelector.vue';
+import NotificationDropdown from '@/components/dashboard/NotificationDropdown.vue';
 
 interface Props {
     title?: string;
@@ -42,11 +43,12 @@ const navItems = [
     { name: 'Dashboard', icon: Home, href: '/dashboard', current: 'dashboard' },
     { name: 'Accounts', icon: Wallet, href: '/dashboard/accounts', current: 'accounts' },
     { name: 'Account Requests', icon: ClipboardList, href: '/dashboard/account-requests', current: 'account-requests' },
+    { name: 'Cards', icon: CreditCard, href: '/dashboard/cards', current: 'cards' },
+    { name: 'Card Requests', icon: CreditCard, href: '/dashboard/card-requests', current: 'card-requests' },
     { name: 'Transactions', icon: Receipt, href: '/dashboard/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/dashboard/transfers', current: 'transfers' },
     { name: 'Beneficiaries', icon: UserPlus, href: '/dashboard/beneficiaries', current: 'beneficiaries' },
     { name: 'Payments', icon: DollarSign, href: '/dashboard/payments', current: 'payments' },
-    { name: 'Cards', icon: CreditCard, href: '/dashboard/cards', current: 'cards' },
     { name: 'Deposits', icon: ArrowDownToLine, href: '/dashboard/deposits', current: 'deposits' },
     { name: 'Loans', icon: TrendingUp, href: '/dashboard/loans', current: 'loans' },
     { name: 'Investments', icon: PieChart, href: '/dashboard/investments', current: 'investments' },
@@ -94,10 +96,7 @@ const isActive = (itemCurrent: string) => {
                         <CurrencySelector />
 
                         <!-- Notifications -->
-                        <Link href="/dashboard/notifications" class="p-2 rounded-full hover:bg-gray-100 relative">
-                            <Bell :size="20" class="text-gray-600" />
-                            <span v-if="unreadNotifications > 0" class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </Link>
+                        <NotificationDropdown />
 
                         <!-- User Menu -->
                         <div class="flex items-center gap-3 pl-3 border-l">
@@ -106,7 +105,7 @@ const isActive = (itemCurrent: string) => {
                                 <p class="text-xs text-gray-500">{{ user.membership_tier }} Member</p>
                             </div>
                             <Link
-                                href="/dashboard/settings"
+                                href="/settings/profile"
                                 class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
                             >
                                 <User :size="20" class="text-gray-700" />
@@ -192,7 +191,7 @@ const isActive = (itemCurrent: string) => {
 
                         <!-- Settings and Logout -->
                         <Link
-                            href="/dashboard/settings"
+                            href="/settings/profile"
                             @click="showMobileMenu = false"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
                         >
@@ -239,7 +238,7 @@ const isActive = (itemCurrent: string) => {
 
                         <!-- Settings -->
                         <Link
-                            href="/dashboard/settings"
+                            href="/settings/profile"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
                         >
                             <Settings :size="20" />

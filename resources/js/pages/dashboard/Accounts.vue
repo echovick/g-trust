@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { Wallet, PiggyBank, Building, ArrowRight, CreditCard, TrendingUp } from 'lucide-vue-next';
+import { Wallet, PiggyBank, Building, ArrowRight, CreditCard, TrendingUp, Plus } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
 interface Card {
@@ -59,8 +59,16 @@ const getAccountColor = (type: string) => {
 
 <template>
     <DashboardLayout title="My Accounts">
-        <div class="mb-8">
+        <div class="mb-8 flex items-center justify-between">
             <p class="text-gray-600">Manage your bank accounts and view balances</p>
+            <Link
+                href="/dashboard/account-requests/create"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+                <Plus :size="20" />
+                <span class="hidden sm:inline">Request New Account</span>
+                <span class="sm:hidden">Request</span>
+            </Link>
         </div>
 
         <div v-if="accounts.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">

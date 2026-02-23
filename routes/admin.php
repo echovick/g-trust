@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AccountRequestController;
+use App\Http\Controllers\Admin\CardRequestController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\CardController;
@@ -45,6 +46,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/account-requests/{accountRequest}', [AccountRequestController::class, 'show'])->name('account-requests.show');
     Route::post('/account-requests/{accountRequest}/approve', [AccountRequestController::class, 'approve'])->name('account-requests.approve');
     Route::post('/account-requests/{accountRequest}/reject', [AccountRequestController::class, 'reject'])->name('account-requests.reject');
+
+    // Card Request Management
+    Route::get('/card-requests', [CardRequestController::class, 'index'])->name('card-requests.index');
+    Route::get('/card-requests/{cardRequest}', [CardRequestController::class, 'show'])->name('card-requests.show');
+    Route::post('/card-requests/{cardRequest}/approve', [CardRequestController::class, 'approve'])->name('card-requests.approve');
+    Route::post('/card-requests/{cardRequest}/reject', [CardRequestController::class, 'reject'])->name('card-requests.reject');
 
     // Transaction Management
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');

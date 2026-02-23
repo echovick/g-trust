@@ -171,6 +171,13 @@ Route::get('/search', function () {
     return Inertia::render('Search');
 })->name('search');
 
+// Registration Success
+Route::middleware('auth')->get('/register/success', function () {
+    return Inertia::render('auth/RegisterSuccess', [
+        'userName' => auth()->user()->name,
+    ]);
+})->name('register.success');
+
 // Dashboard Routes
 require __DIR__.'/dashboard.php';
 

@@ -11,6 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 
@@ -32,6 +33,16 @@ class FortifyServiceProvider extends ServiceProvider
 
                     // Regular users go to user dashboard
                     return redirect()->intended('/dashboard');
+                }
+            };
+        });
+
+        $this->app->singleton(RegisterResponse::class, function () {
+            return new class implements RegisterResponse {
+                public function toResponse($request)
+                {
+                    // Redirect to registration success page
+                    return redirect()->route('register.success');
                 }
             };
         });

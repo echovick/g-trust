@@ -39,9 +39,10 @@ const navItems = [
     { name: 'Users', icon: Users, href: '/admin/users', current: 'users' },
     { name: 'Accounts', icon: Wallet, href: '/admin/accounts', current: 'accounts' },
     { name: 'Account Requests', icon: ClipboardList, href: '/admin/account-requests', current: 'account-requests' },
+    { name: 'Cards', icon: CreditCard, href: '/admin/cards', current: 'cards' },
+    { name: 'Card Requests', icon: CreditCard, href: '/admin/card-requests', current: 'card-requests' },
     { name: 'Transactions', icon: Receipt, href: '/admin/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/admin/transfers', current: 'transfers' },
-    { name: 'Cards', icon: CreditCard, href: '/admin/cards', current: 'cards' },
     { name: 'Loans', icon: Banknote, href: '/admin/loans', current: 'loans' },
     { name: 'Bill Payments', icon: FileText, href: '/admin/bill-payments', current: 'bill-payments' },
 ];

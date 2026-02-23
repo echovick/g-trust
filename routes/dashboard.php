@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\AccountController;
 use App\Http\Controllers\Dashboard\AccountRequestController;
+use App\Http\Controllers\Dashboard\CardRequestController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\TransferController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Dashboard\CardController;
 use App\Http\Controllers\Dashboard\BeneficiaryController;
 use App\Http\Controllers\Dashboard\BillPaymentController;
 use App\Http\Controllers\Dashboard\LoanController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'redirect.if.admin'])->prefix('dashboard')->name('dashboard.')->group(function () {
@@ -27,6 +29,12 @@ Route::middleware(['auth', 'verified', 'redirect.if.admin'])->prefix('dashboard'
     Route::get('/account-requests/create', [AccountRequestController::class, 'create'])->name('account-requests.create');
     Route::post('/account-requests', [AccountRequestController::class, 'store'])->name('account-requests.store');
     Route::get('/account-requests/{accountRequest}', [AccountRequestController::class, 'show'])->name('account-requests.show');
+
+    // Card Requests
+    Route::get('/card-requests', [CardRequestController::class, 'index'])->name('card-requests.index');
+    Route::get('/card-requests/create', [CardRequestController::class, 'create'])->name('card-requests.create');
+    Route::post('/card-requests', [CardRequestController::class, 'store'])->name('card-requests.store');
+    Route::get('/card-requests/{cardRequest}', [CardRequestController::class, 'show'])->name('card-requests.show');
 
     // Transactions
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
@@ -74,4 +82,9 @@ Route::middleware(['auth', 'verified', 'redirect.if.admin'])->prefix('dashboard'
     Route::get('/investments', function () {
         return inertia('dashboard/Investments');
     })->name('investments.index');
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
 });
