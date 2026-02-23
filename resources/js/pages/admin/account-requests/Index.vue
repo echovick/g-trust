@@ -162,7 +162,7 @@ const formatDate = (date: string) => {
                     </div>
                     <select
                         v-model="searchForm.status"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
                     >
                         <option value="">All Statuses</option>
                         <option value="pending">Pending</option>

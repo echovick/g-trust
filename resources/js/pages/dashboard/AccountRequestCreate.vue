@@ -120,7 +120,7 @@ const submit = () => {
                             type="text"
                             required
                             placeholder="e.g., My Checking Account"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
                         />
                         <p v-if="form.errors.account_name" class="mt-1 text-sm text-red-600">
                             {{ form.errors.account_name }}
@@ -138,7 +138,7 @@ const submit = () => {
                         <select
                             v-model="form.currency"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
                         >
                             <option v-for="currency in currencies" :key="currency.code" :value="currency.code">
                                 {{ currency.symbol }} {{ currency.name }} ({{ currency.code }})
@@ -158,7 +158,7 @@ const submit = () => {
                             v-model="form.purpose"
                             rows="4"
                             placeholder="Briefly explain why you need this account..."
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none text-gray-900"
                         ></textarea>
                         <p v-if="form.errors.purpose" class="mt-1 text-sm text-red-600">
                             {{ form.errors.purpose }}

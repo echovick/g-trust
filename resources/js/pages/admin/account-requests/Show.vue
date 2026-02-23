@@ -278,7 +278,7 @@ const getStatusIcon = (status: string) => {
                             required
                             rows="4"
                             placeholder="e.g., Incomplete information, does not meet requirements..."
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none text-gray-900"
                         ></textarea>
                         <p v-if="rejectForm.errors.rejection_reason" class="mt-1 text-sm text-red-600">
                             {{ rejectForm.errors.rejection_reason }}
