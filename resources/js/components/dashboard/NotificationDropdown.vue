@@ -48,11 +48,13 @@ const markAsRead = async (notificationId: string) => {
 const markAllAsRead = async () => {
     try {
         await axios.post('/dashboard/notifications/mark-all-as-read');
-        notifications.value.forEach(n => {
-            if (!n.read_at) {
-                n.read_at = new Date().toISOString();
-            }
-        });
+        if (notifications.value && Array.isArray(notifications.value)) {
+            notifications.value.forEach(n => {
+                if (!n.read_at) {
+                    n.read_at = new Date().toISOString();
+                }
+            });
+        }
         unreadCount.value = 0;
     } catch (error) {
         console.error('Failed to mark all notifications as read:', error);

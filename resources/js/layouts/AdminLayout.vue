@@ -92,7 +92,7 @@ const isActive = (itemCurrent: string) => {
                                 <p class="text-xs text-red-200">Administrator</p>
                             </div>
                             <Link
-                                href="/settings/profile"
+                                href="/admin/settings"
                                 class="w-9 h-9 bg-red-800 rounded-full flex items-center justify-center hover:bg-red-900"
                             >
                                 <User :size="18" class="text-white" />

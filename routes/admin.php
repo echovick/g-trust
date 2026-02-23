@@ -106,4 +106,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/bill-payments/{billPayment}/process', [BillPaymentController::class, 'process'])->name('bill-payments.process');
     Route::post('/bill-payments/{billPayment}/cancel', [BillPaymentController::class, 'cancel'])->name('bill-payments.cancel');
     Route::post('/bill-payments/{billPayment}/toggle-auto-pay', [BillPaymentController::class, 'toggleAutoPay'])->name('bill-payments.toggle-auto-pay');
+
+    // Admin Settings
+    Route::get('/settings', function () {
+        return inertia('admin/Settings');
+    })->name('settings');
 });
