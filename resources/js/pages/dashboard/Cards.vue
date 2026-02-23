@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { router, useForm, Link } from '@inertiajs/vue3';
 import {
     CreditCard, Settings, Lock, Unlock, AlertTriangle, DollarSign,
-    Globe, Wifi, ShoppingCart, CheckCircle, XCircle
+    Globe, Wifi, ShoppingCart, CheckCircle, XCircle, Plus
 } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
@@ -19,7 +19,7 @@ interface Card {
     card_holder_name: string;
     card_type: 'debit' | 'credit';
     expiry_date: string;
-    cvv: string;
+    cvv?: string;
     status: 'active' | 'frozen' | 'blocked' | 'expired' | 'lost';
     daily_limit?: number;
     contactless_enabled: boolean;
@@ -104,8 +104,16 @@ const getStatusIcon = (status: string) => {
 
 <template>
     <DashboardLayout title="My Cards">
-        <div class="mb-8">
+        <div class="mb-8 flex items-center justify-between">
             <p class="text-gray-600">Manage your debit and credit cards</p>
+            <Link
+                href="/dashboard/card-requests/create"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+                <Plus :size="20" />
+                <span class="hidden sm:inline">Request New Card</span>
+                <span class="sm:hidden">Request</span>
+            </Link>
         </div>
 
         <div v-if="cards.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -237,7 +245,14 @@ const getStatusIcon = (status: string) => {
                 <CreditCard :size="32" class="text-gray-400" />
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">No cards yet</h3>
-            <p class="text-gray-600">You don't have any cards associated with your accounts</p>
+            <p class="text-gray-600 mb-6">Get started by requesting a debit or credit card</p>
+            <Link
+                href="/dashboard/card-requests/create"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+                <Plus :size="20" />
+                Request New Card
+            </Link>
         </div>
 
         <!-- Settings Modal -->

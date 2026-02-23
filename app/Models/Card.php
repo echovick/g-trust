@@ -38,8 +38,17 @@ class Card extends Model
         'cvv',
     ];
 
+    protected $appends = [
+        'expiry_date',
+    ];
+
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function getExpiryDateAttribute(): string
+    {
+        return $this->expiry_month . '/' . substr($this->expiry_year, -2);
     }
 }

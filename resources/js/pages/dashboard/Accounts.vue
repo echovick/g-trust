@@ -143,7 +143,14 @@ const getAccountColor = (type: string) => {
                 <Wallet :size="32" class="text-gray-400" />
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">No accounts yet</h3>
-            <p class="text-gray-600">Contact support to open a new account</p>
+            <p class="text-gray-600 mb-6">Get started by requesting your first account</p>
+            <Link
+                href="/dashboard/account-requests/create"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+                <Plus :size="20" />
+                Request New Account
+            </Link>
         </div>
     </DashboardLayout>
 </template>
