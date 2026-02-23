@@ -8,10 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import { send } from '@/routes/verification';
 
 type Props = {
-    mustVerifyEmail: boolean;
     status?: string;
 };
 
@@ -103,31 +101,6 @@ const settingsNav = [
                                 placeholder="Email address"
                             />
                             <InputError class="mt-2" :message="errors.email" />
-                        </div>
-
-                        <div v-if="mustVerifyEmail && !user.email_verified_at" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <div class="flex items-start gap-3">
-                                <Mail :size="20" class="text-yellow-600 mt-0.5 flex-shrink-0" />
-                                <div>
-                                    <p class="text-sm text-yellow-800">
-                                        Your email address is unverified.
-                                        <Link
-                                            :href="send()"
-                                            as="button"
-                                            class="font-medium underline hover:no-underline"
-                                        >
-                                            Click here to resend the verification email.
-                                        </Link>
-                                    </p>
-
-                                    <div
-                                        v-if="status === 'verification-link-sent'"
-                                        class="mt-2 text-sm font-medium text-green-600"
-                                    >
-                                        A new verification link has been sent to your email address.
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="flex items-center gap-4 pt-4 border-t">
