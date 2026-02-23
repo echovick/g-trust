@@ -12,7 +12,7 @@ use App\Http\Controllers\Dashboard\BillPaymentController;
 use App\Http\Controllers\Dashboard\LoanController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->prefix('dashboard')->name('dashboard.')->group(function () {
+Route::middleware(['auth', 'verified', 'redirect.if.admin'])->prefix('dashboard')->name('dashboard.')->group(function () {
     // Dashboard Home
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     Route::post('/currency', [DashboardController::class, 'updateCurrency'])->name('currency.update');

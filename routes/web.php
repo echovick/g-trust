@@ -6,6 +6,12 @@ use Laravel\Fortify\Features;
 
 // Home
 Route::get('/', function () {
+    if (auth()->check()) {
+        // Redirect authenticated users to their appropriate dashboard
+        return auth()->user()->is_admin
+            ? redirect('/admin')
+            : redirect('/dashboard');
+    }
     return Inertia::render('LandingPage');
 })->name('home');
 

@@ -34,7 +34,10 @@ interface Props {
     requests: {
         data: AccountRequest[];
         links: any[];
-        meta: any;
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
     };
     stats: {
         total_requests: number;
@@ -248,17 +251,17 @@ const formatDate = (date: string) => {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="requests.meta.last_page > 1" class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div v-if="requests.last_page > 1" class="bg-gray-50 px-6 py-4 border-t border-gray-200">
                     <div class="flex items-center justify-between">
                         <div class="text-sm text-gray-700">
                             Showing
-                            <span class="font-medium">{{ ((requests.meta.current_page || 1) - 1) * (requests.meta.per_page || 20) + 1 }}</span>
+                            <span class="font-medium">{{ ((requests.current_page || 1) - 1) * (requests.per_page || 20) + 1 }}</span>
                             to
                             <span class="font-medium">
-                                {{ Math.min((requests.meta.current_page || 1) * (requests.meta.per_page || 20), requests.meta.total || 0) }}
+                                {{ Math.min((requests.current_page || 1) * (requests.per_page || 20), requests.total || 0) }}
                             </span>
                             of
-                            <span class="font-medium">{{ requests.meta.total || 0 }}</span>
+                            <span class="font-medium">{{ requests.total || 0 }}</span>
                             results
                         </div>
                         <div class="flex gap-2">
