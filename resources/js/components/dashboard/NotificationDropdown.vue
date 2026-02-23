@@ -21,10 +21,12 @@ const fetchNotifications = async () => {
     loading.value = true;
     try {
         const response = await axios.get('/dashboard/notifications');
-        notifications.value = response.data.notifications;
-        unreadCount.value = response.data.unread_count;
+        notifications.value = response.data.notifications || [];
+        unreadCount.value = response.data.unread_count || 0;
     } catch (error) {
         console.error('Failed to fetch notifications:', error);
+        notifications.value = [];
+        unreadCount.value = 0;
     } finally {
         loading.value = false;
     }
