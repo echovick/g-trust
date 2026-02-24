@@ -19,6 +19,7 @@ import {
     Banknote,
     FileText,
     ClipboardList,
+    ArrowDownToLine,
 } from 'lucide-vue-next';
 
 interface Props {
@@ -43,6 +44,7 @@ const navItems = [
     { name: 'Card Requests', icon: CreditCard, href: '/admin/card-requests', current: 'card-requests' },
     { name: 'Transactions', icon: Receipt, href: '/admin/transactions', current: 'transactions' },
     { name: 'Transfers', icon: Send, href: '/admin/transfers', current: 'transfers' },
+    { name: 'Deposits', icon: ArrowDownToLine, href: '/admin/deposits', current: 'deposits' },
     { name: 'Loans', icon: Banknote, href: '/admin/loans', current: 'loans' },
     { name: 'Bill Payments', icon: FileText, href: '/admin/bill-payments', current: 'bill-payments' },
 ];

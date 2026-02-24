@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\CardController;
 use App\Http\Controllers\Dashboard\BeneficiaryController;
 use App\Http\Controllers\Dashboard\BillPaymentController;
+use App\Http\Controllers\Dashboard\DepositController;
 use App\Http\Controllers\Dashboard\LoanController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
@@ -69,9 +70,9 @@ Route::middleware(['auth', 'verified', 'redirect.if.admin'])->prefix('dashboard'
     Route::delete('/bill-payments/{billPayment}', [BillPaymentController::class, 'destroy'])->name('bill-payments.destroy');
 
     // Deposits
-    Route::get('/deposits', function () {
-        return inertia('dashboard/Deposits');
-    })->name('deposits.index');
+    Route::get('/deposits', [DepositController::class, 'index'])->name('deposits.index');
+    Route::get('/deposits/create', [DepositController::class, 'create'])->name('deposits.create');
+    Route::post('/deposits', [DepositController::class, 'store'])->name('deposits.store');
 
     // Loans
     Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');

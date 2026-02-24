@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\CardController;
 use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\BillPaymentController;
+use App\Http\Controllers\Admin\DepositController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -106,6 +107,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/bill-payments/{billPayment}/process', [BillPaymentController::class, 'process'])->name('bill-payments.process');
     Route::post('/bill-payments/{billPayment}/cancel', [BillPaymentController::class, 'cancel'])->name('bill-payments.cancel');
     Route::post('/bill-payments/{billPayment}/toggle-auto-pay', [BillPaymentController::class, 'toggleAutoPay'])->name('bill-payments.toggle-auto-pay');
+
+    // Deposit Management
+    Route::get('/deposits', [DepositController::class, 'index'])->name('deposits.index');
+    Route::get('/deposits/{deposit}', [DepositController::class, 'show'])->name('deposits.show');
+    Route::post('/deposits/{deposit}/approve', [DepositController::class, 'approve'])->name('deposits.approve');
+    Route::post('/deposits/{deposit}/reject', [DepositController::class, 'reject'])->name('deposits.reject');
 
     // Admin Settings
     Route::get('/settings', function () {
