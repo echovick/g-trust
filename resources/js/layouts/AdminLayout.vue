@@ -99,6 +99,15 @@ const isActive = (itemCurrent: string) => {
                             >
                                 <User :size="18" class="text-white" />
                             </Link>
+                            <Link
+                                href="/logout"
+                                method="post"
+                                as="button"
+                                class="w-9 h-9 bg-red-800 rounded-full flex items-center justify-center hover:bg-red-900"
+                                title="Logout"
+                            >
+                                <LogOut :size="18" class="text-white" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -126,13 +135,22 @@ const isActive = (itemCurrent: string) => {
                                 {{ item.name }}
                             </Link>
                         </nav>
-                        <div class="border-t border-gray-200 p-4">
+                        <div class="border-t border-gray-200 p-4 space-y-3">
                             <Link
                                 href="/dashboard"
                                 class="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm"
                             >
                                 <Landmark :size="18" />
                                 Back to User Dashboard
+                            </Link>
+                            <Link
+                                href="/logout"
+                                method="post"
+                                as="button"
+                                class="w-full flex items-center gap-2 text-gray-600 hover:text-red-600 text-sm"
+                            >
+                                <LogOut :size="18" />
+                                Logout
                             </Link>
                         </div>
                     </div>
@@ -162,7 +180,7 @@ const isActive = (itemCurrent: string) => {
                                 {{ item.name }}
                             </Link>
                         </nav>
-                        <div class="border-t border-gray-200 p-4">
+                        <div class="border-t border-gray-200 p-4 space-y-3">
                             <Link
                                 href="/dashboard"
                                 class="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm"
@@ -170,6 +188,16 @@ const isActive = (itemCurrent: string) => {
                             >
                                 <Landmark :size="18" />
                                 Back to User Dashboard
+                            </Link>
+                            <Link
+                                href="/logout"
+                                method="post"
+                                as="button"
+                                class="w-full flex items-center gap-2 text-gray-600 hover:text-red-600 text-sm"
+                                @click="showMobileMenu = false"
+                            >
+                                <LogOut :size="18" />
+                                Logout
                             </Link>
                         </div>
                     </div>
