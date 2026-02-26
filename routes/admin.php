@@ -28,19 +28,20 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.index');
     Route::get('/accounts/create', [AccountController::class, 'create'])->name('accounts.create');
     Route::post('/accounts', [AccountController::class, 'store'])->name('accounts.store');
+    Route::post('/accounts/transfer', [AccountController::class, 'intraAccountTransfer'])->name('accounts.transfer');
+
+    // Account Bulk Operations (must be before parameterized routes to avoid route conflicts)
+    Route::post('/accounts/bulk/toggle-status', [AccountController::class, 'bulkToggleStatus'])->name('accounts.bulk-toggle-status');
+    Route::post('/accounts/bulk/destroy', [AccountController::class, 'bulkDestroy'])->name('accounts.bulk-destroy');
+    Route::post('/accounts/bulk/fund', [AccountController::class, 'bulkFund'])->name('accounts.bulk-fund');
+    Route::get('/accounts/bulk/export', [AccountController::class, 'bulkExport'])->name('accounts.bulk-export');
+
     Route::get('/accounts/{account}', [AccountController::class, 'show'])->name('accounts.show');
     Route::get('/accounts/{account}/edit', [AccountController::class, 'edit'])->name('accounts.edit');
     Route::put('/accounts/{account}', [AccountController::class, 'update'])->name('accounts.update');
     Route::delete('/accounts/{account}', [AccountController::class, 'destroy'])->name('accounts.destroy');
     Route::post('/accounts/{account}/toggle-status', [AccountController::class, 'toggleStatus'])->name('accounts.toggle-status');
     Route::post('/accounts/{account}/fund', [AccountController::class, 'fundAccount'])->name('accounts.fund');
-    Route::post('/accounts/transfer', [AccountController::class, 'intraAccountTransfer'])->name('accounts.transfer');
-
-    // Account Bulk Operations
-    Route::post('/accounts/bulk/toggle-status', [AccountController::class, 'bulkToggleStatus'])->name('accounts.bulk-toggle-status');
-    Route::post('/accounts/bulk/destroy', [AccountController::class, 'bulkDestroy'])->name('accounts.bulk-destroy');
-    Route::post('/accounts/bulk/fund', [AccountController::class, 'bulkFund'])->name('accounts.bulk-fund');
-    Route::post('/accounts/bulk/export', [AccountController::class, 'bulkExport'])->name('accounts.bulk-export');
 
     // Account Request Management
     Route::get('/account-requests', [AccountRequestController::class, 'index'])->name('account-requests.index');

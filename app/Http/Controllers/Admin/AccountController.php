@@ -80,18 +80,18 @@ class AccountController extends AdminController
     public function intraAccountTransfer(Request $request)
     {
         $validated = $request->validate([
-            'from_account_id' => ['required', 'exists:accounts,id'],
-            'to_account_id' => [
+            'from_account_number' => ['required', 'exists:accounts,account_number'],
+            'to_account_number' => [
                 'required',
-                'exists:accounts,id',
-                'different:from_account_id',
+                'exists:accounts,account_number',
+                'different:from_account_number',
             ],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'description' => ['required', 'string', 'max:255'],
         ]);
 
-        $fromAccount = Account::findOrFail($validated['from_account_id']);
-        $toAccount = Account::findOrFail($validated['to_account_id']);
+        $fromAccount = Account::where('account_number', $validated['from_account_number'])->firstOrFail();
+        $toAccount = Account::where('account_number', $validated['to_account_number'])->firstOrFail();
 
         // Check if from_account has sufficient balance
         if ($fromAccount->available_balance < $validated['amount']) {
@@ -127,7 +127,7 @@ class AccountController extends AdminController
                 'amount' => $amount,
                 'currency' => $fromAccount->currency,
                 'balance_after' => $fromAccount->balance,
-                'reference_number' => $referenceNumber,
+                'reference_number' => $referenceNumber . '-DR',
                 'status' => 'completed',
                 'related_account_id' => $toAccount->id,
                 'transaction_date' => now(),
@@ -146,7 +146,7 @@ class AccountController extends AdminController
                 'amount' => $convertedAmount,
                 'currency' => $toAccount->currency,
                 'balance_after' => $toAccount->balance,
-                'reference_number' => $referenceNumber,
+                'reference_number' => $referenceNumber . '-CR',
                 'status' => 'completed',
                 'related_account_id' => $fromAccount->id,
                 'transaction_date' => now(),
@@ -278,23 +278,23 @@ class AccountController extends AdminController
 
     public function destroy(Account $account)
     {
-        // Check if account has balance
-        if ($account->balance > 0 || $account->balance < 0) {
-            return back()->withErrors(['account' => 'Cannot delete account with non-zero balance. Current balance: ' . $account->currency . ' ' . $account->balance]);
+        if ($account->balance != 0) {
+            return redirect()->route('admin.accounts.index')
+                ->with('error', "Cannot delete {$account->account_number}: account has a non-zero balance ({$account->currency} {$account->balance}).");
         }
 
-        // Check if account is primary
         if ($account->is_primary) {
-            return back()->withErrors(['account' => 'Cannot delete primary account. Set another account as primary first.']);
+            return redirect()->route('admin.accounts.index')
+                ->with('error', "Cannot delete {$account->account_number}: it is set as the primary account.");
         }
 
-        // Check for recent transactions (within last 30 days)
         $recentTransactions = $account->transactions()
             ->where('transaction_date', '>=', now()->subDays(30))
             ->count();
 
         if ($recentTransactions > 0) {
-            return back()->withErrors(['account' => 'Cannot delete account with transactions in the last 30 days.']);
+            return redirect()->route('admin.accounts.index')
+                ->with('error', "Cannot delete {$account->account_number}: it has transactions in the last 30 days.");
         }
 
         $account->delete();
@@ -348,7 +348,13 @@ class AccountController extends AdminController
             $message .= " {$skipped} account(s) skipped.";
         }
 
-        return back()->with('success', $message)->withErrors($errors);
+        $response = redirect()->route('admin.accounts.index')->with('success', $message);
+
+        if (count($errors) > 0) {
+            $response = $response->with('warning', implode(' ', $errors));
+        }
+
+        return $response;
     }
 
     public function bulkDestroy(Request $request)
@@ -396,7 +402,13 @@ class AccountController extends AdminController
             $message .= " {$skipped} account(s) skipped.";
         }
 
-        return back()->with('success', $message)->withErrors($errors);
+        $response = redirect()->route('admin.accounts.index')->with('success', $message);
+
+        if (count($errors) > 0) {
+            $response = $response->with('warning', implode(' ', $errors));
+        }
+
+        return $response;
     }
 
     public function bulkFund(Request $request)
@@ -436,7 +448,7 @@ class AccountController extends AdminController
             }
         });
 
-        return back()->with('success', "{$funded} account(s) funded successfully.");
+        return redirect()->route('admin.accounts.index')->with('success', "{$funded} account(s) funded successfully.");
     }
 
     public function bulkExport(Request $request)

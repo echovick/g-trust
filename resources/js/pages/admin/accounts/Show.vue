@@ -48,8 +48,8 @@ const fundForm = useForm({
 });
 
 const transferForm = useForm({
-    from_account_id: props.account.id,
-    to_account_id: '',
+    from_account_number: props.account.account_number,
+    to_account_number: '',
     amount: '',
     description: '',
 });
@@ -221,14 +221,14 @@ const formatDate = (date: string) => {
                                 To Account Number *
                             </label>
                             <input
-                                v-model="transferForm.to_account_id"
+                                v-model="transferForm.to_account_number"
                                 type="text"
                                 required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
-                                placeholder="Enter account ID or number"
+                                placeholder="e.g. ACC3821460197"
                             />
-                            <p v-if="transferForm.errors.to_account_id" class="mt-1 text-sm text-red-600">
-                                {{ transferForm.errors.to_account_id }}
+                            <p v-if="transferForm.errors.to_account_number" class="mt-1 text-sm text-red-600">
+                                {{ transferForm.errors.to_account_number }}
                             </p>
                         </div>
 
