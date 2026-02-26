@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { ArrowLeft, User, Mail, Calendar, Shield, Wallet, Lock } from 'lucide-vue-next';
+import { ArrowLeft, User, Mail, Calendar, Shield, Wallet, Lock, Pencil, Trash2, AlertCircle } from 'lucide-vue-next';
 
 interface Account {
     id: number;
@@ -31,6 +31,18 @@ interface Props {
 const props = defineProps<Props>();
 
 const showPasswordReset = ref(false);
+const showDeleteModal = ref(false);
+const deleteInProgress = ref(false);
+
+const deleteUser = () => {
+    deleteInProgress.value = true;
+    router.delete(`/admin/users/${props.user.id}`, {
+        onFinish: () => {
+            deleteInProgress.value = false;
+            showDeleteModal.value = false;
+        },
+    });
+};
 
 const passwordForm = useForm({
     password: '',
@@ -76,14 +88,31 @@ const formatDate = (date: string) => {
                     <h1 class="text-xl sm:text-2xl font-bold text-gray-900">{{ user.name }}</h1>
                     <p class="text-gray-600 mt-1">User Details</p>
                 </div>
-                <button
-                    @click="showPasswordReset = !showPasswordReset"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
-                    <Lock :size="18" />
-                    <span class="hidden sm:inline">Reset Password</span>
-                    <span class="sm:hidden">Reset</span>
-                </button>
+                <div class="flex items-center gap-2">
+                    <a
+                        :href="`/admin/users/${user.id}/edit`"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                        <Pencil :size="18" />
+                        <span class="hidden sm:inline">Edit User</span>
+                        <span class="sm:hidden">Edit</span>
+                    </a>
+                    <button
+                        @click="showPasswordReset = !showPasswordReset"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                        <Lock :size="18" />
+                        <span class="hidden sm:inline">Reset Password</span>
+                        <span class="sm:hidden">Reset</span>
+                    </button>
+                    <button
+                        @click="showDeleteModal = true"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                    >
+                        <Trash2 :size="18" />
+                        <span class="hidden sm:inline">Delete</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Password Reset Form -->
@@ -231,6 +260,60 @@ const formatDate = (date: string) => {
                 <div v-else class="p-8 text-center text-gray-500">
                     <Wallet :size="48" class="mx-auto mb-3 text-gray-300" />
                     <p>No accounts found for this user</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div
+            v-if="showDeleteModal"
+            class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center p-4"
+            @click="showDeleteModal = false"
+        >
+            <div
+                class="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
+                @click.stop
+            >
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <AlertCircle :size="24" class="text-red-600" />
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Delete User</h2>
+                        <p class="text-sm text-gray-600">This action cannot be undone</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-sm text-gray-700 mb-3">
+                        Are you sure you want to delete this user?
+                    </p>
+                    <div class="bg-gray-50 rounded-lg p-3 text-sm">
+                        <p class="font-medium text-gray-900">{{ user.name }}</p>
+                        <p class="text-gray-600">{{ user.email }}</p>
+                    </div>
+                    <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <p class="text-xs text-yellow-800">
+                            <strong>Warning:</strong> This will permanently delete the user and all related records including accounts, transactions, cards, transfers, beneficiaries, loans, investments, deposits, and bill payments.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button
+                        @click="showDeleteModal = false"
+                        :disabled="deleteInProgress"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        @click="deleteUser"
+                        :disabled="deleteInProgress"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                    >
+                        {{ deleteInProgress ? 'Deleting...' : 'Delete User' }}
+                    </button>
                 </div>
             </div>
         </div>

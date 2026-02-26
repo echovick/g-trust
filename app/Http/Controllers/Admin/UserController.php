@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\Account;
+use App\Models\Transfer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
@@ -81,6 +84,43 @@ class UserController extends AdminController
         return Inertia::render('admin/users/Show', [
             'user' => $user,
         ]);
+    }
+
+    public function edit(User $user)
+    {
+        return Inertia::render('admin/users/Edit', [
+            'user' => $user,
+        ]);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'preferred_currency' => ['required', 'string', 'in:USD,EUR,GBP,NGN'],
+            'is_admin' => ['boolean'],
+        ]);
+
+        $user->update($validated);
+
+        return back()->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        DB::transaction(function () use ($user) {
+            $accountIds = $user->accounts()->pluck('id');
+
+            Transfer::whereIn('from_account_id', $accountIds)
+                ->orWhereIn('to_account_id', $accountIds)
+                ->delete();
+
+            $user->delete();
+        });
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User deleted successfully.');
     }
 
     public function resetPassword(Request $request, User $user)
