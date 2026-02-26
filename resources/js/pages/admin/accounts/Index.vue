@@ -273,8 +273,9 @@ const formatCurrency = (amount: number, currency: string) => {
                     Are you sure you want to delete <span class="font-medium text-gray-900">{{ accountToDelete.account_name }}</span>?
                 </p>
                 <p class="text-sm text-gray-500 mb-4">Account number: {{ accountToDelete.account_number }}</p>
-                <div class="text-sm text-red-800 bg-red-50 border border-red-200 rounded p-3 mb-6">
-                    <strong>This cannot be undone.</strong> Accounts with a non-zero balance, set as primary, or with recent transactions cannot be deleted.
+                <div class="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded p-3 mb-6 space-y-1">
+                    <p><strong>This action cannot be undone.</strong></p>
+                    <p>The account's current balance of <strong>{{ formatCurrency(accountToDelete.balance, accountToDelete.currency) }}</strong> will be permanently removed, along with all associated transaction history.</p>
                 </div>
                 <div class="flex justify-end gap-3">
                     <button

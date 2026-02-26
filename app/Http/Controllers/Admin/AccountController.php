@@ -278,26 +278,12 @@ class AccountController extends AdminController
 
     public function destroy(Account $account)
     {
-        if ($account->balance != 0) {
-            return redirect()->route('admin.accounts.index')
-                ->with('error', "Cannot delete {$account->account_number}: account has a non-zero balance ({$account->currency} {$account->balance}).");
-        }
+        DB::transaction(function () use ($account) {
+            // transfers.from_account_id has no cascade, so delete them manually
+            Transfer::where('from_account_id', $account->id)->delete();
 
-        if ($account->is_primary) {
-            return redirect()->route('admin.accounts.index')
-                ->with('error', "Cannot delete {$account->account_number}: it is set as the primary account.");
-        }
-
-        $recentTransactions = $account->transactions()
-            ->where('transaction_date', '>=', now()->subDays(30))
-            ->count();
-
-        if ($recentTransactions > 0) {
-            return redirect()->route('admin.accounts.index')
-                ->with('error', "Cannot delete {$account->account_number}: it has transactions in the last 30 days.");
-        }
-
-        $account->delete();
+            $account->delete();
+        });
 
         return redirect()->route('admin.accounts.index')->with('success', 'Account deleted successfully.');
     }

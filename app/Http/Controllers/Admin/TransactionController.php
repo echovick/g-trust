@@ -250,12 +250,6 @@ class TransactionController extends AdminController
 
     public function edit(Transaction $transaction)
     {
-        // Only allow editing of pending transactions
-        if ($transaction->status !== 'pending') {
-            return redirect()->route('admin.transactions.show', $transaction)
-                ->withErrors(['status' => 'Only pending transactions can be edited.']);
-        }
-
         $transaction->load('account.user');
 
         return Inertia::render('admin/transactions/Edit', [
@@ -265,26 +259,33 @@ class TransactionController extends AdminController
 
     public function update(Request $request, Transaction $transaction)
     {
-        // Only allow updating of pending transactions
-        if ($transaction->status !== 'pending') {
-            return back()->withErrors(['status' => 'Only pending transactions can be updated.']);
-        }
-
         $validated = $request->validate([
-            'category' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
-            'amount' => ['required', 'numeric', 'min:0.01'],
+            'description'      => ['required', 'string', 'max:255'],
+            'transaction_date' => ['required', 'date'],
+            'amount'           => ['required', 'numeric', 'min:0.01'],
         ]);
 
-        // Check balance if changing amount for debit transactions
-        if ($validated['amount'] != $transaction->amount && $transaction->transaction_type === 'debit') {
-            $account = $transaction->account;
-            if ($account->available_balance < $validated['amount']) {
-                return back()->withErrors(['amount' => 'Insufficient balance in account for this amount.']);
-            }
-        }
+        DB::transaction(function () use ($transaction, $validated) {
+            // If amount changed on a completed transaction, adjust the account balance
+            if ($transaction->status === 'completed' && (float) $validated['amount'] !== (float) $transaction->amount) {
+                $account  = $transaction->account;
+                $diff     = (float) $validated['amount'] - (float) $transaction->amount;
 
-        $transaction->update($validated);
+                if ($transaction->transaction_type === 'credit') {
+                    $account->balance           += $diff;
+                    $account->available_balance += $diff;
+                } else {
+                    $account->balance           -= $diff;
+                    $account->available_balance -= $diff;
+                }
+
+                $account->save();
+
+                $validated['balance_after'] = $account->balance;
+            }
+
+            $transaction->update($validated);
+        });
 
         return back()->with('success', 'Transaction updated successfully.');
     }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { ArrowLeft, Wallet, User, DollarSign, ArrowRightLeft, TrendingUp, Receipt } from 'lucide-vue-next';
 
@@ -352,7 +352,7 @@ const formatDate = (date: string) => {
                                     {{ formatDate(transaction.transaction_date) }}
                                 </p>
                             </div>
-                            <div class="text-right">
+                            <div class="text-right flex flex-col items-end gap-1">
                                 <p
                                     :class="[
                                         'text-sm font-medium',
@@ -366,7 +366,7 @@ const formatDate = (date: string) => {
                                 </p>
                                 <span
                                     :class="[
-                                        'inline-block mt-1 px-2 py-1 text-xs rounded-full',
+                                        'inline-block px-2 py-1 text-xs rounded-full',
                                         transaction.status === 'completed'
                                             ? 'bg-green-100 text-green-800'
                                             : transaction.status === 'pending'
@@ -376,6 +376,12 @@ const formatDate = (date: string) => {
                                 >
                                     {{ transaction.status }}
                                 </span>
+                                <Link
+                                    :href="`/admin/transactions/${transaction.id}/edit`"
+                                    class="text-xs text-gray-500 hover:text-gray-800 underline"
+                                >
+                                    Edit
+                                </Link>
                             </div>
                         </div>
                     </div>

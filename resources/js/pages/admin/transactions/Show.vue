@@ -246,7 +246,6 @@ const getStatusColor = (status: string) => {
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Admin Actions</h3>
                         <div class="space-y-3">
                             <Link
-                                v-if="transaction.status === 'pending'"
                                 :href="`/admin/transactions/${transaction.id}/edit`"
                                 class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
                             >
