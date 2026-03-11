@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { Plus, Clock, CheckCircle, XCircle, ArrowDownToLine, Eye, AlertCircle } from 'lucide-vue-next';
+import { useCurrency } from '@/composables/useCurrency';
 
 interface Account {
     id: number;
@@ -39,6 +41,13 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const { currentCurrency } = useCurrency();
+
+// Filter deposits by selected currency
+const filteredDeposits = computed(() =>
+    props.deposits.data.filter(deposit => deposit.currency === currentCurrency.value)
+);
 
 const getStatusColor = (status: string) => {
     switch (status) {
@@ -107,9 +116,9 @@ const formatCurrency = (amount: string, currency: string) => {
             </div>
 
             <!-- Deposits List -->
-            <div v-if="deposits.data.length > 0" class="space-y-4">
+            <div v-if="filteredDeposits.length > 0" class="space-y-4">
                 <div
-                    v-for="deposit in deposits.data"
+                    v-for="deposit in filteredDeposits"
                     :key="deposit.id"
                     class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
                 >
@@ -184,8 +193,8 @@ const formatCurrency = (amount: string, currency: string) => {
                 <div class="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4">
                     <ArrowDownToLine :size="32" class="text-purple-400" />
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">No Deposits Yet</h3>
-                <p class="text-gray-600 mb-6">You haven't made any check deposits</p>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} Deposits</h3>
+                <p class="text-gray-600 mb-6">No deposits found in {{ currentCurrency }}</p>
                 <Link
                     href="/dashboard/deposits/create"
                     class="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"

@@ -14,7 +14,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     showCode: false,
     colored: false,
-    convertToPreferred: true,
+    convertToPreferred: false,
 });
 
 const { formatCurrency, convertAmount, currentCurrency } = useCurrency();

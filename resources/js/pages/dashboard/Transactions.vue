@@ -6,6 +6,7 @@ import {
     ShoppingBag, Utensils, Car, Home, CreditCard, TrendingUp
 } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useCurrency } from '@/composables/useCurrency';
 
 interface Account {
     id: number;
@@ -50,7 +51,14 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { currentCurrency } = useCurrency();
+
 const selectedFilter = ref('all');
+
+// Filter transactions by selected currency
+const filteredTransactions = computed(() =>
+    props.transactions.data.filter(t => t.currency === currentCurrency.value)
+);
 
 const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -104,7 +112,7 @@ const formatDate = (date: string) => {
             </div>
         </div>
 
-        <div v-if="transactions.data.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div v-if="filteredTransactions.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gray-50 border-b border-gray-200">
@@ -130,7 +138,7 @@ const formatDate = (date: string) => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        <tr v-for="transaction in transactions.data" :key="transaction.id" class="hover:bg-gray-50">
+                        <tr v-for="transaction in filteredTransactions" :key="transaction.id" class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">
                                     {{ formatDate(transaction.transaction_date).split(',')[0] }}
@@ -224,8 +232,8 @@ const formatDate = (date: string) => {
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Receipt :size="32" class="text-gray-400" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No transactions yet</h3>
-            <p class="text-gray-600">Your transaction history will appear here</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} transactions</h3>
+            <p class="text-gray-600">No transactions found in {{ currentCurrency }}</p>
         </div>
     </DashboardLayout>
 </template>

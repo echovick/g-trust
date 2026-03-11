@@ -23,14 +23,13 @@ const props = withDefaults(defineProps<Props>(), {
     showBalanceToggle: true,
 });
 
-const { formatCurrency, convertAmount, currentCurrency } = useCurrency();
+const { formatCurrency } = useCurrency();
 const showBalance = ref(true);
 
 const displayBalance = () => {
     if (!showBalance.value) return '••••••';
 
-    const converted = convertAmount(props.account.balance, props.account.currency);
-    return formatCurrency(converted);
+    return formatCurrency(props.account.balance, props.account.currency);
 };
 </script>
 
@@ -59,10 +58,6 @@ const displayBalance = () => {
 
         <div class="text-3xl font-bold">
             {{ displayBalance() }}
-        </div>
-
-        <div v-if="account.currency !== currentCurrency" class="mt-2 text-xs text-white/60">
-            Original: {{ formatCurrency(account.balance, account.currency) }}
         </div>
     </div>
 </template>

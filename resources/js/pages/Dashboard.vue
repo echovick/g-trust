@@ -99,13 +99,32 @@ const getAccountIcon = (type: string) => {
     }
 };
 
-// Add icons to accounts
+// Filter accounts by selected currency and add icons
 const accountsWithIcons = computed(() =>
-    (props.accounts || []).map(account => ({
-        ...account,
-        icon: getAccountIcon(account.account_type),
-    }))
+    (props.accounts || [])
+        .filter(account => account.currency === currentCurrency.value)
+        .map(account => ({
+            ...account,
+            icon: getAccountIcon(account.account_type),
+        }))
 );
+
+// Total balance from accounts matching the selected currency only
+const filteredTotalBalance = computed(() =>
+    (props.accounts || [])
+        .filter(account => account.currency === currentCurrency.value)
+        .reduce((sum, account) => sum + account.balance, 0)
+);
+
+// Filter recent transactions to only show those in the selected currency
+const filteredTransactions = computed(() =>
+    (props.recentTransactions || []).filter(
+        transaction => transaction.currency === currentCurrency.value
+    )
+);
+
+// Active accounts count for selected currency
+const activeAccountsCount = computed(() => accountsWithIcons.value.length);
 
 const quickActions = [
     {
@@ -158,7 +177,7 @@ const savingsPercentage = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <StatWidget
                 title="Total Balance"
-                :value="formatCurrency(totalBalance, currentCurrency)"
+                :value="formatCurrency(filteredTotalBalance, currentCurrency)"
                 :icon="Wallet"
                 icon-color="text-red-500"
                 icon-background="bg-red-50"
@@ -174,7 +193,7 @@ const savingsPercentage = computed(() => {
             />
             <StatWidget
                 title="Active Accounts"
-                :value="(accounts || []).length"
+                :value="activeAccountsCount"
                 :icon="Building"
                 icon-color="text-green-500"
                 icon-background="bg-green-50"
@@ -205,8 +224,8 @@ const savingsPercentage = computed(() => {
 
             <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
                 <Wallet :size="48" class="text-gray-300 mx-auto mb-4" />
-                <p class="text-gray-600 mb-4">You don't have any accounts yet</p>
-                <Link href="/register" class="inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-medium transition-colors">
+                <p class="text-gray-600 mb-4">You don't have any {{ currentCurrency }} accounts</p>
+                <Link href="/dashboard/account-requests/create" class="inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-medium transition-colors">
                     Open an Account
                 </Link>
             </div>
@@ -247,9 +266,9 @@ const savingsPercentage = computed(() => {
                     </Link>
                 </div>
 
-                <div v-if="recentTransactions.length > 0" class="space-y-0">
+                <div v-if="filteredTransactions.length > 0" class="space-y-0">
                     <TransactionRow
-                        v-for="transaction in recentTransactions"
+                        v-for="transaction in filteredTransactions"
                         :key="transaction.id"
                         :transaction="transaction"
                         @click="() => {}"
@@ -258,7 +277,7 @@ const savingsPercentage = computed(() => {
 
                 <div v-else class="text-center py-12">
                     <Receipt :size="48" class="text-gray-300 mx-auto mb-4" />
-                    <p class="text-gray-600">No recent transactions</p>
+                    <p class="text-gray-600">No recent transactions in {{ currentCurrency }}</p>
                 </div>
             </div>
 

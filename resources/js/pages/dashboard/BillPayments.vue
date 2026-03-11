@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import { Plus, Receipt, Calendar, Repeat, Trash2, CheckCircle, Clock, XCircle } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useCurrency } from '@/composables/useCurrency';
 
 interface Account {
     id: number;
@@ -50,6 +52,13 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const { currentCurrency } = useCurrency();
+
+// Filter bill payments by selected currency
+const filteredBillPayments = computed(() =>
+    props.billPayments.data.filter(payment => payment.currency === currentCurrency.value)
+);
 
 const deleteBillPayment = (id: number) => {
     if (confirm('Are you sure you want to delete this bill payment?')) {
@@ -105,8 +114,8 @@ const getStatusColor = (status: string) => {
             </div>
         </div>
 
-        <div v-if="billPayments.data.length > 0" class="space-y-4">
-            <div v-for="payment in billPayments.data" :key="payment.id"
+        <div v-if="filteredBillPayments.length > 0" class="space-y-4">
+            <div v-for="payment in filteredBillPayments" :key="payment.id"
                 class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
             >
                 <div class="flex items-start justify-between">
@@ -218,8 +227,8 @@ const getStatusColor = (status: string) => {
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Receipt :size="32" class="text-gray-400" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No bill payments yet</h3>
-            <p class="text-gray-600 mb-6">Schedule your first bill payment to get started</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} bill payments</h3>
+            <p class="text-gray-600 mb-6">No bill payments found in {{ currentCurrency }}</p>
             <Link
                 href="/dashboard/bill-payments/create"
                 class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { TrendingUp, Calendar, DollarSign, Percent, CheckCircle, Clock, ArrowRight } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useCurrency } from '@/composables/useCurrency';
 
 interface Account {
     id: number;
@@ -31,6 +33,13 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const { currentCurrency } = useCurrency();
+
+// Filter loans by selected currency
+const filteredLoans = computed(() =>
+    props.loans.filter(loan => loan.currency === currentCurrency.value)
+);
 
 const getLoanTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
@@ -83,9 +92,9 @@ const formatDate = (date: string) => {
             <p class="text-gray-600">Track and manage your loan payments</p>
         </div>
 
-        <div v-if="loans.length > 0" class="space-y-6">
+        <div v-if="filteredLoans.length > 0" class="space-y-6">
             <Link
-                v-for="loan in loans"
+                v-for="loan in filteredLoans"
                 :key="loan.id"
                 :href="`/dashboard/loans/${loan.id}`"
                 class="block bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden group"
@@ -190,8 +199,8 @@ const formatDate = (date: string) => {
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp :size="32" class="text-gray-400" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No loans yet</h3>
-            <p class="text-gray-600">You don't have any active loans at the moment</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} loans</h3>
+            <p class="text-gray-600">No loans found in {{ currentCurrency }}</p>
         </div>
     </DashboardLayout>
 </template>

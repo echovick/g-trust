@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Send, Plus, ArrowLeftRight, Globe, Calendar, CheckCircle, Clock, XCircle } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useCurrency } from '@/composables/useCurrency';
 
 interface Account {
     id: number;
@@ -55,6 +57,13 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const { currentCurrency } = useCurrency();
+
+// Filter transfers by selected currency
+const filteredTransfers = computed(() =>
+    props.transfers.data.filter(transfer => transfer.currency === currentCurrency.value)
+);
 
 const getTransferIcon = (type: string) => {
     switch (type) {
@@ -110,8 +119,8 @@ const formatDate = (date: string) => {
             </div>
         </div>
 
-        <div v-if="transfers.data.length > 0" class="space-y-4">
-            <div v-for="transfer in transfers.data" :key="transfer.id"
+        <div v-if="filteredTransfers.length > 0" class="space-y-4">
+            <div v-for="transfer in filteredTransfers" :key="transfer.id"
                 class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
             >
                 <div class="flex items-start justify-between">
@@ -228,8 +237,8 @@ const formatDate = (date: string) => {
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Send :size="32" class="text-gray-400" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No transfers yet</h3>
-            <p class="text-gray-600 mb-6">You haven't made any transfers yet</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} transfers</h3>
+            <p class="text-gray-600 mb-6">No transfers found in {{ currentCurrency }}</p>
             <Link
                 href="/dashboard/transfers/create"
                 class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"

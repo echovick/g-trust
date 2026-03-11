@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Wallet, PiggyBank, Building, ArrowRight, CreditCard, TrendingUp, Plus } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useCurrency } from '@/composables/useCurrency';
 
 interface Card {
     id: number;
@@ -37,6 +39,12 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const { currentCurrency } = useCurrency();
+
+// Filter accounts to only show those matching the selected currency
+const filteredAccounts = computed(() =>
+    props.accounts.filter(account => account.currency === currentCurrency.value)
+);
 
 const getAccountIcon = (type: string) => {
     switch (type) {
@@ -71,9 +79,9 @@ const getAccountColor = (type: string) => {
             </Link>
         </div>
 
-        <div v-if="accounts.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div v-if="filteredAccounts.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Link
-                v-for="account in accounts"
+                v-for="account in filteredAccounts"
                 :key="account.id"
                 :href="`/dashboard/accounts/${account.id}`"
                 class="block bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden group"
@@ -142,8 +150,8 @@ const getAccountColor = (type: string) => {
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Wallet :size="32" class="text-gray-400" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No accounts yet</h3>
-            <p class="text-gray-600 mb-6">Get started by requesting your first account</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} accounts</h3>
+            <p class="text-gray-600 mb-6">You don't have any accounts in {{ currentCurrency }}. Request one to get started.</p>
             <Link
                 href="/dashboard/account-requests/create"
                 class="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
