@@ -46,11 +46,11 @@ class BeneficiaryController extends Controller
 
         $request->user()->beneficiaries()->create([
             ...$validated,
-            'is_verified' => false, // Admin needs to verify
+            'is_verified' => true,
         ]);
 
         return redirect()->route('dashboard.beneficiaries.index')
-            ->with('success', 'Beneficiary added successfully. Pending verification.');
+            ->with('success', 'Beneficiary added successfully.');
     }
 
     public function edit(Beneficiary $beneficiary): Response
@@ -87,13 +87,10 @@ class BeneficiaryController extends Controller
             'phone' => ['nullable', 'string', 'max:20'],
         ]);
 
-        $beneficiary->update([
-            ...$validated,
-            'is_verified' => false, // Re-verification needed after edit
-        ]);
+        $beneficiary->update($validated);
 
         return redirect()->route('dashboard.beneficiaries.index')
-            ->with('success', 'Beneficiary updated successfully. Pending re-verification.');
+            ->with('success', 'Beneficiary updated successfully.');
     }
 
     public function destroy(Beneficiary $beneficiary)
