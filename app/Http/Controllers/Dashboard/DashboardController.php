@@ -55,7 +55,7 @@ class DashboardController extends Controller
     public function updateCurrency(Request $request)
     {
         $request->validate([
-            'currency' => 'required|in:USD,EUR,GBP',
+            'currency' => 'required|in:USD,EUR,GBP,NGN',
         ]);
 
         $request->user()->update([

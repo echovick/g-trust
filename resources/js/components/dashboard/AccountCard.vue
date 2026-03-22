@@ -10,7 +10,7 @@ interface Account {
     account_number: string;
     account_type: 'checking' | 'savings' | 'business';
     balance: number;
-    currency: 'USD' | 'EUR' | 'GBP';
+    currency: 'USD' | 'EUR' | 'GBP' | 'NGN';
     icon?: Component;
 }
 

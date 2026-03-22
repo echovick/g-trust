@@ -4,12 +4,14 @@ export const currencySymbols: Record<Currency, string> = {
     USD: '$',
     EUR: '€',
     GBP: '£',
+    NGN: '₦',
 };
 
 export const currencyLocales: Record<Currency, string> = {
     USD: 'en-US',
     EUR: 'de-DE',
     GBP: 'en-GB',
+    NGN: 'en-NG',
 };
 
 /**
@@ -52,6 +54,7 @@ export function convertCurrency(
         USD: 1,
         EUR: 0.92,
         GBP: 0.79,
+        NGN: 1550,
     };
 
     // Convert to USD first, then to target currency

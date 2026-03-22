@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import {
     Wallet,
@@ -26,7 +26,7 @@ interface Account {
     account_type: 'checking' | 'savings' | 'business';
     balance: number;
     available_balance: number;
-    currency: 'USD' | 'EUR' | 'GBP';
+    currency: 'USD' | 'EUR' | 'GBP' | 'NGN';
     is_active: boolean;
     is_primary: boolean;
 }
@@ -35,7 +35,7 @@ interface Transaction {
     id: number;
     description: string;
     amount: number;
-    currency: 'USD' | 'EUR' | 'GBP';
+    currency: 'USD' | 'EUR' | 'GBP' | 'NGN';
     category?: string;
     transaction_date: string;
     transaction_type: string;
@@ -64,7 +64,7 @@ interface Props {
     balanceTrend?: { value: number; label: string };
     savingsGoal?: SavingsGoal;
     creditScore?: CreditScore;
-    preferredCurrency?: 'USD' | 'EUR' | 'GBP';
+    preferredCurrency?: 'USD' | 'EUR' | 'GBP' | 'NGN';
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -76,14 +76,7 @@ const props = withDefaults(defineProps<Props>(), {
     preferredCurrency: 'USD',
 });
 
-const { setCurrency, formatCurrency, currentCurrency } = useCurrency();
-
-// Set user's preferred currency on mount
-onMounted(() => {
-    if (props.preferredCurrency) {
-        setCurrency(props.preferredCurrency);
-    }
-});
+const { formatCurrency, currentCurrency } = useCurrency();
 
 // Get account icon based on type
 const getAccountIcon = (type: string) => {

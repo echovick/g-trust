@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
-import { UserPlus, Globe, MapPin, Edit, Trash2, CheckCircle, XCircle } from 'lucide-vue-next';
+import { UserPlus, Globe, MapPin, Edit, Trash2, CheckCircle, XCircle, Send } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
 interface Beneficiary {
@@ -142,6 +142,13 @@ const deleteBeneficiary = (id: number) => {
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-end gap-2">
+                                    <Link
+                                        :href="`/dashboard/transfers/create?beneficiary_id=${beneficiary.id}`"
+                                        class="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                        title="Transfer to this beneficiary"
+                                    >
+                                        <Send :size="18" />
+                                    </Link>
                                     <Link
                                         :href="`/dashboard/beneficiaries/${beneficiary.id}/edit`"
                                         class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"

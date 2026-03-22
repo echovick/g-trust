@@ -21,18 +21,7 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
                     <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Phone :size="32" class="text-red-500" />
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">UK Customer Service</h3>
-                    <p class="text-gray-600 text-sm mb-2">Mon-Fri 8am-8pm</p>
-                    <a href="tel:+447474798274" class="text-red-500 hover:text-red-600 font-medium"
-                        >+44 7474798274</a
-                    >
-                </div>
-
-                <div class="text-center p-6">
-                    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Phone :size="32" class="text-red-500" />
-                    </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">USA Customer Service</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2">Customer Service</h3>
                     <p class="text-gray-600 text-sm mb-2">Mon-Fri 8am-8pm</p>
                     <a href="tel:+16282657540" class="text-red-500 hover:text-red-600 font-medium"
                         >+1 6282657540</a
@@ -107,17 +96,8 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
 
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Offices</h2>
-                    <div class="bg-white p-6 rounded-lg mb-6 border border-gray-200">
-                        <h3 class="font-semibold text-gray-900 mb-4">UK Headquarters</h3>
-                        <p class="text-gray-600 mb-2">128 City Rd</p>
-                        <p class="text-gray-600 mb-2">London EC1V 2NX</p>
-                        <p class="text-gray-600 mb-4">United Kingdom</p>
-                        <p class="text-gray-900 font-medium mb-1">Customer Service</p>
-                        <a href="tel:+447474798274" class="text-red-500 hover:text-red-600 font-medium">+44 7474798274</a>
-                    </div>
-
                     <div class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h3 class="font-semibold text-gray-900 mb-4">USA Branch</h3>
+                        <h3 class="font-semibold text-gray-900 mb-4">USA Office</h3>
                         <p class="text-gray-600 mb-2">333 Market Street</p>
                         <p class="text-gray-600 mb-2">San Francisco, CA 94105</p>
                         <p class="text-gray-600 mb-4">United States</p>

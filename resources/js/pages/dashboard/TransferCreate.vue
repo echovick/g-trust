@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { ArrowLeft, Send, ArrowLeftRight, Globe, UserPlus } from 'lucide-vue-next';
+import { ArrowLeft, Send, ArrowLeftRight, Globe, UserPlus, Info } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
 interface Account {
@@ -28,16 +28,28 @@ interface Beneficiary {
 interface Props {
     accounts: Account[];
     beneficiaries: Beneficiary[];
+    beneficiary_id?: number | null;
 }
 
 const props = defineProps<Props>();
 
+// Determine initial transfer type and beneficiary based on pre-selected beneficiary
+const getInitialTransferType = (): 'internal' | 'external' | 'international' => {
+    if (props.beneficiary_id) {
+        const beneficiary = props.beneficiaries.find(b => b.id === props.beneficiary_id);
+        if (beneficiary) {
+            return beneficiary.beneficiary_type === 'international' ? 'international' : 'external';
+        }
+    }
+    return 'internal';
+};
+
 const form = useForm({
     from_account_id: props.accounts[0]?.id || null,
-    transfer_type: 'internal' as 'internal' | 'external' | 'international',
+    transfer_type: getInitialTransferType(),
     amount: '',
     description: '',
-    beneficiary_id: null as number | null,
+    beneficiary_id: props.beneficiary_id ?? null as number | null,
     to_account_id: null as number | null,
     scheduled_date: null as string | null,
 });
@@ -215,6 +227,18 @@ const getTransferTypeIcon = (type: string) => {
                             Select Beneficiary <span class="text-red-500">*</span>
                         </label>
 
+                        <div class="flex items-start gap-2 mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <Info :size="16" class="text-blue-500 mt-0.5 shrink-0" />
+                            <p class="text-sm text-blue-700">
+                                <template v-if="form.transfer_type === 'external'">
+                                    Only verified <strong>domestic</strong> beneficiaries are shown here. If you don't see your beneficiary, check that it was added as a domestic beneficiary.
+                                </template>
+                                <template v-else>
+                                    Only verified <strong>international</strong> beneficiaries are shown here. If you don't see your beneficiary, check that it was added as an international beneficiary.
+                                </template>
+                            </p>
+                        </div>
+
                         <div v-if="availableBeneficiaries.length > 0">
                             <select
                                 v-model="form.beneficiary_id"
@@ -231,7 +255,7 @@ const getTransferTypeIcon = (type: string) => {
                         <div v-else class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                             <p class="text-sm text-yellow-800 mb-3">
                                 <strong>No verified beneficiaries found.</strong>
-                                You need to add and verify a {{ form.transfer_type }} beneficiary first.
+                                You need to add and verify a {{ form.transfer_type === 'external' ? 'domestic' : 'international' }} beneficiary first.
                             </p>
                             <button
                                 type="button"

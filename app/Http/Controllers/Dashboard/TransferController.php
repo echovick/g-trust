@@ -38,10 +38,16 @@ class TransferController extends Controller
 
     public function create(Request $request): Response
     {
-        return Inertia::render('dashboard/TransferCreate', [
+        $props = [
             'accounts' => $request->user()->accounts()->where('is_active', true)->get(),
             'beneficiaries' => $request->user()->beneficiaries()->where('is_verified', true)->get(),
-        ]);
+        ];
+
+        if ($request->has('beneficiary_id')) {
+            $props['beneficiary_id'] = (int) $request->query('beneficiary_id');
+        }
+
+        return Inertia::render('dashboard/TransferCreate', $props);
     }
 
     public function store(Request $request)
