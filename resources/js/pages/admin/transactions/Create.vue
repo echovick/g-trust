@@ -42,10 +42,13 @@ const balanceAfterTransaction = computed(() => {
         return selectedAccount.value.balance; // Pending doesn't affect balance
     }
 
+    const currentBalance = parseFloat(selectedAccount.value.balance as unknown as string);
+    const amount = parseFloat(form.amount.toString());
+
     if (form.transaction_type === 'credit') {
-        return selectedAccount.value.balance + parseFloat(form.amount.toString());
+        return currentBalance + amount;
     } else {
-        return selectedAccount.value.balance - parseFloat(form.amount.toString());
+        return currentBalance - amount;
     }
 });
 
@@ -53,7 +56,7 @@ const hasInsufficientFunds = computed(() => {
     if (!selectedAccount.value || !form.amount || form.transaction_type !== 'debit' || form.status === 'pending') {
         return false;
     }
-    return selectedAccount.value.available_balance < parseFloat(form.amount.toString());
+    return parseFloat(selectedAccount.value.available_balance as unknown as string) < parseFloat(form.amount.toString());
 });
 
 const submitForm = () => {
@@ -64,8 +67,9 @@ const submitForm = () => {
     });
 };
 
-const formatCurrency = (amount: number, currency: string) => {
-    return `${currency} ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const formatCurrency = (amount: number | string, currency: string) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return `${currency} ${numAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
 const transactionCategories = [

@@ -15,15 +15,11 @@ class TransferController extends Controller
 {
     public function index(Request $request): Response
     {
-        $transfers = Transfer::where('from_account_id', function ($query) use ($request) {
-                $query->select('id')
-                    ->from('accounts')
-                    ->where('user_id', $request->user()->id);
-            })
-            ->orWhere('to_account_id', function ($query) use ($request) {
-                $query->select('id')
-                    ->from('accounts')
-                    ->where('user_id', $request->user()->id);
+        $userAccountIds = $request->user()->accounts()->pluck('id');
+
+        $transfers = Transfer::where(function ($query) use ($userAccountIds) {
+                $query->whereIn('from_account_id', $userAccountIds)
+                    ->orWhereIn('to_account_id', $userAccountIds);
             })
             ->with(['fromAccount', 'toAccount', 'beneficiary'])
             ->latest('created_at')
@@ -58,7 +54,7 @@ class TransferController extends Controller
             'amount' => ['required', 'numeric', 'min:0.01'],
             'description' => ['required', 'string', 'max:255'],
             'beneficiary_id' => ['required_if:transfer_type,external,international', 'exists:beneficiaries,id'],
-            'to_account_id' => ['required_if:transfer_type,internal', 'exists:accounts,id'],
+            'to_account_id' => ['nullable', 'required_if:transfer_type,internal', 'exists:accounts,id'],
             'scheduled_date' => ['nullable', 'date', 'after_or_equal:today'],
         ]);
 

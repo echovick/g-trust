@@ -23,17 +23,18 @@ interface Transfer {
     to_account_id?: number;
     beneficiary_id?: number;
     transfer_type: 'internal' | 'external' | 'international';
-    amount: number;
-    currency: string;
-    fee: number;
+    amount: string | number;
+    from_currency: string;
+    to_currency: string;
+    fee: string | number;
     exchange_rate?: number;
     description: string;
     reference_number: string;
     status: 'pending' | 'completed' | 'failed' | 'scheduled';
     scheduled_date?: string;
     completed_at?: string;
-    fromAccount?: Account;
-    toAccount?: Account;
+    from_account?: Account;
+    to_account?: Account;
     beneficiary?: Beneficiary;
 }
 
@@ -62,7 +63,7 @@ const { currentCurrency } = useCurrency();
 
 // Filter transfers by selected currency
 const filteredTransfers = computed(() =>
-    props.transfers.data.filter(transfer => transfer.currency === currentCurrency.value)
+    props.transfers.data.filter(transfer => transfer.from_currency === currentCurrency.value || transfer.to_currency === currentCurrency.value)
 );
 
 const getTransferIcon = (type: string) => {
@@ -91,6 +92,11 @@ const getStatusIcon = (status: string) => {
         case 'scheduled': return Calendar;
         default: return XCircle;
     }
+};
+
+const formatAmount = (value: string | number, currency: string) => {
+    const num = typeof value === 'string' ? parseFloat(value) : value;
+    return `${currency} ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
 const formatDate = (date: string) => {
@@ -147,14 +153,14 @@ const formatDate = (date: string) => {
                                     <h3 class="font-semibold text-gray-900 text-lg capitalize">
                                         {{ transfer.transfer_type }} Transfer
                                     </h3>
-                                    <p class="text-sm text-gray-600 mt-1">{{ transfer.description }}</p>
+                                    <p class="text-sm text-gray-600 mt-1"><span class="font-medium text-gray-500">Note:</span> {{ transfer.description }}</p>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-2xl font-bold text-gray-900">
-                                        {{ transfer.currency }} {{ transfer.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                                        {{ formatAmount(transfer.amount, transfer.from_currency) }}
                                     </div>
-                                    <div v-if="transfer.fee > 0" class="text-xs text-gray-500 mt-1">
-                                        Fee: {{ transfer.currency }} {{ transfer.fee.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                                    <div v-if="parseFloat(transfer.fee as string) > 0" class="text-xs text-gray-500 mt-1">
+                                        Fee: {{ formatAmount(transfer.fee, transfer.from_currency) }}
                                     </div>
                                 </div>
                             </div>
@@ -163,19 +169,19 @@ const formatDate = (date: string) => {
                                 <div>
                                     <div class="text-xs text-gray-500 mb-1">From</div>
                                     <div class="text-sm font-medium text-gray-900">
-                                        {{ transfer.fromAccount?.account_name || 'Unknown' }}
+                                        {{ transfer.from_account?.account_name || 'Unknown' }}
                                     </div>
                                     <div class="text-xs text-gray-500">
-                                        {{ transfer.fromAccount?.account_number || '' }}
+                                        {{ transfer.from_account?.account_number || '' }}
                                     </div>
                                 </div>
                                 <div>
                                     <div class="text-xs text-gray-500 mb-1">To</div>
                                     <div class="text-sm font-medium text-gray-900">
-                                        {{ transfer.toAccount?.account_name || transfer.beneficiary?.name || 'Unknown' }}
+                                        {{ transfer.to_account?.account_name || transfer.beneficiary?.name || 'Unknown' }}
                                     </div>
                                     <div class="text-xs text-gray-500">
-                                        {{ transfer.toAccount?.account_number || transfer.beneficiary?.bank_name || '' }}
+                                        {{ transfer.to_account?.account_number || transfer.beneficiary?.bank_name || '' }}
                                     </div>
                                 </div>
                             </div>
