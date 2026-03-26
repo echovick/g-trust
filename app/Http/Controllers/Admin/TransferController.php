@@ -190,56 +190,75 @@ class TransferController extends AdminController
         $fromAccount = $transfer->fromAccount;
         $toAccount = $transfer->toAccount;
 
-        if ($fromAccount->available_balance < $transfer->amount) {
-            return back()->withErrors(['amount' => 'Insufficient balance in source account.']);
+        if ($toAccount) {
+            // Internal transfer: debit sender, credit receiver
+            if ($fromAccount->available_balance < $transfer->amount) {
+                return back()->withErrors(['amount' => 'Insufficient balance in source account.']);
+            }
+
+            DB::transaction(function () use ($transfer, $fromAccount, $toAccount) {
+                $referenceNumber = $transfer->reference_number;
+
+                // Debit from account
+                $fromAccount->balance -= $transfer->amount;
+                $fromAccount->available_balance -= $transfer->amount;
+                $fromAccount->save();
+
+                Transaction::create([
+                    'account_id' => $fromAccount->id,
+                    'transaction_type' => 'debit',
+                    'category' => 'transfer',
+                    'description' => $transfer->description . ' (To: ' . $toAccount->account_number . ')',
+                    'amount' => $transfer->amount,
+                    'currency' => $fromAccount->currency,
+                    'balance_after' => $fromAccount->balance,
+                    'reference_number' => $referenceNumber,
+                    'status' => 'completed',
+                    'related_account_id' => $toAccount->id,
+                    'transaction_date' => now(),
+                ]);
+
+                // Credit to account
+                $toAccount->balance += $transfer->converted_amount;
+                $toAccount->available_balance += $transfer->converted_amount;
+                $toAccount->save();
+
+                Transaction::create([
+                    'account_id' => $toAccount->id,
+                    'transaction_type' => 'credit',
+                    'category' => 'transfer',
+                    'description' => $transfer->description . ' (From: ' . $fromAccount->account_number . ')',
+                    'amount' => $transfer->converted_amount,
+                    'currency' => $toAccount->currency,
+                    'balance_after' => $toAccount->balance,
+                    'reference_number' => $referenceNumber,
+                    'status' => 'completed',
+                    'related_account_id' => $fromAccount->id,
+                    'transaction_date' => now(),
+                ]);
+
+                $transfer->update([
+                    'status' => 'completed',
+                    'completed_at' => now(),
+                ]);
+            });
+        } else {
+            // External/beneficiary transfer: funds already debited at creation, just update status
+            DB::transaction(function () use ($transfer, $fromAccount) {
+                $referenceNumber = $transfer->reference_number;
+
+                // Update the existing pending debit transaction to completed
+                Transaction::where('reference_number', $referenceNumber)
+                    ->where('account_id', $fromAccount->id)
+                    ->where('status', 'pending')
+                    ->update(['status' => 'completed']);
+
+                $transfer->update([
+                    'status' => 'completed',
+                    'completed_at' => now(),
+                ]);
+            });
         }
-
-        DB::transaction(function () use ($transfer, $fromAccount, $toAccount) {
-            $referenceNumber = $transfer->reference_number;
-
-            // Debit from account
-            $fromAccount->balance -= $transfer->amount;
-            $fromAccount->available_balance -= $transfer->amount;
-            $fromAccount->save();
-
-            Transaction::create([
-                'account_id' => $fromAccount->id,
-                'transaction_type' => 'debit',
-                'category' => 'transfer',
-                'description' => $transfer->description . ' (To: ' . $toAccount->account_number . ')',
-                'amount' => $transfer->amount,
-                'currency' => $fromAccount->currency,
-                'balance_after' => $fromAccount->balance,
-                'reference_number' => $referenceNumber,
-                'status' => 'completed',
-                'related_account_id' => $toAccount->id,
-                'transaction_date' => now(),
-            ]);
-
-            // Credit to account
-            $toAccount->balance += $transfer->converted_amount;
-            $toAccount->available_balance += $transfer->converted_amount;
-            $toAccount->save();
-
-            Transaction::create([
-                'account_id' => $toAccount->id,
-                'transaction_type' => 'credit',
-                'category' => 'transfer',
-                'description' => $transfer->description . ' (From: ' . $fromAccount->account_number . ')',
-                'amount' => $transfer->converted_amount,
-                'currency' => $toAccount->currency,
-                'balance_after' => $toAccount->balance,
-                'reference_number' => $referenceNumber,
-                'status' => 'completed',
-                'related_account_id' => $fromAccount->id,
-                'transaction_date' => now(),
-            ]);
-
-            $transfer->update([
-                'status' => 'completed',
-                'completed_at' => now(),
-            ]);
-        });
 
         return back()->with('success', 'Transfer approved successfully.');
     }
