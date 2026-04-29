@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -42,6 +43,21 @@ class TransactionController extends Controller
             'transactions' => $transactions,
             'accounts' => $request->user()->accounts,
             'filters' => $request->only(['from_date', 'to_date', 'category', 'account_id']),
+        ]);
+    }
+
+    public function receipt(Request $request, Transaction $transaction)
+    {
+        $transaction->load(['account.user', 'relatedAccount.user']);
+
+        // Ensure the user owns this transaction
+        if ($transaction->account->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        return view('receipts.transaction', [
+            'transaction' => $transaction,
+            'isAdmin'     => false,
         ]);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\TransactionAlertMail;
 use App\Models\Transaction;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class TransactionController extends AdminController
@@ -98,9 +100,11 @@ class TransactionController extends AdminController
                 'status' => 'completed',
                 'balance_after' => $account->balance,
             ]);
-
-            // Log admin action (we'll implement this in Priority 3)
         });
+
+        Mail::to($transaction->account->user->email)->queue(
+            new TransactionAlertMail($transaction->load('account.user'), $transaction->account->user)
+        );
 
         return back()->with('success', 'Transaction approved successfully.');
     }
@@ -230,19 +234,24 @@ class TransactionController extends AdminController
                 $balanceAfter = $account->balance;
             }
 
-            // Create transaction record
-            Transaction::create([
-                'account_id' => $account->id,
+            $txn = Transaction::create([
+                'account_id'       => $account->id,
                 'transaction_type' => $validated['transaction_type'],
-                'category' => $validated['category'],
-                'description' => $validated['description'],
-                'amount' => $validated['amount'],
-                'currency' => $account->currency,
-                'balance_after' => $balanceAfter,
+                'category'         => $validated['category'],
+                'description'      => $validated['description'],
+                'amount'           => $validated['amount'],
+                'currency'         => $account->currency,
+                'balance_after'    => $balanceAfter,
                 'reference_number' => 'TXN-' . strtoupper(uniqid()),
-                'status' => $validated['status'],
+                'status'           => $validated['status'],
                 'transaction_date' => now(),
             ]);
+
+            if ($validated['status'] === 'completed') {
+                Mail::to($account->user->email)->queue(
+                    new TransactionAlertMail($txn->load('account.user'), $account->user)
+                );
+            }
         });
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaction created successfully.');
@@ -292,14 +301,34 @@ class TransactionController extends AdminController
 
     public function destroy(Transaction $transaction)
     {
-        // Only allow deletion of pending or cancelled transactions
-        if (!in_array($transaction->status, ['pending', 'cancelled'])) {
-            return back()->withErrors(['status' => 'Only pending or cancelled transactions can be deleted. Use reverse for completed transactions.']);
-        }
+        DB::transaction(function () use ($transaction) {
+            // Reverse balance impact for completed transactions
+            if ($transaction->status === 'completed') {
+                $account = $transaction->account;
+                if ($transaction->transaction_type === 'credit') {
+                    $account->balance -= $transaction->amount;
+                    $account->available_balance -= $transaction->amount;
+                } else {
+                    $account->balance += $transaction->amount;
+                    $account->available_balance += $transaction->amount;
+                }
+                $account->save();
+            }
 
-        $transaction->delete();
+            $transaction->delete();
+        });
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaction deleted successfully.');
+    }
+
+    public function receipt(Transaction $transaction)
+    {
+        $transaction->load(['account.user', 'relatedAccount.user']);
+
+        return view('receipts.transaction', [
+            'transaction' => $transaction,
+            'isAdmin'     => true,
+        ]);
     }
 
     public function bulkApprove(Request $request)

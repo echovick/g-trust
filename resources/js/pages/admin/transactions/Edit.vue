@@ -101,6 +101,13 @@ const statusColors: Record<string, string> = {
                     <h1 class="text-2xl font-bold text-gray-900">Edit Transaction</h1>
                     <p class="text-gray-500 mt-1 font-mono text-sm">{{ transaction.reference_number }}</p>
                 </div>
+                <a
+                    :href="`/admin/transactions/${transaction.id}/receipt`"
+                    target="_blank"
+                    class="px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2 text-sm font-medium"
+                >
+                    Receipt
+                </a>
                 <button
                     @click="showDeleteModal = true"
                     class="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2"

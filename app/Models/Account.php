@@ -18,6 +18,7 @@ class Account extends Model
         'available_balance',
         'is_active',
         'is_primary',
+        'account_since',
     ];
 
     protected $casts = [
@@ -25,6 +26,7 @@ class Account extends Model
         'available_balance' => 'decimal:2',
         'is_active' => 'boolean',
         'is_primary' => 'boolean',
+        'account_since' => 'date:Y-m-d',
     ];
 
     public function user(): BelongsTo

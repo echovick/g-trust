@@ -135,6 +135,9 @@ const formatDate = (date: string) => {
                             <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Status
                             </th>
+                            <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Receipt
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -193,6 +196,16 @@ const formatDate = (date: string) => {
                                 >
                                     {{ transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1) }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <a
+                                    :href="`/dashboard/transactions/${transaction.id}/receipt`"
+                                    target="_blank"
+                                    class="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-medium"
+                                >
+                                    <Receipt :size="14" />
+                                    View
+                                </a>
                             </td>
                         </tr>
                     </tbody>

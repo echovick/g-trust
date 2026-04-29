@@ -115,10 +115,17 @@ const getStatusColor = (status: string) => {
                 <Link href="/admin/transactions" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                     <ArrowLeft :size="20" />
                 </Link>
-                <div>
+                <div class="flex-1">
                     <h1 class="text-2xl font-bold text-gray-900">Transaction Details</h1>
                     <p class="text-gray-600 mt-1">{{ transaction.reference_number }}</p>
                 </div>
+                <a
+                    :href="`/admin/transactions/${transaction.id}/receipt`"
+                    target="_blank"
+                    class="px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2 text-sm font-medium"
+                >
+                    View Receipt
+                </a>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -41,6 +41,7 @@ interface Account {
     is_active: boolean;
     is_primary: boolean;
     created_at: string;
+    account_since: string | null;
     cards?: Card[];
     transactions?: PaginatedTransactions;
 }
@@ -117,7 +118,7 @@ const getAccountTypeColor = (type: string) => {
                 <div>
                     <div class="text-white/80 text-sm mb-1">Account Since</div>
                     <div class="text-xl font-semibold">
-                        {{ formatDate(account.created_at) }}
+                        {{ formatDate(account.account_since ?? account.created_at) }}
                     </div>
                 </div>
             </div>

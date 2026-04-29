@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\TransactionAlertMail;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -53,26 +55,29 @@ class AccountController extends AdminController
             'description' => ['required', 'string', 'max:255'],
         ]);
 
-        DB::transaction(function () use ($account, $validated) {
-            // Update account balance
+        $txn = null;
+        DB::transaction(function () use ($account, $validated, &$txn) {
             $account->balance += $validated['amount'];
             $account->available_balance += $validated['amount'];
             $account->save();
 
-            // Create transaction record
-            Transaction::create([
-                'account_id' => $account->id,
+            $txn = Transaction::create([
+                'account_id'       => $account->id,
                 'transaction_type' => 'credit',
-                'category' => 'deposit',
-                'description' => $validated['description'],
-                'amount' => $validated['amount'],
-                'currency' => $account->currency,
-                'balance_after' => $account->balance,
+                'category'         => 'deposit',
+                'description'      => $validated['description'],
+                'amount'           => $validated['amount'],
+                'currency'         => $account->currency,
+                'balance_after'    => $account->balance,
                 'reference_number' => 'ADM-' . strtoupper(uniqid()),
-                'status' => 'completed',
+                'status'           => 'completed',
                 'transaction_date' => now(),
             ]);
         });
+
+        Mail::to($account->user->email)->queue(
+            new TransactionAlertMail($txn->load('account.user'), $account->user)
+        );
 
         return back()->with('success', 'Account funded successfully.');
     }
@@ -251,21 +256,23 @@ class AccountController extends AdminController
     public function update(Request $request, Account $account)
     {
         $validated = $request->validate([
-            'account_name' => ['required', 'string', 'max:255'],
-            'account_type' => ['required', Rule::in(['checking', 'savings', 'business'])],
-            'is_active' => ['boolean'],
-            'is_primary' => ['boolean'],
+            'account_name'      => ['required', 'string', 'max:255'],
+            'account_type'      => ['required', Rule::in(['checking', 'savings', 'business'])],
+            'currency'          => ['required', 'string', 'size:3'],
+            'balance'           => ['required', 'numeric', 'min:0'],
+            'available_balance' => ['required', 'numeric', 'min:0'],
+            'account_since'     => ['nullable', 'date'],
+            'is_active'         => ['boolean'],
+            'is_primary'        => ['boolean'],
         ]);
 
         DB::transaction(function () use ($account, $validated) {
-            // If setting as primary, unset other primary accounts for this user
             if (($validated['is_primary'] ?? false) && !$account->is_primary) {
                 Account::where('user_id', $account->user_id)
                     ->where('id', '!=', $account->id)
                     ->update(['is_primary' => false]);
             }
 
-            // Prevent deactivation of primary account
             if (isset($validated['is_active']) && !$validated['is_active'] && $account->is_primary) {
                 throw new \Exception('Cannot deactivate primary account. Set another account as primary first.');
             }

@@ -20,6 +20,8 @@ interface Account {
     available_balance: number;
     is_active: boolean;
     is_primary: boolean;
+    account_since: string | null;
+    created_at: string;
     user: User;
 }
 
@@ -29,11 +31,20 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const toDateInput = (val: string | null | undefined) => {
+    if (!val) return '';
+    return val.substring(0, 10);
+};
+
 const form = useForm({
-    account_name: props.account.account_name,
-    account_type: props.account.account_type,
-    is_active: props.account.is_active,
-    is_primary: props.account.is_primary,
+    account_name:      props.account.account_name,
+    account_type:      props.account.account_type,
+    currency:          props.account.currency,
+    balance:           props.account.balance,
+    available_balance: props.account.available_balance,
+    account_since:     toDateInput(props.account.account_since ?? props.account.created_at),
+    is_active:         props.account.is_active,
+    is_primary:        props.account.is_primary,
 });
 
 const showDeleteModal = ref(false);
@@ -60,6 +71,8 @@ const accountTypes = [
     { value: 'savings', label: 'Savings Account', description: 'For saving and earning interest' },
     { value: 'business', label: 'Business Account', description: 'For business operations' },
 ];
+
+const currencies = ['USD', 'EUR', 'GBP', 'NGN', 'CAD', 'AUD', 'JPY', 'CHF'];
 
 const formatCurrency = (amount: number, currency: string) => {
     return `${currency} ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -99,28 +112,6 @@ const formatCurrency = (amount: number, currency: string) => {
                         <p class="text-xs text-gray-500 mt-2">
                             Account Number: <span class="font-mono">{{ account.account_number }}</span>
                         </p>
-                        <p class="text-xs text-gray-500">
-                            Currency: <span class="font-medium">{{ account.currency }}</span> (cannot be changed)
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Balance Info (Read-only) -->
-                <div class="mb-6 pb-6 border-b">
-                    <h3 class="text-sm font-medium text-gray-700 mb-3">Balance Information</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-green-50 rounded-lg p-4">
-                            <p class="text-xs text-green-700 mb-1">Current Balance</p>
-                            <p class="text-lg font-bold text-green-900">
-                                {{ formatCurrency(account.balance, account.currency) }}
-                            </p>
-                        </div>
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <p class="text-xs text-blue-700 mb-1">Available Balance</p>
-                            <p class="text-lg font-bold text-blue-900">
-                                {{ formatCurrency(account.available_balance, account.currency) }}
-                            </p>
-                        </div>
                     </div>
                 </div>
 
@@ -173,6 +164,75 @@ const formatCurrency = (amount: number, currency: string) => {
                         </div>
                         <p v-if="form.errors.account_type" class="mt-1 text-sm text-red-600">
                             {{ form.errors.account_type }}
+                        </p>
+                    </div>
+
+                    <!-- Currency -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Currency *
+                        </label>
+                        <select
+                            v-model="form.currency"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 bg-white"
+                        >
+                            <option v-for="c in currencies" :key="c" :value="c">{{ c }}</option>
+                        </select>
+                        <p v-if="form.errors.currency" class="mt-1 text-sm text-red-600">
+                            {{ form.errors.currency }}
+                        </p>
+                    </div>
+
+                    <!-- Balance Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Current Balance *
+                            </label>
+                            <input
+                                v-model="form.balance"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                            />
+                            <p v-if="form.errors.balance" class="mt-1 text-sm text-red-600">
+                                {{ form.errors.balance }}
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Available Balance *
+                            </label>
+                            <input
+                                v-model="form.available_balance"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                            />
+                            <p v-if="form.errors.available_balance" class="mt-1 text-sm text-red-600">
+                                {{ form.errors.available_balance }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Account Since Date -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Account Since Date
+                        </label>
+                        <input
+                            v-model="form.account_since"
+                            type="date"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                        />
+                        <p class="text-xs text-gray-500 mt-1">This date is displayed on the customer's account page.</p>
+                        <p v-if="form.errors.account_since" class="mt-1 text-sm text-red-600">
+                            {{ form.errors.account_since }}
                         </p>
                     </div>
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import FlashNotification from '@/components/FlashNotification.vue';
 import {
     Home,
     Wallet,
@@ -288,4 +289,6 @@ const isActive = (itemCurrent: string) => {
             </div>
         </div>
     </div>
+
+    <FlashNotification />
 </template>

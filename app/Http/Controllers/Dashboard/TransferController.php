@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TransactionAlertMail;
 use App\Models\Transfer;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -81,12 +83,12 @@ class TransferController extends Controller
     private function processInternalTransfer(Account $fromAccount, array $data)
     {
         $toAccount = Account::findOrFail($data['to_account_id']);
+        $debitTxn = null;
 
-        DB::transaction(function () use ($fromAccount, $toAccount, $data) {
+        DB::transaction(function () use ($fromAccount, $toAccount, $data, &$debitTxn) {
             $amount = $data['amount'];
             $referenceNumber = 'TRF-' . strtoupper(uniqid());
 
-            // Calculate exchange if needed
             $exchangeRate = 1;
             $convertedAmount = $amount;
 
@@ -95,74 +97,83 @@ class TransferController extends Controller
                 $convertedAmount = $amount * $exchangeRate;
             }
 
-            // Debit from account
             $fromAccount->balance -= $amount;
             $fromAccount->available_balance -= $amount;
             $fromAccount->save();
 
-            Transaction::create([
-                'account_id' => $fromAccount->id,
+            $debitTxn = Transaction::create([
+                'account_id'       => $fromAccount->id,
                 'transaction_type' => 'debit',
-                'category' => 'transfer',
-                'description' => $data['description'] . ' (To: ' . $toAccount->account_number . ')',
-                'amount' => $amount,
-                'currency' => $fromAccount->currency,
-                'balance_after' => $fromAccount->balance,
+                'category'         => 'transfer',
+                'description'      => $data['description'] . ' (To: ' . $toAccount->account_number . ')',
+                'amount'           => $amount,
+                'currency'         => $fromAccount->currency,
+                'balance_after'    => $fromAccount->balance,
                 'reference_number' => $referenceNumber,
-                'status' => 'completed',
+                'status'           => 'completed',
                 'related_account_id' => $toAccount->id,
                 'transaction_date' => now(),
             ]);
 
-            // Credit to account
             $toAccount->balance += $convertedAmount;
             $toAccount->available_balance += $convertedAmount;
             $toAccount->save();
 
-            Transaction::create([
-                'account_id' => $toAccount->id,
+            $creditTxn = Transaction::create([
+                'account_id'       => $toAccount->id,
                 'transaction_type' => 'credit',
-                'category' => 'transfer',
-                'description' => $data['description'] . ' (From: ' . $fromAccount->account_number . ')',
-                'amount' => $convertedAmount,
-                'currency' => $toAccount->currency,
-                'balance_after' => $toAccount->balance,
+                'category'         => 'transfer',
+                'description'      => $data['description'] . ' (From: ' . $fromAccount->account_number . ')',
+                'amount'           => $convertedAmount,
+                'currency'         => $toAccount->currency,
+                'balance_after'    => $toAccount->balance,
                 'reference_number' => $referenceNumber,
-                'status' => 'completed',
+                'status'           => 'completed',
                 'related_account_id' => $fromAccount->id,
                 'transaction_date' => now(),
             ]);
 
-            // Create transfer record
             Transfer::create([
                 'from_account_id' => $fromAccount->id,
-                'to_account_id' => $toAccount->id,
-                'transfer_type' => 'internal',
-                'amount' => $amount,
-                'from_currency' => $fromAccount->currency,
-                'to_currency' => $toAccount->currency,
-                'exchange_rate' => $exchangeRate,
+                'to_account_id'   => $toAccount->id,
+                'transfer_type'   => 'internal',
+                'amount'          => $amount,
+                'from_currency'   => $fromAccount->currency,
+                'to_currency'     => $toAccount->currency,
+                'exchange_rate'   => $exchangeRate,
                 'converted_amount' => $convertedAmount,
-                'fee' => 0,
+                'fee'             => 0,
                 'reference_number' => $referenceNumber,
-                'description' => $data['description'],
-                'status' => 'completed',
-                'completed_at' => now(),
+                'description'     => $data['description'],
+                'status'          => 'completed',
+                'completed_at'    => now(),
             ]);
+
+            // Send debit alert to sender
+            Mail::to($fromAccount->user->email)->queue(
+                new TransactionAlertMail($debitTxn->load('account.user'), $fromAccount->user)
+            );
+
+            // Send credit alert to recipient (only if different user)
+            if ($fromAccount->user_id !== $toAccount->user_id) {
+                Mail::to($toAccount->user->email)->queue(
+                    new TransactionAlertMail($creditTxn->load('account.user'), $toAccount->user)
+                );
+            }
         });
 
-        return redirect()->route('dashboard.transfers.index')
-            ->with('success', 'Transfer completed successfully.');
+        return redirect()->route('dashboard.transactions.receipt', $debitTxn->id);
     }
 
     private function processExternalTransfer(Account $fromAccount, array $data)
     {
-        DB::transaction(function () use ($fromAccount, $data) {
+        $debitTxn = null;
+
+        DB::transaction(function () use ($fromAccount, $data, &$debitTxn) {
             $amount = $data['amount'];
-            $fee = $data['transfer_type'] === 'international' ? $amount * 0.02 : 2.50; // 2% for international, $2.50 for domestic
+            $fee = $data['transfer_type'] === 'international' ? $amount * 0.02 : 2.50;
             $totalAmount = $amount + $fee;
 
-            // Check if enough balance for amount + fee
             if ($fromAccount->available_balance < $totalAmount) {
                 throw new \Exception('Insufficient balance including transfer fee.');
             }
@@ -170,45 +181,47 @@ class TransferController extends Controller
             $referenceNumber = 'TRF-' . strtoupper(uniqid());
             $status = $data['scheduled_date'] ?? null ? 'scheduled' : 'pending';
 
-            // Debit from account
             $fromAccount->balance -= $totalAmount;
             $fromAccount->available_balance -= $totalAmount;
             $fromAccount->save();
 
-            Transaction::create([
-                'account_id' => $fromAccount->id,
+            $debitTxn = Transaction::create([
+                'account_id'       => $fromAccount->id,
                 'transaction_type' => 'debit',
-                'category' => 'transfer',
-                'description' => $data['description'],
-                'amount' => $totalAmount,
-                'currency' => $fromAccount->currency,
-                'balance_after' => $fromAccount->balance,
+                'category'         => 'transfer',
+                'description'      => $data['description'],
+                'amount'           => $totalAmount,
+                'currency'         => $fromAccount->currency,
+                'balance_after'    => $fromAccount->balance,
                 'reference_number' => $referenceNumber,
-                'status' => $status,
+                'status'           => $status,
                 'transaction_date' => $data['scheduled_date'] ?? now(),
             ]);
 
-            // Create transfer record
             Transfer::create([
                 'from_account_id' => $fromAccount->id,
-                'beneficiary_id' => $data['beneficiary_id'],
-                'transfer_type' => $data['transfer_type'],
-                'amount' => $amount,
-                'from_currency' => $fromAccount->currency,
-                'to_currency' => $fromAccount->currency,
-                'exchange_rate' => 1,
+                'beneficiary_id'  => $data['beneficiary_id'],
+                'transfer_type'   => $data['transfer_type'],
+                'amount'          => $amount,
+                'from_currency'   => $fromAccount->currency,
+                'to_currency'     => $fromAccount->currency,
+                'exchange_rate'   => 1,
                 'converted_amount' => $amount,
-                'fee' => $fee,
+                'fee'             => $fee,
                 'reference_number' => $referenceNumber,
-                'description' => $data['description'],
-                'status' => $status,
-                'scheduled_date' => $data['scheduled_date'] ?? null,
-                'completed_at' => $status === 'pending' ? now() : null,
+                'description'     => $data['description'],
+                'status'          => $status,
+                'scheduled_date'  => $data['scheduled_date'] ?? null,
+                'completed_at'    => $status === 'pending' ? now() : null,
             ]);
+
+            // Send debit alert
+            Mail::to($fromAccount->user->email)->queue(
+                new TransactionAlertMail($debitTxn->load('account.user'), $fromAccount->user)
+            );
         });
 
-        return redirect()->route('dashboard.transfers.index')
-            ->with('success', 'Transfer initiated successfully. Processing may take 1-3 business days.');
+        return redirect()->route('dashboard.transactions.receipt', $debitTxn->id);
     }
 
     private function getExchangeRate(string $from, string $to): float

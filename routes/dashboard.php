@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified', 'redirect.if.admin'])->prefix('dashboard'
 
     // Transactions
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{transaction}/receipt', [TransactionController::class, 'receipt'])->name('transactions.receipt');
 
     // Transfers
     Route::get('/transfers', [TransferController::class, 'index'])->name('transfers.index');
