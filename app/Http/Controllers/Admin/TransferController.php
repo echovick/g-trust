@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\TransactionAlertMail;
 use App\Models\Transfer;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class TransferController extends AdminController
@@ -196,68 +198,113 @@ class TransferController extends AdminController
                 return back()->withErrors(['amount' => 'Insufficient balance in source account.']);
             }
 
-            DB::transaction(function () use ($transfer, $fromAccount, $toAccount) {
+            $debitTxn = null;
+            $creditTxn = null;
+
+            DB::transaction(function () use ($transfer, $fromAccount, $toAccount, &$debitTxn, &$creditTxn) {
                 $referenceNumber = $transfer->reference_number;
 
-                // Debit from account
                 $fromAccount->balance -= $transfer->amount;
                 $fromAccount->available_balance -= $transfer->amount;
                 $fromAccount->save();
 
-                Transaction::create([
-                    'account_id' => $fromAccount->id,
-                    'transaction_type' => 'debit',
-                    'category' => 'transfer',
-                    'description' => $transfer->description . ' (To: ' . $toAccount->account_number . ')',
-                    'amount' => $transfer->amount,
-                    'currency' => $fromAccount->currency,
-                    'balance_after' => $fromAccount->balance,
-                    'reference_number' => $referenceNumber,
-                    'status' => 'completed',
+                $debitTxn = Transaction::create([
+                    'account_id'         => $fromAccount->id,
+                    'transaction_type'   => 'debit',
+                    'category'           => 'transfer',
+                    'description'        => $transfer->description . ' (To: ' . $toAccount->account_number . ')',
+                    'amount'             => $transfer->amount,
+                    'currency'           => $fromAccount->currency,
+                    'balance_after'      => $fromAccount->balance,
+                    'reference_number'   => $referenceNumber,
+                    'status'             => 'completed',
                     'related_account_id' => $toAccount->id,
-                    'transaction_date' => now(),
+                    'transaction_date'   => now(),
                 ]);
 
-                // Credit to account
                 $toAccount->balance += $transfer->converted_amount;
                 $toAccount->available_balance += $transfer->converted_amount;
                 $toAccount->save();
 
-                Transaction::create([
-                    'account_id' => $toAccount->id,
-                    'transaction_type' => 'credit',
-                    'category' => 'transfer',
-                    'description' => $transfer->description . ' (From: ' . $fromAccount->account_number . ')',
-                    'amount' => $transfer->converted_amount,
-                    'currency' => $toAccount->currency,
-                    'balance_after' => $toAccount->balance,
-                    'reference_number' => $referenceNumber,
-                    'status' => 'completed',
+                $creditTxn = Transaction::create([
+                    'account_id'         => $toAccount->id,
+                    'transaction_type'   => 'credit',
+                    'category'           => 'transfer',
+                    'description'        => $transfer->description . ' (From: ' . $fromAccount->account_number . ')',
+                    'amount'             => $transfer->converted_amount,
+                    'currency'           => $toAccount->currency,
+                    'balance_after'      => $toAccount->balance,
+                    'reference_number'   => $referenceNumber,
+                    'status'             => 'completed',
                     'related_account_id' => $fromAccount->id,
-                    'transaction_date' => now(),
+                    'transaction_date'   => now(),
                 ]);
 
                 $transfer->update([
-                    'status' => 'completed',
+                    'status'       => 'completed',
                     'completed_at' => now(),
                 ]);
             });
+
+            Mail::to($fromAccount->user->email)->queue(
+                new TransactionAlertMail($debitTxn->load('account.user'), $fromAccount->user)
+            );
+
+            if ($fromAccount->user_id !== $toAccount->user_id) {
+                Mail::to($toAccount->user->email)->queue(
+                    new TransactionAlertMail($creditTxn->load('account.user'), $toAccount->user)
+                );
+            }
         } else {
-            // External/beneficiary transfer: funds already debited at creation, just update status
-            DB::transaction(function () use ($transfer, $fromAccount) {
-                $referenceNumber = $transfer->reference_number;
+            // External/beneficiary transfer
+            $debitTxn = null;
 
-                // Update the existing pending debit transaction to completed
-                Transaction::where('reference_number', $referenceNumber)
+            DB::transaction(function () use ($transfer, $fromAccount, &$debitTxn) {
+                // A transaction may already exist if this transfer was created by legacy code
+                // that debited the account at submission time.
+                $existingTxn = Transaction::where('reference_number', $transfer->reference_number)
                     ->where('account_id', $fromAccount->id)
-                    ->where('status', 'pending')
-                    ->update(['status' => 'completed']);
+                    ->first();
+
+                if ($existingTxn) {
+                    // Balance was already debited — just mark the transaction completed.
+                    $existingTxn->update(['status' => 'completed']);
+                    $debitTxn = $existingTxn;
+                } else {
+                    // New flow — debit now and create the transaction.
+                    $totalAmount = $transfer->amount + $transfer->fee;
+
+                    if ($fromAccount->available_balance < $totalAmount) {
+                        throw new \Exception('Insufficient balance in source account.');
+                    }
+
+                    $fromAccount->balance -= $totalAmount;
+                    $fromAccount->available_balance -= $totalAmount;
+                    $fromAccount->save();
+
+                    $debitTxn = Transaction::create([
+                        'account_id'       => $fromAccount->id,
+                        'transaction_type' => 'debit',
+                        'category'         => 'transfer',
+                        'description'      => $transfer->description,
+                        'amount'           => $totalAmount,
+                        'currency'         => $fromAccount->currency,
+                        'balance_after'    => $fromAccount->balance,
+                        'reference_number' => $transfer->reference_number,
+                        'status'           => 'completed',
+                        'transaction_date' => now(),
+                    ]);
+                }
 
                 $transfer->update([
-                    'status' => 'completed',
+                    'status'       => 'completed',
                     'completed_at' => now(),
                 ]);
             });
+
+            Mail::to($fromAccount->user->email)->queue(
+                new TransactionAlertMail($debitTxn->load('account.user'), $fromAccount->user)
+            );
         }
 
         return back()->with('success', 'Transfer approved successfully.');

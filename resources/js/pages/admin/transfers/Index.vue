@@ -41,8 +41,8 @@ interface Transfer {
     scheduled_date?: string;
     completed_at?: string;
     created_at: string;
-    fromAccount?: Account & { user?: User };
-    toAccount?: Account & { user?: User };
+    from_account?: Account & { user?: User };
+    to_account?: Account & { user?: User };
     beneficiary?: Beneficiary;
 }
 
@@ -330,19 +330,19 @@ const getTypeColor = (type: string) => {
                                     <div>
                                         <div class="text-xs text-gray-500 mb-1">From</div>
                                         <div class="text-sm font-medium text-gray-900">
-                                            {{ transfer.fromAccount?.user?.name || 'Unknown' }}
+                                            {{ transfer.from_account?.user?.name || 'Unknown' }}
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            {{ transfer.fromAccount?.account_number || '' }}
+                                            {{ transfer.from_account?.account_number || '' }}
                                         </div>
                                     </div>
                                     <div>
                                         <div class="text-xs text-gray-500 mb-1">To</div>
                                         <div class="text-sm font-medium text-gray-900">
-                                            {{ transfer.toAccount?.user?.name || transfer.beneficiary?.name || 'Unknown' }}
+                                            {{ transfer.to_account?.user?.name || transfer.beneficiary?.name || 'Unknown' }}
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            {{ transfer.toAccount?.account_number || transfer.beneficiary?.bank_name || '' }}
+                                            {{ transfer.to_account?.account_number || transfer.beneficiary?.bank_name || '' }}
                                         </div>
                                     </div>
                                 </div>

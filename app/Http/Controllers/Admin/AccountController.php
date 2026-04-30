@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Mail\TransactionAlertMail;
+use App\Mail\TransactionVerificationCodeMail;
 use App\Models\Account;
 use App\Models\Transaction;
+use App\Models\TransactionVerificationCode;
 use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -481,6 +483,22 @@ class AccountController extends AdminController
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="accounts-export-' . now()->format('Y-m-d-His') . '.csv"',
         ]);
+    }
+
+    public function generateVerificationCode(Account $account)
+    {
+        $code = TransactionVerificationCode::create([
+            'account_id' => $account->id,
+            'created_by' => auth()->id(),
+            'code'       => TransactionVerificationCode::generateCode(),
+            'expires_at' => now()->addHours(24),
+        ]);
+
+        Mail::to($account->user->email)->queue(
+            new TransactionVerificationCodeMail($code, $account, $account->user)
+        );
+
+        return back()->with('success', 'Verification code generated and sent to ' . $account->user->email . '.');
     }
 
     private function getExchangeRate(string $from, string $to): float

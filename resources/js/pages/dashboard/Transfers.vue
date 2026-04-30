@@ -61,10 +61,7 @@ const props = defineProps<Props>();
 
 const { currentCurrency } = useCurrency();
 
-// Filter transfers by selected currency
-const filteredTransfers = computed(() =>
-    props.transfers.data.filter(transfer => transfer.from_currency === currentCurrency.value || transfer.to_currency === currentCurrency.value)
-);
+const filteredTransfers = computed(() => props.transfers.data);
 
 const getTransferIcon = (type: string) => {
     switch (type) {
@@ -243,8 +240,8 @@ const formatDate = (date: string) => {
             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Send :size="32" class="text-gray-400" />
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">No {{ currentCurrency }} transfers</h3>
-            <p class="text-gray-600 mb-6">No transfers found in {{ currentCurrency }}</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No transfers yet</h3>
+            <p class="text-gray-600 mb-6">You haven't made any transfers yet.</p>
             <Link
                 href="/dashboard/transfers/create"
                 class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"

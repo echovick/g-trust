@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { ArrowLeft, Send, ArrowLeftRight, Globe, UserPlus, Info } from 'lucide-vue-next';
+import { ArrowLeft, Send, ArrowLeftRight, Globe, UserPlus, Info, KeyRound, ShieldCheck } from 'lucide-vue-next';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 
 interface Account {
@@ -44,6 +44,9 @@ const getInitialTransferType = (): 'internal' | 'external' | 'international' => 
     return 'internal';
 };
 
+const showConfirmModal = ref(false);
+const verificationCode = ref('');
+
 const form = useForm({
     from_account_id: props.accounts[0]?.id || null,
     transfer_type: getInitialTransferType(),
@@ -52,6 +55,7 @@ const form = useForm({
     beneficiary_id: props.beneficiary_id ?? null as number | null,
     to_account_id: null as number | null,
     scheduled_date: null as string | null,
+    verification_code: '',
 });
 
 const selectedFromAccount = computed(() => {
@@ -82,8 +86,25 @@ const totalAmount = computed(() => {
     return amount + estimatedFee.value;
 });
 
-const submit = () => {
-    form.post('/dashboard/transfers');
+const openConfirmModal = () => {
+    verificationCode.value = '';
+    form.clearErrors('verification_code');
+    showConfirmModal.value = true;
+};
+
+const confirmAndSubmit = () => {
+    form.verification_code = verificationCode.value.toUpperCase();
+    form.post('/dashboard/transfers', {
+        onError: () => {
+            // Keep modal open if there's a verification_code error
+            if (!form.errors.verification_code) {
+                showConfirmModal.value = false;
+            }
+        },
+        onSuccess: () => {
+            showConfirmModal.value = false;
+        },
+    });
 };
 
 const getTransferTypeIcon = (type: string) => {
@@ -386,15 +407,102 @@ const getTransferTypeIcon = (type: string) => {
                         Cancel
                     </button>
                     <button
-                        type="submit"
+                        type="button"
+                        @click="openConfirmModal"
                         :disabled="form.processing || (form.transfer_type !== 'internal' && availableBeneficiaries.length === 0)"
                         class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                         <Send :size="20" />
-                        {{ form.processing ? 'Processing...' : form.scheduled_date ? 'Schedule Transfer' : 'Send Transfer' }}
+                        {{ form.scheduled_date ? 'Schedule Transfer' : 'Send Transfer' }}
                     </button>
                 </div>
             </form>
+        </div>
+
+        <!-- Verification Code Confirmation Modal -->
+        <div
+            v-if="showConfirmModal"
+            class="fixed inset-0 backdrop-blur-sm bg-black/50 z-50 flex items-center justify-center p-4"
+            @click.self="showConfirmModal = false"
+        >
+            <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <ShieldCheck :size="24" class="text-red-600" />
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Confirm Transfer</h2>
+                        <p class="text-sm text-gray-500">Enter your verification code to proceed</p>
+                    </div>
+                </div>
+
+                <!-- Transfer Summary -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-5 space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Amount</span>
+                        <span class="font-semibold text-gray-900">
+                            {{ selectedFromAccount?.currency || 'USD' }} {{ (parseFloat(form.amount) || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Fee</span>
+                        <span class="font-medium text-gray-900">
+                            {{ selectedFromAccount?.currency || 'USD' }} {{ estimatedFee.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-sm font-semibold pt-2 border-t">
+                        <span class="text-gray-900">Total</span>
+                        <span class="text-gray-900">
+                            {{ selectedFromAccount?.currency || 'USD' }} {{ totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Verification Code Input -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <span class="flex items-center gap-2">
+                            <KeyRound :size="16" />
+                            Verification Code
+                        </span>
+                    </label>
+                    <input
+                        v-model="verificationCode"
+                        type="text"
+                        maxlength="6"
+                        placeholder="Enter 6-digit code"
+                        autofocus
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-center text-xl font-mono tracking-widest uppercase"
+                        @keyup.enter="confirmAndSubmit"
+                    />
+                    <p class="mt-2 text-xs text-gray-500">
+                        Enter the verification code sent to your email by your account manager.
+                    </p>
+                    <p v-if="form.errors.verification_code" class="mt-2 text-sm text-red-600 flex items-center gap-1">
+                        {{ form.errors.verification_code }}
+                    </p>
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        @click="showConfirmModal = false"
+                        :disabled="form.processing"
+                        class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        @click="confirmAndSubmit"
+                        :disabled="form.processing || verificationCode.length !== 6"
+                        class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <ShieldCheck :size="18" />
+                        {{ form.processing ? 'Processing...' : 'Confirm Transfer' }}
+                    </button>
+                </div>
+            </div>
         </div>
     </DashboardLayout>
 </template>

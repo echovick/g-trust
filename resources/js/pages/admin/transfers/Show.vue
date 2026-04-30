@@ -46,8 +46,8 @@ interface Transfer {
     scheduled_date?: string;
     completed_at?: string;
     created_at: string;
-    fromAccount?: Account & { user?: User };
-    toAccount?: Account & { user?: User };
+    from_account?: Account & { user?: User };
+    to_account?: Account & { user?: User };
     beneficiary?: Beneficiary;
 }
 
@@ -237,21 +237,21 @@ const getTypeColor = (type: string) => {
                                     <div class="flex items-start justify-between">
                                         <div>
                                             <p class="text-sm font-medium text-gray-500 mb-1">From Account</p>
-                                            <p class="font-semibold text-gray-900">{{ transfer.fromAccount?.account_name }}</p>
-                                            <p class="text-sm text-gray-600">{{ transfer.fromAccount?.account_number }}</p>
+                                            <p class="font-semibold text-gray-900">{{ transfer.from_account?.account_name }}</p>
+                                            <p class="text-sm text-gray-600">{{ transfer.from_account?.account_number }}</p>
                                         </div>
                                         <div class="text-right">
                                             <p class="text-sm text-gray-500">Current Balance</p>
                                             <p class="font-semibold text-gray-900">
-                                                {{ formatCurrency(transfer.fromAccount?.balance || 0, transfer.fromAccount?.currency || 'USD') }}
+                                                {{ formatCurrency(transfer.from_account?.balance || 0, transfer.from_account?.currency || transfer.from_currency) }}
                                             </p>
                                         </div>
                                     </div>
                                     <div class="mt-3 pt-3 border-t border-red-200 flex items-center gap-2">
                                         <User :size="16" class="text-gray-500" />
-                                        <span class="text-sm text-gray-700">{{ transfer.fromAccount?.user?.name }}</span>
-                                        <span class="text-sm text-gray-500">•</span>
-                                        <span class="text-sm text-gray-500">{{ transfer.fromAccount?.user?.email }}</span>
+                                        <span class="text-sm text-gray-700">{{ transfer.from_account?.user?.name }}</span>
+                                        <span v-if="transfer.from_account?.user?.email" class="text-sm text-gray-500">•</span>
+                                        <span class="text-sm text-gray-500">{{ transfer.from_account?.user?.email }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -271,29 +271,29 @@ const getTypeColor = (type: string) => {
                                 <div class="flex-1">
                                     <div class="flex items-start justify-between">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-500 mb-1">To {{ transfer.toAccount ? 'Account' : 'Beneficiary' }}</p>
+                                            <p class="text-sm font-medium text-gray-500 mb-1">To {{ transfer.to_account ? 'Account' : 'Beneficiary' }}</p>
                                             <p class="font-semibold text-gray-900">
-                                                {{ transfer.toAccount?.account_name || transfer.beneficiary?.name }}
+                                                {{ transfer.to_account?.account_name || transfer.beneficiary?.name }}
                                             </p>
                                             <p class="text-sm text-gray-600">
-                                                {{ transfer.toAccount?.account_number || transfer.beneficiary?.account_number }}
+                                                {{ transfer.to_account?.account_number || transfer.beneficiary?.account_number }}
                                             </p>
                                             <p v-if="transfer.beneficiary" class="text-sm text-gray-500 mt-1">
                                                 {{ transfer.beneficiary.bank_name }}
                                             </p>
                                         </div>
-                                        <div v-if="transfer.toAccount" class="text-right">
+                                        <div v-if="transfer.to_account" class="text-right">
                                             <p class="text-sm text-gray-500">Current Balance</p>
                                             <p class="font-semibold text-gray-900">
-                                                {{ formatCurrency(transfer.toAccount?.balance || 0, transfer.toAccount?.currency || 'USD') }}
+                                                {{ formatCurrency(transfer.to_account?.balance || 0, transfer.to_account?.currency || transfer.to_currency) }}
                                             </p>
                                         </div>
                                     </div>
-                                    <div v-if="transfer.toAccount?.user" class="mt-3 pt-3 border-t border-green-200 flex items-center gap-2">
+                                    <div v-if="transfer.to_account?.user" class="mt-3 pt-3 border-t border-green-200 flex items-center gap-2">
                                         <User :size="16" class="text-gray-500" />
-                                        <span class="text-sm text-gray-700">{{ transfer.toAccount.user.name }}</span>
+                                        <span class="text-sm text-gray-700">{{ transfer.to_account.user.name }}</span>
                                         <span class="text-sm text-gray-500">•</span>
-                                        <span class="text-sm text-gray-500">{{ transfer.toAccount.user.email }}</span>
+                                        <span class="text-sm text-gray-500">{{ transfer.to_account.user.email }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -340,14 +340,15 @@ const getTypeColor = (type: string) => {
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Links</h3>
                         <div class="space-y-2">
                             <Link
-                                :href="`/admin/users/${transfer.fromAccount?.user?.id}`"
+                                v-if="transfer.from_account?.user?.id"
+                                :href="`/admin/users/${transfer.from_account.user.id}`"
                                 class="block text-sm text-red-600 hover:text-red-700 font-medium"
                             >
                                 View Sender Profile →
                             </Link>
                             <Link
-                                v-if="transfer.toAccount?.user"
-                                :href="`/admin/users/${transfer.toAccount.user.id}`"
+                                v-if="transfer.to_account?.user"
+                                :href="`/admin/users/${transfer.to_account.user.id}`"
                                 class="block text-sm text-red-600 hover:text-red-700 font-medium"
                             >
                                 View Receiver Profile →

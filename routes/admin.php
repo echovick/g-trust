@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('/accounts/{account}', [AccountController::class, 'destroy'])->name('accounts.destroy');
     Route::post('/accounts/{account}/toggle-status', [AccountController::class, 'toggleStatus'])->name('accounts.toggle-status');
     Route::post('/accounts/{account}/fund', [AccountController::class, 'fundAccount'])->name('accounts.fund');
+    Route::post('/accounts/{account}/generate-verification-code', [AccountController::class, 'generateVerificationCode'])->name('accounts.generate-verification-code');
 
     // Account Request Management
     Route::get('/account-requests', [AccountRequestController::class, 'index'])->name('account-requests.index');

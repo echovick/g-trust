@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { ArrowLeft, Wallet, User, DollarSign, ArrowRightLeft, TrendingUp, Receipt } from 'lucide-vue-next';
+import { ArrowLeft, Wallet, User, DollarSign, ArrowRightLeft, TrendingUp, Receipt, KeyRound } from 'lucide-vue-next';
 
 interface User {
     id: number;
@@ -41,6 +41,7 @@ const props = defineProps<Props>();
 
 const showFundModal = ref(false);
 const showTransferModal = ref(false);
+const showVerificationCodeModal = ref(false);
 
 const fundForm = useForm({
     amount: '',
@@ -53,6 +54,8 @@ const transferForm = useForm({
     amount: '',
     description: '',
 });
+
+const verificationCodeForm = useForm({});
 
 const fundAccount = () => {
     fundForm.post(`/admin/accounts/${props.account.id}/fund`, {
@@ -68,6 +71,14 @@ const makeTransfer = () => {
         onSuccess: () => {
             transferForm.reset();
             showTransferModal.value = false;
+        },
+    });
+};
+
+const generateVerificationCode = () => {
+    verificationCodeForm.post(`/admin/accounts/${props.account.id}/generate-verification-code`, {
+        onSuccess: () => {
+            showVerificationCodeModal.value = false;
         },
     });
 };
@@ -127,6 +138,13 @@ const formatDate = (date: string) => {
                     >
                         <ArrowRightLeft :size="18" />
                         Transfer
+                    </button>
+                    <button
+                        @click="showVerificationCodeModal = true"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                    >
+                        <KeyRound :size="18" />
+                        Generate Verification Code
                     </button>
                 </div>
             </div>
@@ -282,6 +300,58 @@ const formatDate = (date: string) => {
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Generate Verification Code Modal -->
+            <div
+                v-if="showVerificationCodeModal"
+                class="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 flex items-center justify-center p-4"
+                @click="showVerificationCodeModal = false"
+            >
+                <div
+                    class="bg-white rounded-lg shadow-xl max-w-md w-full p-6"
+                    @click.stop
+                >
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                            <KeyRound :size="20" class="text-purple-600" />
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-900">Generate Verification Code</h2>
+                    </div>
+
+                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-5">
+                        <p class="text-sm text-purple-800">
+                            A 6-digit alphanumeric verification code will be generated and sent to
+                            <strong>{{ account.user.email }}</strong>.
+                            The code will be valid for <strong>24 hours</strong> and can only be used once.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-4 mb-5">
+                        <p class="text-xs text-gray-500 mb-1">Account</p>
+                        <p class="font-medium text-gray-900">{{ account.account_name }}</p>
+                        <p class="text-sm text-gray-500">{{ account.account_number }}</p>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t">
+                        <button
+                            type="button"
+                            @click="showVerificationCodeModal = false"
+                            class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            @click="generateVerificationCode"
+                            :disabled="verificationCodeForm.processing"
+                            class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                        >
+                            <KeyRound :size="16" />
+                            {{ verificationCodeForm.processing ? 'Generating...' : 'Generate & Send Code' }}
+                        </button>
+                    </div>
                 </div>
             </div>
 
