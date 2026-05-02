@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamp('used_at')->nullable();
             $table->timestamps();
 
-            $table->index(['account_id', 'used_at', 'expires_at']);
+            $table->index(['account_id', 'used_at', 'expires_at'], 'tvc_account_used_at_expires_idx');
         });
     }
 
