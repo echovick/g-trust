@@ -34,35 +34,43 @@ class AccountBalanceService
      *
      * Also resets available_balance to account.balance minus pending debits.
      *
+     * @param  bool  $useLocks  Pass false for one-shot backfills where no
+     *                         other writer is racing — avoids loading every
+     *                         transaction at once and skips row locks.
      * @return array{updated:int, oldest_pre_balance:float, total:int}
      */
-    public function recomputeBalanceAfter(int $accountId): array
+    public function recomputeBalanceAfter(int $accountId, bool $useLocks = true): array
     {
-        return DB::transaction(function () use ($accountId) {
-            $account = Account::lockForUpdate()->findOrFail($accountId);
+        $work = function () use ($accountId, $useLocks) {
+            $account = $useLocks
+                ? Account::lockForUpdate()->findOrFail($accountId)
+                : Account::findOrFail($accountId);
 
             $running = (float) $account->balance;
             $updated = 0;
             $total = 0;
 
-            $txns = Transaction::where('account_id', $accountId)
+            $query = Transaction::where('account_id', $accountId)
                 ->where('status', 'completed')
                 ->orderByDesc('transaction_date')
-                ->orderByDesc('id')
-                ->lockForUpdate()
-                ->get();
+                ->orderByDesc('id');
 
-            foreach ($txns as $txn) {
-                $total++;
-                if ((float) $txn->balance_after !== $running) {
-                    $txn->balance_after = $running;
-                    $txn->save();
-                    $updated++;
+            if ($useLocks) {
+                $query->lockForUpdate();
+            }
+
+            // chunk(...) when unlocked so we don't pull every row into memory.
+            // get() under lock keeps the row-lock semantics for the runtime path.
+            if ($useLocks) {
+                foreach ($query->get() as $txn) {
+                    [$running, $updated, $total] = $this->applyRow($txn, $running, $updated, $total);
                 }
-                $delta = $txn->transaction_type === 'credit'
-                    ? (float) $txn->amount
-                    : -(float) $txn->amount;
-                $running -= $delta;
+            } else {
+                $query->chunk(500, function ($chunk) use (&$running, &$updated, &$total) {
+                    foreach ($chunk as $txn) {
+                        [$running, $updated, $total] = $this->applyRow($txn, $running, $updated, $total);
+                    }
+                });
             }
 
             $pendingDebits = (float) Transaction::where('account_id', $accountId)
@@ -78,6 +86,26 @@ class AccountBalanceService
                 'oldest_pre_balance' => $running,
                 'total' => $total,
             ];
-        });
+        };
+
+        return $useLocks ? DB::transaction($work) : $work();
+    }
+
+    /**
+     * @return array{0:float,1:int,2:int}
+     */
+    private function applyRow(Transaction $txn, float $running, int $updated, int $total): array
+    {
+        $total++;
+        if ((float) $txn->balance_after !== $running) {
+            $txn->balance_after = $running;
+            $txn->save();
+            $updated++;
+        }
+        $delta = $txn->transaction_type === 'credit'
+            ? (float) $txn->amount
+            : -(float) $txn->amount;
+
+        return [$running - $delta, $updated, $total];
     }
 }
