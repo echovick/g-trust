@@ -79,26 +79,30 @@ class TransactionController extends AdminController
             'admin_notes' => ['nullable', 'string', 'max:500'],
         ]);
 
-        DB::transaction(function () use ($transaction, $balances) {
-            // Pre-check balance with a fresh lock to avoid races.
-            $locked = Account::lockForUpdate()->findOrFail($transaction->account_id);
+        try {
+            DB::transaction(function () use ($transaction, $balances) {
+                // Pre-check balance with a fresh lock to avoid races.
+                $locked = Account::lockForUpdate()->findOrFail($transaction->account_id);
 
-            if ($transaction->transaction_type === 'debit'
-                && (float) $locked->available_balance < (float) $transaction->amount) {
-                throw new \Exception('Insufficient balance in account.');
-            }
+                if ($transaction->transaction_type === 'debit'
+                    && (float) $locked->available_balance < (float) $transaction->amount) {
+                    throw new \RuntimeException('Insufficient balance in account.');
+                }
 
-            $delta = $transaction->transaction_type === 'credit'
-                ? (float) $transaction->amount
-                : -(float) $transaction->amount;
+                $delta = $transaction->transaction_type === 'credit'
+                    ? (float) $transaction->amount
+                    : -(float) $transaction->amount;
 
-            $account = $balances->applyDelta($transaction->account_id, $delta);
+                $account = $balances->applyDelta($transaction->account_id, $delta);
 
-            $transaction->update([
-                'status' => 'completed',
-                'balance_after' => $account->balance,
-            ]);
-        });
+                $transaction->update([
+                    'status' => 'completed',
+                    'balance_after' => $account->balance,
+                ]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['amount' => $e->getMessage()]);
+        }
 
         Mail::to($transaction->account->user->email)->queue(
             new TransactionAlertMail($transaction->load('account.user'), $transaction->account->user)
