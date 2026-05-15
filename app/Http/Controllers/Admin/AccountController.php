@@ -195,7 +195,6 @@ class AccountController extends AdminController
             'user_id' => ['required', 'exists:users,id'],
             'account_type' => ['required', Rule::in(['checking', 'savings', 'business'])],
             'currency' => ['required', 'string', 'size:3'],
-            'account_name' => ['required', 'string', 'max:255'],
             'initial_balance' => ['nullable', 'numeric', 'min:0'],
             'is_primary' => ['boolean'],
         ]);
@@ -214,10 +213,12 @@ class AccountController extends AdminController
                     ->update(['is_primary' => false]);
             }
 
+            $user = User::findOrFail($validated['user_id']);
+
             $account = Account::create([
                 'user_id' => $validated['user_id'],
                 'account_number' => $accountNumber,
-                'account_name' => $validated['account_name'],
+                'account_name' => Account::buildAccountName($user->name, $validated['account_type']),
                 'account_type' => $validated['account_type'],
                 'currency' => $validated['currency'],
                 'balance' => $initialBalance,
@@ -258,7 +259,6 @@ class AccountController extends AdminController
     public function update(Request $request, Account $account)
     {
         $validated = $request->validate([
-            'account_name'      => ['required', 'string', 'max:255'],
             'account_type'      => ['required', Rule::in(['checking', 'savings', 'business'])],
             'currency'          => ['required', 'string', 'size:3'],
             'balance'           => ['required', 'numeric', 'min:0'],
@@ -278,6 +278,9 @@ class AccountController extends AdminController
             if (isset($validated['is_active']) && !$validated['is_active'] && $account->is_primary) {
                 throw new \Exception('Cannot deactivate primary account. Set another account as primary first.');
             }
+
+            $account->load('user');
+            $validated['account_name'] = Account::buildAccountName($account->user->name, $validated['account_type']);
 
             $account->update($validated);
         });

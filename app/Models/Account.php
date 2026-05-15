@@ -63,4 +63,9 @@ class Account extends Model
     {
         return $this->hasMany(Deposit::class);
     }
+
+    public static function buildAccountName(string $userName, string $accountType): string
+    {
+        return $userName . ' ' . ucfirst($accountType) . ' Account';
+    }
 }

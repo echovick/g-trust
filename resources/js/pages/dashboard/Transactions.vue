@@ -200,11 +200,10 @@ const formatDate = (date: string) => {
                             <td class="px-6 py-4 whitespace-nowrap text-right">
                                 <a
                                     :href="`/dashboard/transactions/${transaction.id}/receipt`"
-                                    target="_blank"
                                     class="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-medium"
                                 >
                                     <Receipt :size="14" />
-                                    View
+                                    Download
                                 </a>
                             </td>
                         </tr>

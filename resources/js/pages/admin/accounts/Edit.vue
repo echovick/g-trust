@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { ArrowLeft, Trash2, Check, AlertCircle } from 'lucide-vue-next';
@@ -37,7 +37,6 @@ const toDateInput = (val: string | null | undefined) => {
 };
 
 const form = useForm({
-    account_name:      props.account.account_name,
     account_type:      props.account.account_type,
     currency:          props.account.currency,
     balance:           props.account.balance,
@@ -45,6 +44,11 @@ const form = useForm({
     account_since:     toDateInput(props.account.account_since ?? props.account.created_at),
     is_active:         props.account.is_active,
     is_primary:        props.account.is_primary,
+});
+
+const previewAccountName = computed(() => {
+    const typeName = form.account_type.charAt(0).toUpperCase() + form.account_type.slice(1);
+    return `${props.account.user.name} ${typeName} Account`;
 });
 
 const showDeleteModal = ref(false);
@@ -116,19 +120,16 @@ const formatCurrency = (amount: number, currency: string) => {
                 </div>
 
                 <form @submit.prevent="submitForm" class="space-y-6">
-                    <!-- Account Name -->
+                    <!-- Account Name Preview (auto-generated from holder + type) -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Account Name *
+                            Account Name
                         </label>
-                        <input
-                            v-model="form.account_name"
-                            type="text"
-                            required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
-                        />
-                        <p v-if="form.errors.account_name" class="mt-1 text-sm text-red-600">
-                            {{ form.errors.account_name }}
+                        <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
+                            {{ previewAccountName }}
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Auto-generated from the account holder and selected account type.
                         </p>
                     </div>
 

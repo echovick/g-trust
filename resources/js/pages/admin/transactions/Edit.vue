@@ -103,10 +103,9 @@ const statusColors: Record<string, string> = {
                 </div>
                 <a
                     :href="`/admin/transactions/${transaction.id}/receipt`"
-                    target="_blank"
                     class="px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2 text-sm font-medium"
                 >
-                    Receipt
+                    Download Receipt
                 </a>
                 <button
                     @click="showDeleteModal = true"

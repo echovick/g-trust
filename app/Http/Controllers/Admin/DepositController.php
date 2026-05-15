@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Deposit;
 use App\Models\Transaction;
+use App\Services\AccountBalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -57,22 +58,17 @@ class DepositController extends Controller
         ]);
     }
 
-    public function approve(Deposit $deposit)
+    public function approve(Deposit $deposit, AccountBalanceService $balances)
     {
         if ($deposit->status !== 'pending') {
             return back()->with('error', 'Only pending deposits can be approved.');
         }
 
-        DB::transaction(function () use ($deposit) {
-            $account = $deposit->account;
-            $amount = $deposit->amount;
+        DB::transaction(function () use ($deposit, $balances) {
+            $amount = (float) $deposit->amount;
 
-            // Credit the account
-            $account->balance += $amount;
-            $account->available_balance += $amount;
-            $account->save();
+            $account = $balances->applyDelta($deposit->account_id, $amount);
 
-            // Create transaction record
             Transaction::create([
                 'account_id' => $account->id,
                 'transaction_type' => 'credit',
@@ -86,7 +82,6 @@ class DepositController extends Controller
                 'transaction_date' => now(),
             ]);
 
-            // Update deposit status and set available date (2 business days)
             $availableDate = now()->addWeekdays(2);
 
             $deposit->update([

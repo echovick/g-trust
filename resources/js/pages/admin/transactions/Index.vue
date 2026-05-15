@@ -356,7 +356,6 @@ const getStatusIcon = (status: string) => {
                                         </Link>
                                         <a
                                             :href="`/admin/transactions/${transaction.id}/receipt`"
-                                            target="_blank"
                                             class="text-blue-600 hover:text-blue-900 font-medium"
                                         >
                                             Receipt

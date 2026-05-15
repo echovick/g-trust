@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Support\ReceiptPdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -55,9 +56,6 @@ class TransactionController extends Controller
             abort(403);
         }
 
-        return view('receipts.transaction', [
-            'transaction' => $transaction,
-            'isAdmin'     => false,
-        ]);
+        return ReceiptPdf::download($transaction, isAdmin: false);
     }
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { ArrowLeft, User, Wallet, DollarSign, Check } from 'lucide-vue-next';
+import { ArrowLeft, DollarSign, Check } from 'lucide-vue-next';
 
 interface User {
     id: number;
@@ -20,7 +20,6 @@ const form = useForm({
     user_id: '',
     account_type: 'checking',
     currency: 'USD',
-    account_name: '',
     initial_balance: 0,
     is_primary: false,
 });
@@ -30,13 +29,11 @@ const selectedUser = computed(() => {
     return props.users.find(u => u.id === parseInt(form.user_id as string));
 });
 
-// Auto-fill account name based on user and account type
-const autoFillAccountName = () => {
-    if (selectedUser.value && form.account_type) {
-        const typeName = form.account_type.charAt(0).toUpperCase() + form.account_type.slice(1);
-        form.account_name = `${selectedUser.value.name} ${typeName} Account`;
-    }
-};
+const previewAccountName = computed(() => {
+    if (!selectedUser.value || !form.account_type) return '';
+    const typeName = form.account_type.charAt(0).toUpperCase() + form.account_type.slice(1);
+    return `${selectedUser.value.name} ${typeName} Account`;
+});
 
 const submitForm = () => {
     form.post('/admin/accounts', {
@@ -85,7 +82,6 @@ const accountTypes = [
                         </label>
                         <select
                             v-model="form.user_id"
-                            @change="autoFillAccountName"
                             required
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
                         >
@@ -115,7 +111,6 @@ const accountTypes = [
                                     v-model="form.account_type"
                                     type="radio"
                                     :value="type.value"
-                                    @change="autoFillAccountName"
                                     class="sr-only"
                                 />
                                 <div class="flex items-center justify-between mb-2">
@@ -135,20 +130,16 @@ const accountTypes = [
                         </p>
                     </div>
 
-                    <!-- Account Name -->
-                    <div>
+                    <!-- Account Name Preview (auto-generated from user + type) -->
+                    <div v-if="previewAccountName">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Account Name *
+                            Account Name
                         </label>
-                        <input
-                            v-model="form.account_name"
-                            type="text"
-                            required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
-                            placeholder="e.g., John Doe Checking Account"
-                        />
-                        <p v-if="form.errors.account_name" class="mt-1 text-sm text-red-600">
-                            {{ form.errors.account_name }}
+                        <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
+                            {{ previewAccountName }}
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Auto-generated from the account holder and account type.
                         </p>
                     </div>
 

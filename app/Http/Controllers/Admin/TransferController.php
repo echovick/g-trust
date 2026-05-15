@@ -6,6 +6,7 @@ use App\Mail\TransactionAlertMail;
 use App\Models\Transfer;
 use App\Models\Account;
 use App\Models\Transaction;
+use App\Services\AccountBalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -78,7 +79,7 @@ class TransferController extends AdminController
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, AccountBalanceService $balances)
     {
         $validated = $request->validate([
             'from_account_id' => ['required', 'exists:accounts,id'],
@@ -95,17 +96,15 @@ class TransferController extends AdminController
         $fromAccount = Account::findOrFail($validated['from_account_id']);
         $toAccount = Account::findOrFail($validated['to_account_id']);
 
-        // Check if from_account has sufficient balance
         if ($fromAccount->available_balance < $validated['amount']) {
             return back()->withErrors(['amount' => 'Insufficient balance in source account.']);
         }
 
-        $transfer = DB::transaction(function () use ($fromAccount, $toAccount, $validated) {
-            $amount = $validated['amount'];
+        $transfer = DB::transaction(function () use ($fromAccount, $toAccount, $validated, $balances) {
+            $amount = (float) $validated['amount'];
             $description = $validated['description'];
             $referenceNumber = 'ADM-TRF-' . strtoupper(uniqid());
 
-            // Calculate exchange if currencies are different
             $exchangeRate = 1;
             $convertedAmount = $amount;
 
@@ -115,39 +114,32 @@ class TransferController extends AdminController
             }
 
             if ($validated['execute_immediately'] ?? true) {
-                // Execute transfer immediately
-                // Debit from account
-                $fromAccount->balance -= $amount;
-                $fromAccount->available_balance -= $amount;
-                $fromAccount->save();
+                $lockedFrom = $balances->applyDelta($fromAccount->id, -$amount);
 
                 Transaction::create([
-                    'account_id' => $fromAccount->id,
+                    'account_id' => $lockedFrom->id,
                     'transaction_type' => 'debit',
                     'category' => 'transfer',
                     'description' => $description . ' (To: ' . $toAccount->account_number . ')',
                     'amount' => $amount,
-                    'currency' => $fromAccount->currency,
-                    'balance_after' => $fromAccount->balance,
+                    'currency' => $lockedFrom->currency,
+                    'balance_after' => $lockedFrom->balance,
                     'reference_number' => $referenceNumber,
                     'status' => 'completed',
                     'related_account_id' => $toAccount->id,
                     'transaction_date' => now(),
                 ]);
 
-                // Credit to account
-                $toAccount->balance += $convertedAmount;
-                $toAccount->available_balance += $convertedAmount;
-                $toAccount->save();
+                $lockedTo = $balances->applyDelta($toAccount->id, $convertedAmount);
 
                 Transaction::create([
-                    'account_id' => $toAccount->id,
+                    'account_id' => $lockedTo->id,
                     'transaction_type' => 'credit',
                     'category' => 'transfer',
                     'description' => $description . ' (From: ' . $fromAccount->account_number . ')',
                     'amount' => $convertedAmount,
-                    'currency' => $toAccount->currency,
-                    'balance_after' => $toAccount->balance,
+                    'currency' => $lockedTo->currency,
+                    'balance_after' => $lockedTo->balance,
                     'reference_number' => $referenceNumber,
                     'status' => 'completed',
                     'related_account_id' => $fromAccount->id,
@@ -161,7 +153,6 @@ class TransferController extends AdminController
                 $completedAt = null;
             }
 
-            // Create transfer record
             return Transfer::create([
                 'from_account_id' => $fromAccount->id,
                 'to_account_id' => $toAccount->id,
@@ -183,7 +174,7 @@ class TransferController extends AdminController
             ->with('success', 'Transfer created successfully.');
     }
 
-    public function approve(Request $request, Transfer $transfer)
+    public function approve(Request $request, Transfer $transfer, AccountBalanceService $balances)
     {
         if ($transfer->status !== 'pending') {
             return back()->withErrors(['status' => 'Only pending transfers can be approved.']);
@@ -193,7 +184,6 @@ class TransferController extends AdminController
         $toAccount = $transfer->toAccount;
 
         if ($toAccount) {
-            // Internal transfer: debit sender, credit receiver
             if ($fromAccount->available_balance < $transfer->amount) {
                 return back()->withErrors(['amount' => 'Insufficient balance in source account.']);
             }
@@ -201,39 +191,35 @@ class TransferController extends AdminController
             $debitTxn = null;
             $creditTxn = null;
 
-            DB::transaction(function () use ($transfer, $fromAccount, $toAccount, &$debitTxn, &$creditTxn) {
+            DB::transaction(function () use ($transfer, $fromAccount, $toAccount, $balances, &$debitTxn, &$creditTxn) {
                 $referenceNumber = $transfer->reference_number;
 
-                $fromAccount->balance -= $transfer->amount;
-                $fromAccount->available_balance -= $transfer->amount;
-                $fromAccount->save();
+                $lockedFrom = $balances->applyDelta($fromAccount->id, -(float) $transfer->amount);
 
                 $debitTxn = Transaction::create([
-                    'account_id'         => $fromAccount->id,
+                    'account_id'         => $lockedFrom->id,
                     'transaction_type'   => 'debit',
                     'category'           => 'transfer',
                     'description'        => $transfer->description . ' (To: ' . $toAccount->account_number . ')',
                     'amount'             => $transfer->amount,
-                    'currency'           => $fromAccount->currency,
-                    'balance_after'      => $fromAccount->balance,
+                    'currency'           => $lockedFrom->currency,
+                    'balance_after'      => $lockedFrom->balance,
                     'reference_number'   => $referenceNumber,
                     'status'             => 'completed',
                     'related_account_id' => $toAccount->id,
                     'transaction_date'   => now(),
                 ]);
 
-                $toAccount->balance += $transfer->converted_amount;
-                $toAccount->available_balance += $transfer->converted_amount;
-                $toAccount->save();
+                $lockedTo = $balances->applyDelta($toAccount->id, (float) $transfer->converted_amount);
 
                 $creditTxn = Transaction::create([
-                    'account_id'         => $toAccount->id,
+                    'account_id'         => $lockedTo->id,
                     'transaction_type'   => 'credit',
                     'category'           => 'transfer',
                     'description'        => $transfer->description . ' (From: ' . $fromAccount->account_number . ')',
                     'amount'             => $transfer->converted_amount,
-                    'currency'           => $toAccount->currency,
-                    'balance_after'      => $toAccount->balance,
+                    'currency'           => $lockedTo->currency,
+                    'balance_after'      => $lockedTo->balance,
                     'reference_number'   => $referenceNumber,
                     'status'             => 'completed',
                     'related_account_id' => $fromAccount->id,
@@ -259,7 +245,7 @@ class TransferController extends AdminController
             // External/beneficiary transfer
             $debitTxn = null;
 
-            DB::transaction(function () use ($transfer, $fromAccount, &$debitTxn) {
+            DB::transaction(function () use ($transfer, $fromAccount, $balances, &$debitTxn) {
                 // A transaction may already exist if this transfer was created by legacy code
                 // that debited the account at submission time.
                 $existingTxn = Transaction::where('reference_number', $transfer->reference_number)
@@ -267,29 +253,27 @@ class TransferController extends AdminController
                     ->first();
 
                 if ($existingTxn) {
-                    // Balance was already debited — just mark the transaction completed.
                     $existingTxn->update(['status' => 'completed']);
                     $debitTxn = $existingTxn;
                 } else {
-                    // New flow — debit now and create the transaction.
-                    $totalAmount = $transfer->amount + $transfer->fee;
+                    $totalAmount = (float) $transfer->amount + (float) $transfer->fee;
 
-                    if ($fromAccount->available_balance < $totalAmount) {
+                    // Pre-check with a quick lock to give a friendly error before applyDelta.
+                    $locked = Account::lockForUpdate()->findOrFail($fromAccount->id);
+                    if ((float) $locked->available_balance < $totalAmount) {
                         throw new \Exception('Insufficient balance in source account.');
                     }
 
-                    $fromAccount->balance -= $totalAmount;
-                    $fromAccount->available_balance -= $totalAmount;
-                    $fromAccount->save();
+                    $locked = $balances->applyDelta($fromAccount->id, -$totalAmount);
 
                     $debitTxn = Transaction::create([
-                        'account_id'       => $fromAccount->id,
+                        'account_id'       => $locked->id,
                         'transaction_type' => 'debit',
                         'category'         => 'transfer',
                         'description'      => $transfer->description,
                         'amount'           => $totalAmount,
-                        'currency'         => $fromAccount->currency,
-                        'balance_after'    => $fromAccount->balance,
+                        'currency'         => $locked->currency,
+                        'balance_after'    => $locked->balance,
                         'reference_number' => $transfer->reference_number,
                         'status'           => 'completed',
                         'transaction_date' => now(),

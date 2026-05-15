@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Mail\TransactionAlertMail;
 use App\Models\Transaction;
 use App\Models\Account;
+use App\Services\AccountBalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -68,7 +69,7 @@ class TransactionController extends AdminController
         ]);
     }
 
-    public function approve(Request $request, Transaction $transaction)
+    public function approve(Request $request, Transaction $transaction, AccountBalanceService $balances)
     {
         if ($transaction->status !== 'pending') {
             return back()->withErrors(['status' => 'Only pending transactions can be approved.']);
@@ -78,23 +79,20 @@ class TransactionController extends AdminController
             'admin_notes' => ['nullable', 'string', 'max:500'],
         ]);
 
-        DB::transaction(function () use ($transaction, $validated) {
-            $account = $transaction->account;
+        DB::transaction(function () use ($transaction, $balances) {
+            // Pre-check balance with a fresh lock to avoid races.
+            $locked = Account::lockForUpdate()->findOrFail($transaction->account_id);
 
-            if ($transaction->transaction_type === 'debit') {
-                // Check sufficient balance
-                if ($account->available_balance < $transaction->amount) {
-                    throw new \Exception('Insufficient balance in account.');
-                }
-
-                $account->balance -= $transaction->amount;
-                $account->available_balance -= $transaction->amount;
-            } else {
-                $account->balance += $transaction->amount;
-                $account->available_balance += $transaction->amount;
+            if ($transaction->transaction_type === 'debit'
+                && (float) $locked->available_balance < (float) $transaction->amount) {
+                throw new \Exception('Insufficient balance in account.');
             }
 
-            $account->save();
+            $delta = $transaction->transaction_type === 'credit'
+                ? (float) $transaction->amount
+                : -(float) $transaction->amount;
+
+            $account = $balances->applyDelta($transaction->account_id, $delta);
 
             $transaction->update([
                 'status' => 'completed',
@@ -126,7 +124,7 @@ class TransactionController extends AdminController
         return back()->with('success', 'Transaction rejected successfully.');
     }
 
-    public function reverse(Request $request, Transaction $transaction)
+    public function reverse(Request $request, Transaction $transaction, AccountBalanceService $balances)
     {
         if ($transaction->status !== 'completed') {
             return back()->withErrors(['status' => 'Only completed transactions can be reversed.']);
@@ -136,23 +134,14 @@ class TransactionController extends AdminController
             'reason' => ['required', 'string', 'max:500'],
         ]);
 
-        DB::transaction(function () use ($transaction, $validated) {
-            $account = $transaction->account;
+        DB::transaction(function () use ($transaction, $balances) {
+            // Reverse delta is the opposite sign of the original.
+            $delta = $transaction->transaction_type === 'debit'
+                ? (float) $transaction->amount
+                : -(float) $transaction->amount;
 
-            // Reverse the transaction
-            if ($transaction->transaction_type === 'debit') {
-                // Refund the amount
-                $account->balance += $transaction->amount;
-                $account->available_balance += $transaction->amount;
-            } else {
-                // Deduct the amount
-                $account->balance -= $transaction->amount;
-                $account->available_balance -= $transaction->amount;
-            }
+            $account = $balances->applyDelta($transaction->account_id, $delta);
 
-            $account->save();
-
-            // Create a reversal transaction
             Transaction::create([
                 'account_id' => $account->id,
                 'transaction_type' => $transaction->transaction_type === 'debit' ? 'credit' : 'debit',
@@ -166,7 +155,6 @@ class TransactionController extends AdminController
                 'transaction_date' => now(),
             ]);
 
-            // Mark original transaction as reversed
             $transaction->update([
                 'status' => 'cancelled',
             ]);
@@ -198,7 +186,7 @@ class TransactionController extends AdminController
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, AccountBalanceService $balances)
     {
         $validated = $request->validate([
             'account_id' => ['required', 'exists:accounts,id'],
@@ -209,50 +197,51 @@ class TransactionController extends AdminController
             'status' => ['required', 'in:pending,completed'],
         ]);
 
-        $account = Account::findOrFail($validated['account_id']);
+        $txn = null;
 
-        // Check if sufficient balance for debit transactions
-        if ($validated['transaction_type'] === 'debit' && $validated['status'] === 'completed') {
-            if ($account->available_balance < $validated['amount']) {
-                return back()->withErrors(['amount' => 'Insufficient balance in account.']);
-            }
+        try {
+            DB::transaction(function () use ($validated, $balances, &$txn) {
+                $locked = Account::lockForUpdate()->findOrFail($validated['account_id']);
+
+                $balanceAfter = (float) $locked->balance;
+
+                if ($validated['status'] === 'completed') {
+                    if ($validated['transaction_type'] === 'debit'
+                        && (float) $locked->available_balance < (float) $validated['amount']) {
+                        throw new \RuntimeException('Insufficient balance in account.');
+                    }
+
+                    $delta = $validated['transaction_type'] === 'credit'
+                        ? (float) $validated['amount']
+                        : -(float) $validated['amount'];
+
+                    $locked = $balances->applyDelta($locked->id, $delta);
+                    $balanceAfter = (float) $locked->balance;
+                }
+
+                $txn = Transaction::create([
+                    'account_id'       => $locked->id,
+                    'transaction_type' => $validated['transaction_type'],
+                    'category'         => $validated['category'],
+                    'description'      => $validated['description'],
+                    'amount'           => $validated['amount'],
+                    'currency'         => $locked->currency,
+                    'balance_after'    => $balanceAfter,
+                    'reference_number' => 'TXN-' . strtoupper(uniqid()),
+                    'status'           => $validated['status'],
+                    'transaction_date' => now(),
+                ]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['amount' => $e->getMessage()]);
         }
 
-        DB::transaction(function () use ($account, $validated) {
-            $balanceAfter = $account->balance;
-
-            // Update balance only if status is completed
-            if ($validated['status'] === 'completed') {
-                if ($validated['transaction_type'] === 'debit') {
-                    $account->balance -= $validated['amount'];
-                    $account->available_balance -= $validated['amount'];
-                } else {
-                    $account->balance += $validated['amount'];
-                    $account->available_balance += $validated['amount'];
-                }
-                $account->save();
-                $balanceAfter = $account->balance;
-            }
-
-            $txn = Transaction::create([
-                'account_id'       => $account->id,
-                'transaction_type' => $validated['transaction_type'],
-                'category'         => $validated['category'],
-                'description'      => $validated['description'],
-                'amount'           => $validated['amount'],
-                'currency'         => $account->currency,
-                'balance_after'    => $balanceAfter,
-                'reference_number' => 'TXN-' . strtoupper(uniqid()),
-                'status'           => $validated['status'],
-                'transaction_date' => now(),
-            ]);
-
-            if ($validated['status'] === 'completed') {
-                Mail::to($account->user->email)->queue(
-                    new TransactionAlertMail($txn->load('account.user'), $account->user)
-                );
-            }
-        });
+        if ($txn && $txn->status === 'completed') {
+            $txn->load('account.user');
+            Mail::to($txn->account->user->email)->queue(
+                new TransactionAlertMail($txn, $txn->account->user)
+            );
+        }
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaction created successfully.');
     }
@@ -266,7 +255,7 @@ class TransactionController extends AdminController
         ]);
     }
 
-    public function update(Request $request, Transaction $transaction)
+    public function update(Request $request, Transaction $transaction, AccountBalanceService $balances)
     {
         $validated = $request->validate([
             'description'      => ['required', 'string', 'max:255'],
@@ -274,49 +263,40 @@ class TransactionController extends AdminController
             'amount'           => ['required', 'numeric', 'min:0.01'],
         ]);
 
-        DB::transaction(function () use ($transaction, $validated) {
-            // If amount changed on a completed transaction, adjust the account balance
+        $accountId = $transaction->account_id;
+
+        DB::transaction(function () use ($transaction, $validated, $balances, $accountId) {
             if ($transaction->status === 'completed' && (float) $validated['amount'] !== (float) $transaction->amount) {
-                $account  = $transaction->account;
-                $diff     = (float) $validated['amount'] - (float) $transaction->amount;
-
-                if ($transaction->transaction_type === 'credit') {
-                    $account->balance           += $diff;
-                    $account->available_balance += $diff;
-                } else {
-                    $account->balance           -= $diff;
-                    $account->available_balance -= $diff;
-                }
-
-                $account->save();
-
-                $validated['balance_after'] = $account->balance;
+                $diff = (float) $validated['amount'] - (float) $transaction->amount;
+                $delta = $transaction->transaction_type === 'credit' ? $diff : -$diff;
+                $balances->applyDelta($accountId, $delta);
             }
 
             $transaction->update($validated);
         });
 
+        // Rewrite the whole chain so every row downstream of the edit is consistent.
+        $balances->recomputeBalanceAfter($accountId);
+
         return back()->with('success', 'Transaction updated successfully.');
     }
 
-    public function destroy(Transaction $transaction)
+    public function destroy(Transaction $transaction, AccountBalanceService $balances)
     {
-        DB::transaction(function () use ($transaction) {
-            // Reverse balance impact for completed transactions
+        $accountId = $transaction->account_id;
+
+        DB::transaction(function () use ($transaction, $balances, $accountId) {
             if ($transaction->status === 'completed') {
-                $account = $transaction->account;
-                if ($transaction->transaction_type === 'credit') {
-                    $account->balance -= $transaction->amount;
-                    $account->available_balance -= $transaction->amount;
-                } else {
-                    $account->balance += $transaction->amount;
-                    $account->available_balance += $transaction->amount;
-                }
-                $account->save();
+                $delta = $transaction->transaction_type === 'credit'
+                    ? -(float) $transaction->amount
+                    : (float) $transaction->amount;
+                $balances->applyDelta($accountId, $delta);
             }
 
             $transaction->delete();
         });
+
+        $balances->recomputeBalanceAfter($accountId);
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaction deleted successfully.');
     }
@@ -325,10 +305,7 @@ class TransactionController extends AdminController
     {
         $transaction->load(['account.user', 'relatedAccount.user']);
 
-        return view('receipts.transaction', [
-            'transaction' => $transaction,
-            'isAdmin'     => true,
-        ]);
+        return \App\Support\ReceiptPdf::download($transaction, isAdmin: true);
     }
 
     public function bulkApprove(Request $request)
