@@ -58,16 +58,7 @@
         .status-pending   { background: rgba(253,224,71,0.25);  color: #fde047; }
         .status-cancelled { background: rgba(252,165,165,0.25); color: #fca5a5; }
 
-        .section-title {
-            margin-top: 10px;
-            padding: 4px 0 3px;
-            font-size: 7px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #6b7280;
-            border-bottom: 1px solid #e5e7eb;
-        }
+        .rows { margin-top: 10px; }
         .row {
             display: flex;
             justify-content: space-between;
@@ -123,7 +114,7 @@
             </div>
         </div>
 
-        <div class="section-title">Transaction Details</div>
+        <div class="rows">
         <div class="row">
             <span class="row-label">Reference</span>
             <span class="row-value mono">{{ $transaction->reference_number }}</span>
@@ -168,9 +159,8 @@
         @endphp
 
         @if($beneficiary)
-        <div class="section-title">Beneficiary Details</div>
         <div class="row">
-            <span class="row-label">Name</span>
+            <span class="row-label">Beneficiary</span>
             <span class="row-value">{{ $beneficiary['name'] }}</span>
         </div>
         @if($beneficiary['account_number'])
@@ -204,6 +194,7 @@
         </div>
         @endif
         @endif
+        </div>
 
         <div class="receipt-footer">
             G-Trust Bank &bull; This is an official transaction receipt<br>
