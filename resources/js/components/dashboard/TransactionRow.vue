@@ -10,6 +10,7 @@ interface Transaction {
     currency: Currency;
     category?: string;
     transaction_date: string;
+    transaction_type: 'credit' | 'debit';
     status: 'pending' | 'completed' | 'failed' | 'cancelled';
     icon?: Component;
 }
@@ -92,9 +93,9 @@ const statusColor = (status: Transaction['status']) => {
         <div class="text-right">
             <p :class="[
                 'font-semibold text-lg',
-                transaction.amount > 0 ? 'text-green-600' : 'text-gray-900'
+                transaction.transaction_type === 'credit' ? 'text-green-600' : 'text-red-600'
             ]">
-                <span v-if="transaction.amount > 0">+</span>
+                <span>{{ transaction.transaction_type === 'credit' ? '+' : '−' }}</span>
                 <CurrencyAmount :amount="Math.abs(transaction.amount)" :currency="transaction.currency" />
             </p>
         </div>
