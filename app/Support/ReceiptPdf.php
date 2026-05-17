@@ -16,9 +16,9 @@ class ReceiptPdf
         ])->render();
 
         $pdf = Browsershot::html($html)
-            ->format('A4')
+            ->paperSize(100, 140, 'mm')
             ->showBackground()
-            ->margins(10, 10, 10, 10)
+            ->margins(0, 0, 0, 0)
             ->pdf();
 
         $filename = 'receipt-' . $transaction->reference_number . '.pdf';
