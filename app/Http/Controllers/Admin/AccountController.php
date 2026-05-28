@@ -268,15 +268,15 @@ class AccountController extends AdminController
             'is_primary'        => ['boolean'],
         ]);
 
+        if (isset($validated['is_active']) && !$validated['is_active'] && $account->is_primary) {
+            return back()->with('error', 'Cannot deactivate primary account. Set another account as primary first.');
+        }
+
         DB::transaction(function () use ($account, $validated) {
             if (($validated['is_primary'] ?? false) && !$account->is_primary) {
                 Account::where('user_id', $account->user_id)
                     ->where('id', '!=', $account->id)
                     ->update(['is_primary' => false]);
-            }
-
-            if (isset($validated['is_active']) && !$validated['is_active'] && $account->is_primary) {
-                throw new \Exception('Cannot deactivate primary account. Set another account as primary first.');
             }
 
             $account->load('user');
