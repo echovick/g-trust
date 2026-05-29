@@ -16,6 +16,7 @@ class ReceiptPdf
         ])->render();
 
         $pdf = Browsershot::html($html)
+            ->noSandbox()
             ->paperSize(100, 140, 'mm')
             ->showBackground()
             ->margins(0, 0, 0, 0)
