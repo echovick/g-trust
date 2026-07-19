@@ -4,6 +4,21 @@ import PageHero from '@/components/shared/PageHero.vue';
 import ContentSection from '@/components/shared/ContentSection.vue';
 import CardGrid from '@/components/shared/CardGrid.vue';
 import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
+import { useForm } from '@inertiajs/vue3';
+
+const form = useForm({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+});
+
+const submit = () => {
+    form.post('/contact', {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+    });
+};
 </script>
 
 <template>
@@ -52,44 +67,53 @@ import { Phone, Mail, MessageCircle, MapPin } from 'lucide-vue-next';
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-                    <form class="space-y-4">
+                    <form class="space-y-4" @submit.prevent="submit">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
                             <input
+                                v-model="form.name"
                                 type="text"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                 placeholder="Your name"
                             />
+                            <p v-if="form.errors.name" class="mt-1 text-sm text-red-600">{{ form.errors.name }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                             <input
+                                v-model="form.email"
                                 type="email"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                 placeholder="your@email.com"
                             />
+                            <p v-if="form.errors.email" class="mt-1 text-sm text-red-600">{{ form.errors.email }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                             <input
+                                v-model="form.subject"
                                 type="text"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                 placeholder="How can we help?"
                             />
+                            <p v-if="form.errors.subject" class="mt-1 text-sm text-red-600">{{ form.errors.subject }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
                             <textarea
+                                v-model="form.message"
                                 rows="5"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                 placeholder="Your message..."
                             ></textarea>
+                            <p v-if="form.errors.message" class="mt-1 text-sm text-red-600">{{ form.errors.message }}</p>
                         </div>
                         <button
                             type="submit"
-                            class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors"
+                            :disabled="form.processing"
+                            class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                         >
-                            Send Message
+                            {{ form.processing ? 'Sending...' : 'Send Message' }}
                         </button>
                     </form>
                 </div>

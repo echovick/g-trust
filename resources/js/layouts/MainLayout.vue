@@ -5,6 +5,7 @@ import Header from '@/components/landing/Header.vue';
 import Footer from '@/components/landing/Footer.vue';
 import FooterBottom from '@/components/landing/FooterBottom.vue';
 import CookieBanner from '@/components/landing/CookieBanner.vue';
+import FlashNotification from '@/components/FlashNotification.vue';
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -17,6 +18,8 @@ const cookieBannerVisible = ref(props.showCookieBanner ?? false);
 
 <template>
     <Head :title="title || 'G-Trust'" />
+
+    <FlashNotification />
 
     <div class="min-h-screen bg-white flex flex-col">
         <TopBar />

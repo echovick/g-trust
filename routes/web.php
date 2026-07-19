@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -149,6 +150,8 @@ Route::prefix('news')->name('news.')->group(function () {
 Route::get('/contact', function () {
     return Inertia::render('support/Contact');
 })->name('contact');
+
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/locations', function () {
     return Inertia::render('support/Locations');
