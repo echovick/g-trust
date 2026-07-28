@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Mail\TransactionAlertMail;
 use App\Models\Transfer;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Services\AccountBalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class TransferController extends AdminController
@@ -232,15 +230,7 @@ class TransferController extends AdminController
                 ]);
             });
 
-            Mail::to($fromAccount->user->email)->queue(
-                new TransactionAlertMail($debitTxn->load('account.user'), $fromAccount->user)
-            );
-
-            if ($fromAccount->user_id !== $toAccount->user_id) {
-                Mail::to($toAccount->user->email)->queue(
-                    new TransactionAlertMail($creditTxn->load('account.user'), $toAccount->user)
-                );
-            }
+            // Both leg alerts are dispatched by TransactionObserver.
         } else {
             // External/beneficiary transfer
             $debitTxn = null;
@@ -286,9 +276,7 @@ class TransferController extends AdminController
                 ]);
             });
 
-            Mail::to($fromAccount->user->email)->queue(
-                new TransactionAlertMail($debitTxn->load('account.user'), $fromAccount->user)
-            );
+            // The customer alert is dispatched by TransactionObserver.
         }
 
         return back()->with('success', 'Transfer approved successfully.');

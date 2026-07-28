@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Mail\TransactionAlertMail;
 use App\Mail\TransactionVerificationCodeMail;
 use App\Models\Account;
 use App\Models\Transaction;
@@ -11,6 +10,7 @@ use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -77,9 +77,7 @@ class AccountController extends AdminController
             ]);
         });
 
-        Mail::to($account->user->email)->queue(
-            new TransactionAlertMail($txn->load('account.user'), $account->user)
-        );
+        // The customer alert is dispatched by TransactionObserver.
 
         return back()->with('success', 'Account funded successfully.');
     }
@@ -497,9 +495,20 @@ class AccountController extends AdminController
             'expires_at' => now()->addHours(24),
         ]);
 
-        Mail::to($account->user->email)->queue(
-            new TransactionVerificationCodeMail($code, $account, $account->user)
-        );
+        // Sent inline: this deployment runs no queue worker, so a queued
+        // mailable would sit in the jobs table undelivered.
+        try {
+            Mail::to($account->user->email)->send(
+                new TransactionVerificationCodeMail($code, $account, $account->user)
+            );
+        } catch (\Throwable $e) {
+            Log::error('Verification code email failed to send.', [
+                'account_id' => $account->id,
+                'exception'  => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Verification code was generated but the email could not be sent. Please retry.');
+        }
 
         return back()->with('success', 'Verification code generated and sent to ' . $account->user->email . '.');
     }

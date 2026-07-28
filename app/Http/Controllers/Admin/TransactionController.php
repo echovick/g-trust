@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Mail\TransactionAlertMail;
 use App\Models\Transaction;
 use App\Models\Account;
 use App\Services\AccountBalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class TransactionController extends AdminController
@@ -104,9 +102,7 @@ class TransactionController extends AdminController
             return back()->withErrors(['amount' => $e->getMessage()]);
         }
 
-        Mail::to($transaction->account->user->email)->queue(
-            new TransactionAlertMail($transaction->load('account.user'), $transaction->account->user)
-        );
+        // The customer alert is dispatched by TransactionObserver.
 
         return back()->with('success', 'Transaction approved successfully.');
     }
@@ -240,12 +236,7 @@ class TransactionController extends AdminController
             return back()->withErrors(['amount' => $e->getMessage()]);
         }
 
-        if ($txn && $txn->status === 'completed') {
-            $txn->load('account.user');
-            Mail::to($txn->account->user->email)->queue(
-                new TransactionAlertMail($txn, $txn->account->user)
-            );
-        }
+        // The customer alert is dispatched by TransactionObserver.
 
         return redirect()->route('admin.transactions.index')->with('success', 'Transaction created successfully.');
     }
